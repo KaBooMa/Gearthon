@@ -1,8 +1,9 @@
-import requests, shutil, os
+import requests, shutil, os, time
 from zipfile import ZipFile
 from appdata import CURRENT_VERSION
 
-GITHUB_URL = 'https://api.github.com/repos/KaBooMa/Gearthon/releases/latest'
+GITHUB_API_URL = 'https://api.github.com/repos/KaBooMa/Gearthon/releases/latest'
+GITHUB_DOWNLOAD_URL = 'https://github.com/KaBooMa/Gearthon/releases/latest/download'
 
 INTERNALS_NAME = '_internal'
 APP_NAME = 'editor.exe'
@@ -10,6 +11,7 @@ APP_PATH = '.'
 
 ## Check for old exe from being updated
 def verify_cleanup():
+    time.sleep(1)
     OLD_APP_PATH = f'{APP_PATH}/{APP_NAME}.old'
     if os.path.exists(OLD_APP_PATH):
         os.remove(OLD_APP_PATH)
@@ -20,7 +22,7 @@ def verify_cleanup():
 
 
 def check_for_update():
-    res = requests.get(GITHUB_URL)
+    res = requests.get(GITHUB_API_URL)
     latest = res.json()
     latest_version = latest['tag_name']
 
@@ -38,7 +40,7 @@ def check_for_update():
         
 
 def download_latest_gearthon():
-    res = requests.get(f'{GITHUB_URL}/Gearthon.zip')
+    res = requests.get(f'{GITHUB_DOWNLOAD_URL}/Gearthon.zip')
     with open('gearthon.zip', 'wb') as f:
         f.write(res.content)
 
@@ -47,4 +49,6 @@ def download_latest_gearthon():
     shutil.move(f'{APP_PATH}/{INTERNALS_NAME}', f'{APP_PATH}/{INTERNALS_NAME}.old')
 
     with ZipFile('gearthon.zip', 'r') as zip:
-        zip.extractall(APP_PATH)
+        zip.extractall()
+
+    os.remove('gearthon.zip')

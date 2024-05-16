@@ -10,7 +10,7 @@ else:
     DEBUG = True
 ##################################################
 
-import os, shutil, eel, json, random, requests, zipfile, updater, time, subprocess
+import os, shutil, eel, json, random, requests, zipfile, updater, subprocess
 from dacite import from_dict
 from classes import *
 from dataclasses import asdict, fields
@@ -19,7 +19,7 @@ from tkinter import filedialog, messagebox
 
 updater.verify_cleanup()
 
-eel.init('web', allowed_extensions=[])
+eel.init('web', allowed_extensions=['.html'])
 
 #### APP API ####
 appdata: AppData = None
@@ -114,25 +114,23 @@ def update_gearlib():
 
 @eel.expose
 def update_gearthon():
-    res = requests.get(f'{updater.GITHUB_URL}/Gearthon.dll')
-    with open('Gearthon.dll', 'wb') as f:
-        f.write(res.content)
-        
+    res = requests.get(f'{updater.GITHUB_DOWNLOAD_URL}/Gearthon.dll')
+
     plugin_path = f'{appdata.gearblocks_path}/BepInEx/plugins'
     if os.path.exists(f'{plugin_path}/Gearthon.dll'):
         os.remove(f'{plugin_path}/Gearthon.dll')
 
-    shutil.copy('Gearthon.dll', f'{appdata.gearblocks_path}/BepInEx/plugins/')
+    with open(f'{plugin_path}/Gearthon.dll', 'wb') as f:
+        f.write(res.content)
 
 
 #### UPDATE API ####
 @eel.expose
 def update():
-    updater.download_latest_gearthon()
     update_gearlib()
     update_gearthon()
+    updater.download_latest_gearthon()
     eel.close_window()
-    time.sleep(1)
     subprocess.Popen(updater.APP_NAME)
 
 
