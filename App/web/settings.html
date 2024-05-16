@@ -1,0 +1,41 @@
+<div class="p-4 d-flex flex-column gap-4">
+    <div x-data="{ 'state': 'downloaded' }">
+        <button class="btn btn-success" :class="{ 'disabled': state == 'downloading' }" x-on:click="async () => { state = 'downloading'; await eel.setup_gearlib()(); state = 'downloaded'; }">Update GearLib <i class="fa-solid fa-download"></i></button>
+    </div>
+    <div x-data="{ 'state': 'downloaded' }">
+        <button class="btn btn-success" :class="{ 'disabled': state == 'downloading' }" x-on:click="async () => { state = 'downloading'; await eel.update()(); state = 'downloaded'; }">Update Gearthon <i class="fa-solid fa-download"></i></button>
+    </div>
+    <div>
+        <label class="form-label">Theme</label>
+        <select class="form-select" x-model="appdata.theme" x-on:change="eel.update_appdata({'theme': $event.target.value})()">
+            <option value="cerulean">Cerulean</option>
+            <option value="cosmo">Cosmo</option>
+            <option value="cyborg">Cyborg</option>
+            <option value="darkly">Darkly</option>
+            <option value="default">Default</option>
+            <option value="flatly">Flatly</option>
+            <option value="litera">Litera</option>
+            <option value="lumen">Lumen</option>
+            <option value="minty">Minty</option>
+            <option value="pulse">Pulse</option>
+            <option value="sandstone">Sandstone</option>
+            <option value="simplex">Simplex</option>
+            <option value="sketchy">Sketchy</option>
+            <option value="solar">Solar</option>
+            <option value="spacelab">Spacelab</option>
+            <option value="superhero">Superhero</option>
+            <option value="united">United</option>
+            <option value="vapor">Vapor</option>
+            <option value="yeti">Yeti</option>
+            <option value="zephyr">Zephyr</option>
+        </select>
+    </div>
+
+    <div>
+        <label class="form-label">GearBlocks Path</label>
+        <div class="d-flex">
+            <input class="form-control" disabled :class="{'is-valid': appdata.gearblocks_path}" x-model="appdata.gearblocks_path">
+            <button class="btn btn-primary ms-2" x-on:click="async () => { await eel.update_gearblocks_folder()(); appdata = await eel.get_appdata()(); }"><i class="fa-solid fa-upload"></i></button>
+        </div>
+    </div>
+</div>

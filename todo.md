@@ -1,0 +1,11 @@
+- Delete tweakables
+- Swap x/z keys (maybe just do away with the keybinds and add better stepping?... Causes constant issues)
+- Right click add attachment possibility, if better than ctrl
+- Home page, hotkeys in editor
+- Hide is_part_pairing_limited for now
+- Description on the flags
+- Fix lag caused over time w/ lua scripts
+
+- version control mods. So if a mod was made with v1 GearThon, v0.9 isn't allowed
+- Ability to create new of existing; For example, new wheel w/ WheelBehaviour
+- attachment images to show what there is available? Might have to cycle every x seconds. Or just a simple list when hovering

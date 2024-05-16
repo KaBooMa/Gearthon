@@ -1,0 +1,203 @@
+<html data-bs-theme="dark">
+    <head>
+        <script type="text/javascript" src="/eel.js"></script>
+        <script defer src="js/alpine.min.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+        <link rel="stylesheet" href="css/fa.min.css">
+        <script src="js/fa.min.js"></script>
+        <script src="js/three.min.js"></script>
+        <script src="js/OBJLoader.js"></script>
+        <script src="js/OrbitControls.js"></script>
+        <script src="js/fflate.min.js"></script>
+        <script src="js/ace/ace.js" type="text/javascript"></script>
+        <script src="js/ace/mode-lua.js" type="text/javascript"></script>
+        <script src="js/ace/theme-tomorrow_night.js" type="text/javascript"></script>
+        <script src="js/ace/ext-language_tools.js" type="text/javascript"></script>
+
+        <title>Gearthon</title>
+        <link rel="icon" type="image/x-icon" href="favico.ico">
+        <style>
+            body {
+                user-select: none;
+            }
+            .content {
+                height: calc(100% - 3rem);
+            }
+            .navbar {
+                height: 3rem;
+            }
+            .loading-spinner {
+                border: 4px solid rgba(0, 0, 0, 0.1);
+                border-left-color: #333;
+                border-radius: 50%;
+                width: 40px;
+                height: 40px;
+                animation: spin 1s linear infinite;
+            }
+
+            @keyframes spin {
+                to {
+                    transform: rotate(360deg);
+                }
+            }
+        </style>
+    </head>
+    <body class="vh-100" x-data="app">
+        <template x-if="appdata.theme == 'cerulean'">
+            <link rel="stylesheet" href="css/themes/cerulean.css">
+        </template>
+        <template x-if="appdata.theme == 'cosmo'">
+            <link rel="stylesheet" href="css/themes/cosmo.css">
+        </template>
+        <template x-if="appdata.theme == 'cyborg'">
+            <link rel="stylesheet" href="css/themes/cyborg.css">
+        </template>
+        <template x-if="appdata.theme == 'darkly'">
+            <link rel="stylesheet" href="css/themes/darkly.css">
+        </template>
+        <template x-if="appdata.theme == 'default'">
+            <link rel="stylesheet" href="css/themes/default.css">
+        </template>
+        <template x-if="appdata.theme == 'flatly'">
+            <link rel="stylesheet" href="css/themes/flatly.css">
+        </template>
+        <template x-if="appdata.theme == 'litera'">
+            <link rel="stylesheet" href="css/themes/litera.css">
+        </template>
+        <template x-if="appdata.theme == 'lumen'">
+            <link rel="stylesheet" href="css/themes/lumen.css">
+        </template>
+        <template x-if="appdata.theme == 'minty'">
+            <link rel="stylesheet" href="css/themes/minty.css">
+        </template>
+        <template x-if="appdata.theme == 'pulse'">
+            <link rel="stylesheet" href="css/themes/pulse.css">
+        </template>
+        <template x-if="appdata.theme == 'sandstone'">
+            <link rel="stylesheet" href="css/themes/sandstone.css">
+        </template>
+        <template x-if="appdata.theme == 'simplex'">
+            <link rel="stylesheet" href="css/themes/simplex.css">
+        </template>
+        <template x-if="appdata.theme == 'sketchy'">
+            <link rel="stylesheet" href="css/themes/sketchy.css">
+        </template>
+        <template x-if="appdata.theme == 'solar'">
+            <link rel="stylesheet" href="css/themes/solar.css">
+        </template>
+        <template x-if="appdata.theme == 'spacelab'">
+            <link rel="stylesheet" href="css/themes/spacelab.css">
+        </template>
+        <template x-if="appdata.theme == 'superhero'">
+            <link rel="stylesheet" href="css/themes/superhero.css">
+        </template>
+        <template x-if="appdata.theme == 'united'">
+            <link rel="stylesheet" href="css/themes/united.css">
+        </template>
+        <template x-if="appdata.theme == 'vapor'">
+            <link rel="stylesheet" href="css/themes/vapor.css">
+        </template>
+        <template x-if="appdata.theme == 'yeti'">
+            <link rel="stylesheet" href="css/themes/yeti.css">
+        </template>
+        <template x-if="appdata.theme == 'zephyr'">
+            <link rel="stylesheet" href="css/themes/zephyr.css">
+        </template>
+        <nav class="navbar navbar-expand bg-primary" data-bs-theme="dark">
+            <div class="container-fluid">
+                <a class="navbar-brand">Gearthon</a>
+                <div class="collapse navbar-collapse" id="navbarColor01">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item">
+                            <button class="nav-link" :class="{ 'active': current_page == 'home', 'disabled': !appdata.setup}" x-on:click="loadPage('home')">Home</button>
+                        </li>
+                        <li class="nav-item">
+                            <button class="nav-link" :class="{ 'active': current_page == 'mods', 'disabled': !appdata.setup}" x-on:click="loadPage('mods')">Mods</button>
+                        </li>
+                        <li class="nav-item">
+                            <button class="nav-link" :class="{ 'active': current_page == 'editor', 'disabled': !appdata.setup}" x-on:click="loadPage('editor')">Editor</button>
+                        </li>
+                    </ul>
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <button class="nav-link" :class="{ 'active': current_page == 'settings', 'disabled': !appdata.setup}" x-on:click="loadPage('settings')">Settings</button>
+                        </li>
+                    </ul>
+                    <template x-if="mod">
+                        <ul class="navbar-nav ms-auto" x-show="mod">
+                            <li class="nav-item">
+                                <label class="nav-link me-4 active"><b>Editing Mod:</b> <span x-text="mod?.name"></span></label>
+                            </li>
+                        </ul>
+                    </template>
+                </div>
+            </div>
+        </nav>
+        <div class="content" id="content"></div>
+        <script>
+            document.addEventListener('alpine:init', () => {
+                Alpine.data('app', () => ({
+                    current_page: null,
+                    appdata: null,
+                    scripts: [],
+
+                    async init() {
+                        this.appdata = await eel.get_appdata()();
+                        if (this.appdata.setup)
+                            this.loadPage('home');
+                        else
+                            this.loadPage('setup');
+                    },
+                    
+                    loadPage(page) {
+                        this.current_page = page;
+                        fetch(`${page}.html`)
+                        .then(response => response.text())
+                        .then(html => {
+                            return new Promise(async (resolve, reject) => {
+                                var content = document.getElementById('content');
+                                content.innerHTML = html;
+                                const scriptRegex = /<script\b[^>]*>([\s\S]*?)<\/script>/gi;
+
+                                // Remove current scripts
+                                for (var i = 0; i < this.scripts.length; i++) {
+                                    var script = this.scripts[i];
+                                    script.remove();
+                                }
+
+                                this.scripts = [];
+
+                                var scripts = html.match(scriptRegex);
+                                let match;
+                                while ((match = scriptRegex.exec(html)) !== null) {
+                                    var script = match[1];
+                                    this.loadScript(script);
+                                }
+
+                                resolve();
+                            });
+                        });
+                    },
+
+                    loadScript(scriptText) {
+                        var newScript = document.createElement('script');
+                        newScript.text = scriptText;
+                        document.body.appendChild(newScript);
+                        this.scripts.push(newScript);
+                    }
+                }));
+                
+                Alpine.directive('load', async(element, { expression }) => {
+                    const response = await fetch(expression, { method: 'GET' });
+                    const target = element._x_currentIfEl ? element._x_currentIfEl : element;
+                    target.innerHTML = await response.text();
+                });
+            });
+
+            eel.expose(close_window);
+            function close_window() {
+                window.close();
+            }
+        </script>
+    </body>
+</html>

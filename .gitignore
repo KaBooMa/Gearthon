@@ -1,0 +1,10 @@
+bin/
+obj/
+__pycache__/
+venv/
+.venv/
+output/
+mods/
+*.zip
+data.json
+Docs/

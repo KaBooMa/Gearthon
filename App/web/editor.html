@@ -1,0 +1,740 @@
+<div x-data="{mod: null}" x-init="async () => { mod = await eel.get_mod()();}">
+    <div x-show="!mod" class="h-100" x-load="loading.html"></div>
+    <div x-show="mod">
+
+        <div class="d-flex h-100" x-data="editor">
+            <div class="w-25 p-2 border-end">
+                <div class="d-flex flex-column">
+                    <!-- TODO: Setup form for this -->
+                    <!-- <textarea class="form-control" placeholder="Enter mod description..."></textarea>
+                    <button class="btn btn-primary mt-2">Apply Changes</button> -->
+                    <!-- <div 
+                        class="p-2"
+                        x-load="form.html" 
+                        x-data="{ form: null, data: mod }" 
+                        x-init="async () => { form = await eel.get_form('Mod')() }"></div> -->
+                    <button 
+                        class="btn btn-success mt-2 w-100" 
+                        type="submit" 
+                        x-on:click="selected_part['attachments'] = attachments; eel.update_selected_part(selected_part)(); eel.save_mod(); loadPage('editor')">
+                        Save Mod
+                    </button>
+                </div>
+                <hr>
+                <div x-data="{ deleting: false, collapsed: false }">
+                    <h5 class="d-flex">
+                        <button class="btn fa-solid" :class="{ 'fa-chevron-up': !collapsed, 'fa-chevron-down': collapsed }" x-on:click="collapsed = !collapsed"></button>
+                        Parts
+                        <button class="btn fa-solid fa-plus ms-auto" x-on:click="if (selected_part) { selected_part['attachments'] = attachments; eel.update_selected_part(selected_part)(); } eel.create_part(); loadPage('editor')"></button>
+                        <button class="btn fa-solid fa-trash" x-on:click="deleting = !deleting"></button>
+                    </h5>
+                    <ul class="nav nav-pills flex-column" x-transition x-show="!collapsed">
+                        <template x-for="part in mod?.parts">
+                            <li class="nav-item d-flex">
+                                <button class="btn btn-danger fa-solid fa-trash m-2" x-show="deleting" x-transition x-on:click="if (selected_part) { selected_part['attachments'] = attachments; eel.update_selected_part(selected_part)(); } eel.delete_part(part.uid); loadPage('editor')"></button>
+                                <button 
+                                    class="btn w-100 my-2" 
+                                    :class="{ 'btn-primary': part.uid == selected_part?.uid, 'btn-dark': part.uid != selected_part?.uid }" 
+                                    x-text="part.display_name" 
+                                    x-on:click="if (selected_part) { selected_part['attachments'] = attachments; eel.update_selected_part(selected_part)(); } eel.select_part(part.uid); loadPage('editor')"></button>
+                            </li>
+                        </template>
+                    </ul>
+                </div>
+                <!-- TODO: Add these other modding options -->
+                <!-- <h5 class="d-flex" x-data="{ deleting: false, collapsed: false }">
+                    <button class="btn fa-solid" :class="{ 'fa-chevron-up': !collapsed, 'fa-chevron-down': collapsed }" x-on:click="collapsed = !collapsed"></button>
+                    Link Types
+                    <button class="btn fa-solid fa-plus ms-auto"></button>
+                    <button class="btn fa-solid fa-trash" x-on:click="deleting = !deleting"></button>
+                </h5>
+                <hr>
+                <h5 class="d-flex" x-data="{ deleting: false, collapsed: false }">
+                    <button class="btn fa-solid" :class="{ 'fa-chevron-up': !collapsed, 'fa-chevron-down': collapsed }" x-on:click="collapsed = !collapsed"></button>
+                    Materials
+                    <button class="btn fa-solid fa-plus ms-auto"></button>
+                    <button class="btn fa-solid fa-trash" x-on:click="deleting = !deleting"></button>
+                </h5> -->
+            </div>
+            <div class="d-flex flex-column p-0 w-50" style="min-width: 0rem;">
+                <nav class="nav navbar-expand navbar border-bottom">
+                    <div class="container-fluid">
+                        <ul class="navbar-nav">
+                            <li class="nav-item" x-data="{ open_file_browser: function() { $refs.filebrowser.click(); }}">
+                                <a class="nav-link" role="button" x-on:click="open_file_browser()">Upload Model</a>
+                                <input 
+                                    class="form-control" 
+                                    type="file" 
+                                    hidden
+                                    accept=".obj"
+                                    x-ref="filebrowser"
+                                    x-on:change="async () => { await uploadOBJ($event) }">
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Mode</a>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item" x-on:click="UpdateMode('View')">View <span class="text-secondary">[Ctrl+1]</span></a>
+                                    <a class="dropdown-item" x-on:click="UpdateMode('Attachments')">Attachments <span class="text-secondary">[Ctrl+2]</span></a>
+                                    <a class="dropdown-item" x-on:click="UpdateMode('Scripting')">Scripting <span class="text-secondary">[Ctrl+3]</span></a>
+                                    <a class="dropdown-item" x-on:click="UpdateMode('Tweakables')">Tweakables <span class="text-secondary">[Ctrl+4]</span></a>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+                <div class="d-flex flex-column h-100 w-100">
+                    <div class="h-100" id="3js" x-on:mousemove="MouseMove" x-on:mousedown="MouseDown" x-on:keydown="KeyDown" x-init="async() => { loadOBJ(await eel.load_part_obj()())}"></div>
+                    <template x-if="mode == 'Scripting'">
+                        <div class="h-100 w-50 p-2 position-fixed">
+                            <!-- <textarea 
+                                class="form-control h-75"
+                                style="tab-size: 2; white-space: nowrap; resize: none;"
+                                x-model="selected_part.script"></textarea> -->
+                            <div id="editor" x-init="DisplayAce" class="h-75 rounded border shadow"></div>
+                        </div>
+                    </template>
+                </div>
+            </div>
+        
+        
+            <div class="bg-dark w-25 h-100 border-start overflow-auto">
+                <template x-if="mode == 'View' && selected_part"> <!--class="bg-dark p-4 col border-start overflow-scroll"--> 
+                    <div class="p-2">
+                        <h3 class="text-center">Settings</h3>
+                        <hr>
+                        <div 
+                            class="p-2"
+                            x-load="form.html" 
+                            x-data="{ form: null, data: selected_part }" 
+                            x-init="async () => { form = await eel.get_form('Part')() }"></div>
+                    </div>
+                </template>
+                <template x-if="mode == 'Attachments' && SelectedAttachment()">
+                    <div class="p-2">
+                        <h3 class="text-center">Attachment</h3>
+                        <hr>
+                        <div 
+                            class="p-2" 
+                            x-load="form.html" 
+                            x-data="{ form: null, data: SelectedAttachment() }" 
+                            x-init="async () => { form = await eel.get_form('Attachment')() }"></div>
+                    </div>
+                </template>
+                <template x-if="mode == 'Scripting'">
+                    <div class="p-2">
+                        <h3 class="text-center">Tweakables</h3>
+                        <hr>
+                        <template x-for="tweakable in selected_part?.int_tweakables.concat(
+                            selected_part?.boolean_tweakables,
+                            selected_part?.joystick_tweakables,
+                            selected_part?.float_tweakables,
+                            selected_part?.string_tweakables,
+                            selected_part?.inputaction_tweakables,
+                        )">
+                            <div class="p-2">
+                                <b x-text="tweakable.name"></b> - <span x-text="tweakable.type"></span>
+                            </div>
+                        </template>
+                    </div>
+                </template>
+                <template x-if="mode == 'Tweakables'">
+                    <div class="" x-data="{ selected_tweakable: null, form: null }">
+                        <nav class="nav navbar-expand navbar border-bottom">
+                            <div class="container-fluid">
+                                <ul class="navbar-nav">
+                                    <li class="nav-item dropdown">
+                                        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Add</a>
+                                        <div class="dropdown-menu">
+                                            <a class="dropdown-item" x-on:click="selected_part.int_tweakables.push({
+                                                'name': 'my_new_integer',
+                                                'label': 'New Integer',
+                                                'description': '',
+                                                'type': 'int',
+                                                'initial_value': 5,
+                                                'maximum': 10,
+                                                'minimum': 0
+                                            })">Integer</a>
+                                            <a class="dropdown-item" x-on:click="selected_part.string_tweakables.push({
+                                                'name': 'my_new_string',
+                                                'label': 'New String',
+                                                'description': '',
+                                                'type': 'string',
+                                                'initial_value': '',
+                                                'multiline': false
+                                            })">String</a>
+                                            <a class="dropdown-item" x-on:click="selected_part.boolean_tweakables.push({
+                                                'name': 'my_new_boolean',
+                                                'label': 'New Boolean',
+                                                'description': '',
+                                                'type': 'boolean',
+                                                'initial_value': false
+                                            })">Boolean</a>
+                                            <a class="dropdown-item" x-on:click="selected_part.float_tweakables.push({
+                                                'name': 'my_new_float',
+                                                'label': 'New Float',
+                                                'description': '',
+                                                'type': 'float',
+                                                'initial_value': 0.5,
+                                                'maximum': 1.0,
+                                                'minimum': 0.0
+                                            })">Float</a>
+                                            <a class="dropdown-item" x-on:click="selected_part.joystick_tweakables.push({
+                                                'name': 'my_new_joystick',
+                                                'label': 'New Joystick',
+                                                'description': '',
+                                                'type': 'joystick'
+                                            })">Joystick</a>
+                                            <a class="dropdown-item" x-on:click="selected_part.inputaction_tweakables.push({
+                                                'name': 'my_new_inputaction',
+                                                'label': 'New Input Action',
+                                                'description': '',
+                                                'type': 'inputaction'
+                                            })">Input Action</a>
+                                        </div>
+                                    </li>
+                                    <li class="nav-item dropdown">
+                                        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Edit</a>
+                                        <div class="dropdown-menu">
+                                            <template x-for="tweakable in [
+                                                ...selected_part?.int_tweakables, 
+                                                ...selected_part?.float_tweakables, 
+                                                ...selected_part?.boolean_tweakables, 
+                                                ...selected_part?.joystick_tweakables, 
+                                                ...selected_part?.inputaction_tweakables, 
+                                                ...selected_part?.string_tweakables
+                                            ]">
+                                                <a class="dropdown-item" 
+                                                    x-text="tweakable.name"
+                                                    x-on:click="() => {
+                                                        selected_tweakable = null;
+                                                        setTimeout(async () => {
+                                                            selected_tweakable = tweakable;
+                                                            form = selected_tweakable.type == 'int' ? await eel.get_form('IntTweakable')() :
+                                                            selected_tweakable.type == 'string' ? await eel.get_form('StringTweakable')() :
+                                                            selected_tweakable.type == 'boolean' ? await eel.get_form('BooleanTweakable')() :
+                                                            selected_tweakable.type == 'float' ? await eel.get_form('FloatTweakable')() :
+                                                            selected_tweakable.type == 'joystick' ? await eel.get_form('JoystickTweakable')() :
+                                                            selected_tweakable.type == 'inputaction' ? await eel.get_form('InputActionTweakable')() :
+                                                            null;
+        
+                                                        }, 1);
+                                                    }"></a>
+                                            </template>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </nav>
+                        <div class="p-2">
+                            <h3 class="text-center">Tweakable</h3>
+                            <hr>
+                            <template x-if="selected_tweakable && form">
+                                <div 
+                                    class="p-2" 
+                                    x-data="{ data: selected_tweakable }"
+                                    x-load="form.html"></div>
+                            </template>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    Alpine.data('editor', () => ({
+        attachments: [],
+        selected_attachment_index: null,
+        mode: 'View',
+        selected_part: null,
+        part_form: null,
+
+        async init() {
+            document.addEventListener('keydown', (event) => {
+                this.KeyDown(event);
+            });
+
+            this.selected_part = await eel.get_selected_part()(); 
+            this.part_form = await eel.get_form('Part')();
+            this.RenderExistingAttachments(this.selected_part.attachments);
+            setTimeout(Update3DContainer, 100);
+        },
+
+        DisplayAce() {
+            ace.require("ace/ext/language_tools");
+            editor = ace.edit("editor");
+            editor.setTheme("ace/theme/tomorrow_night");
+            editor.getSession().setMode("ace/mode/lua");
+
+            editor.getSession().on('change', (e) => {
+                var code = editor.getValue();
+                this.selected_part.script = code;
+            });
+            // var LuaCompleter = {
+            //     getCompletions: function(editor, session, pos, prefix, callback) {
+            //         // Define your custom functions and classes here
+            //         var completions = [
+            //             {name: "myFunction", value: "myFunction", meta: "function"},
+            //             {name: "MyClass", value: "MyClass", meta: "class"}
+            //             // Add more custom functions and classes as needed
+            //         ];
+
+            //         callback(null, completions);
+            //     }
+            // };
+            editor.setOptions({
+                enableBasicAutocompletion: true,
+                enableSnippets: true,
+                enableLiveAutocompletion: true
+            })
+
+            editor.setValue(this.selected_part.script);
+            editor.moveCursorTo(0, 0);
+
+            // editor.completers.push(LuaCompleter);
+        },
+
+        AddNewAttachment(position) {
+            var obj = this.AddAttachment(
+                'Attachment',
+                ['fixed'],
+                ['is_bidirectional'],
+                position,
+                { 'x': 0, 'y': 0, 'z': 0 },
+                { 'x': 1, 'y': 1, 'z': 1 },
+                true
+            );
+            this.SelectAttachmentByObject(obj);
+        },
+
+        AddAttachment(name, attachment_flags, alignment_flags, position, orientation, size, pivot) {
+            var geometry = new THREE.ConeGeometry(0.01, 0.02, 8);
+            var material = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+            var obj = new THREE.Mesh(geometry, material);
+
+            this.attachments.push({
+                'uuid': obj.uuid,
+                'name': name,
+                'attachment_flags': attachment_flags,
+                'alignment_flags': alignment_flags,
+                'position': position,
+                'orientation': orientation,
+                'size': size,
+                'pivot': pivot
+            });
+            obj.name = 'attachment';
+
+            // Add the attachment to the scene
+            scene.add(obj);
+            obj.position.copy(position);
+            obj.rotation.x = THREE.MathUtils.degToRad(orientation.x);
+            obj.rotation.y = THREE.MathUtils.degToRad(orientation.y);
+            obj.rotation.z = THREE.MathUtils.degToRad(orientation.z);
+            this.updatePositioning(obj.position, true, false);
+            return obj;
+        },
+
+        SelectedAttachment() {
+            return this.attachments[this.selected_attachment_index];
+        },
+
+        SelectedAttachmentObject() {
+            var selected_attachment = this.attachments[this.selected_attachment_index];
+            if (selected_attachment == null)
+                return;
+
+            return scene.children.filter(obj => obj.uuid == selected_attachment.uuid)[0];
+        },
+
+        SelectAttachmentByObject(obj) {
+            for (i = 0; i < this.attachments.length; i++)
+            {
+                var attachment = this.attachments[i];
+                if (attachment.uuid == obj.uuid)
+                {
+                    this.SelectAttachmentByIndex(i);
+                    break;
+                }
+            }
+        },
+
+        RemoveAttachmentByObject(obj) {
+            for (i = 0; i < this.attachments.length; i++)
+            {
+                var attachment = this.attachments[i];
+                if (attachment.uuid == obj.uuid)
+                {
+                    this.attachments.pop(i);
+                    if (this.selected_attachment_index == i)
+                        this.selected_attachment_index = null;
+                    scene.remove(obj);
+                    break;
+                }
+            }
+        },
+
+        SelectAttachmentByIndex(index) {
+            this.DeselectAttachment();
+            this.selected_attachment_index = index;
+            this.SelectedAttachmentObject().material.color.set(0x0000ff);
+        },
+
+        DeselectAttachment() {
+            if (this.selected_attachment_index == null)
+                return;
+
+
+            this.SelectedAttachmentObject().material.color.set(0xff0000);
+            this.selected_attachment_index = null;
+        },
+
+        RenderExistingAttachments(attachments) {
+            attachments.forEach((attachment, index) => {
+                this.AddAttachment(
+                    attachment.name,
+                    attachment.attachment_flags,
+                    attachment.alignment_flags,
+                    attachment.position,
+                    attachment.orientation,
+                    attachment.size,
+                    attachment.pivot
+                );
+            });
+        },
+
+        UpdateMode(new_mode) {
+            this.mode = new_mode;
+            this.DeselectAttachment();
+            if (this.mode == "View") {
+            }
+            
+            if (this.mode == "Tweakables") {
+            }
+
+            if (this.mode == "Attachments") {
+                setTransparency(0.2);
+            } else {
+                setTransparency(1);
+            }
+        },
+
+        updatePositioning(exact_position, round, only_update_values) {
+            var attachment = this.SelectedAttachmentObject();
+            var attachment_data = this.SelectedAttachment();
+
+            if (!attachment)
+                return;
+
+            // Update with floats as this is the data we're expecting, not text
+            attachment_data.orientation.x = parseFloat(attachment_data.orientation.x);
+            attachment_data.orientation.y = parseFloat(attachment_data.orientation.y);
+            attachment_data.orientation.z = parseFloat(attachment_data.orientation.z);
+            attachment_data.position.x = parseFloat(attachment_data.position.x);
+            attachment_data.position.y = parseFloat(attachment_data.position.y);
+            attachment_data.position.z = parseFloat(attachment_data.position.z);
+
+            // Update the position of the selected attachments
+            if (round == true)
+            {
+                var position = new THREE.Vector3(
+                    Math.round(exact_position.x * 40) / 40,
+                    Math.round(exact_position.y * 40) / 40,
+                    Math.round(exact_position.z * 40) / 40
+                );
+            }
+            else
+            {
+                var position = exact_position;
+            }
+            attachment.position.copy(position);
+
+            // Update attachment data
+            attachment_data.position = position;
+            attachment.rotation.x = THREE.MathUtils.degToRad(attachment_data.orientation.x);
+            attachment.rotation.y = THREE.MathUtils.degToRad(attachment_data.orientation.y);
+            attachment.rotation.z = THREE.MathUtils.degToRad(attachment_data.orientation.z);
+
+            if (!only_update_values) {
+                // Reposition for rotation
+                var relativePosition = new THREE.Vector3(0, 0.01, 0);
+                var rotationMatrix = new THREE.Matrix4();
+                rotationMatrix.extractRotation(attachment.matrixWorld); // Extract rotation matrix from cone's world matrix
+                relativePosition.applyMatrix4(rotationMatrix);
+                // attachment.rotation.copy();
+                // attachment.position.add(relativePosition);
+            }
+        },
+
+        MouseDown(event) {
+            if (event.button == 1)
+            {
+                return;
+            }
+            // Mouse coordinates
+            var mouse = new THREE.Vector2();
+            mouse.x = ((event.clientX - container.offsetLeft) / WIDTH) * 2 - 1;
+            mouse.y = -((event.clientY - container.offsetTop) / HEIGHT) * 2 + 1;
+
+            if (this.mode == "Attachments") {
+                var selected_attachment = this.SelectedAttachmentObject();
+
+                // Raycasting
+                var raycaster = new THREE.Raycaster();
+                raycaster.setFromCamera(mouse, camera);
+
+                // Intersect with attachments
+                var intersects = raycaster.intersectObjects(scene.children, true).filter(obj => obj.object instanceof THREE.Mesh && obj.object != loaded_obj);
+
+                if (intersects.length > 0) {
+                    // Get the first intersected attachment
+                    var obj = intersects[0].object;
+                    if (obj.name == 'attachment') {
+                        if (selected_attachment == obj) {
+                            this.DeselectAttachment();
+                            return;
+                        }
+
+                        this.SelectAttachmentByObject(obj);
+
+                        if (event.button == 2) {
+                            // TODO: ADD REMOVE FOR ATTACHMENTS
+                            this.RemoveAttachmentByObject(obj);
+                            event.preventDefault();
+                            return;
+                        }
+
+                        return;
+                    }
+                }
+
+                // Intersect with all
+                var intersects = raycaster.intersectObjects(scene.children, true).filter(obj => obj.object instanceof THREE.Mesh);
+
+                if (!selected_attachment && event.ctrlKey) {
+                    // Raycasting
+                    var raycaster = new THREE.Raycaster();
+                    raycaster.setFromCamera(mouse, camera);
+
+                    // Intersect with your model
+                    var intersects = raycaster.intersectObjects(scene.children, true);
+
+                    if (intersects.length > 0) {
+                        var intersectionPoint = intersects[0].point;
+                        this.AddNewAttachment(intersectionPoint);
+                    }
+                } 
+            }
+        },
+        
+        MouseMove(event) {
+            var selected_attachment = this.SelectedAttachmentObject();
+            // Mouse coordinates
+            var mouse = new THREE.Vector2();
+            mouse.x = ((event.clientX - container.offsetLeft) / WIDTH) * 2 - 1;
+            mouse.y = -((event.clientY - container.offsetTop) / HEIGHT) * 2 + 1;
+
+            // Raycasting
+            var raycaster = new THREE.Raycaster();
+            raycaster.setFromCamera(mouse, camera);
+
+            // Intersect with the plane
+            var scene_objects = scene.children.filter(obj => obj !== selected_attachment);
+            var intersects = raycaster.intersectObjects(scene_objects, true);
+            
+            if (intersects.length > 0) {
+                if (selected_attachment && event.ctrlKey) {
+                    this.updatePositioning(intersects[0].point, true, false);
+                }
+            }
+        },
+
+        KeyDown(event) {
+            var selected_attachment = this.SelectedAttachmentObject();
+
+            // Keys not dependent on a selected attachment
+            if (event.ctrlKey) {
+                switch (event.keyCode) {
+                    case 49: // 1
+                        this.UpdateMode('View');
+                        break;
+                    case 50: // 2
+                        this.UpdateMode('Attachments');
+                        break;
+                    case 51: // 3
+                        this.UpdateMode('Scripting');
+                        break;
+                    case 52: // 4
+                        this.UpdateMode('Tweakables');
+                        break;
+                }
+            }
+
+            // Keys dependent on a selected attachment
+            if (!selected_attachment)
+                return;
+              
+            switch (event.keyCode) {
+                case 87: // W
+                    if (event.shiftKey)
+                    {
+                        selected_attachment.rotation.x += THREE.MathUtils.degToRad(45);
+                        this.updatePositioning(selected_attachment.position, true, false);
+                    } else {
+                        selected_attachment.position.add(new THREE.Vector3(0, 0, -0.01));
+                        this.updatePositioning(selected_attachment.position, false, true);
+                    }
+                    break;
+                case 65: // A
+                    if (event.shiftKey)
+                    {
+                        selected_attachment.rotation.z += THREE.MathUtils.degToRad(45);
+                        this.updatePositioning(selected_attachment.position, true, false);
+                    } else {
+                        selected_attachment.position.add(new THREE.Vector3(-0.01, 0, 0));
+                        this.updatePositioning(selected_attachment.position, false, true);
+                    }
+                    break;
+                case 83: // S
+                    if (event.shiftKey)
+                    {
+                        selected_attachment.rotation.x += THREE.MathUtils.degToRad(45);
+                        this.updatePositioning(selected_attachment.position, true, false);
+                    } else {
+                        selected_attachment.position.add(new THREE.Vector3(0, 0, 0.01));
+                        this.updatePositioning(selected_attachment.position, false, true);
+                    }
+                    break;
+                case 68: // D
+                    if (event.shiftKey)
+                    {
+                        selected_attachment.rotation.x -= THREE.MathUtils.degToRad(45);
+                        this.updatePositioning(selected_attachment.position, true, false);
+                    } else {
+                        selected_attachment.position.add(new THREE.Vector3(0.01, 0, 0));
+                        this.updatePositioning(selected_attachment.position, false, true);
+                    }
+                    break;
+                case 81: // Q
+                    if (event.shiftKey)
+                    {
+                        selected_attachment.rotation.y += THREE.MathUtils.degToRad(45);
+                        this.updatePositioning(selected_attachment.position, true, false);
+                    } else {
+                        selected_attachment.position.add(new THREE.Vector3(0, -0.01, 0));
+                        this.updatePositioning(selected_attachment.position, false, true);
+                    }
+                    break;
+                case 69: // E
+                    if (event.shiftKey)
+                    {
+                        selected_attachment.rotation.y -= THREE.MathUtils.degToRad(45);
+                        this.updatePositioning(selected_attachment.position, true, false);
+                    } else {
+                        selected_attachment.position.add(new THREE.Vector3(0, 0.01, 0));
+                        this.updatePositioning(selected_attachment.position, false, true);
+                    }
+                    break;
+                case 27: // Escape
+                    this.DeselectAttachment();
+                    break;
+                default:
+                    // this.updatePositioning(selected_attachment.position, true, false);
+                    break;
+            }
+        },
+    }));
+
+    function Update3DContainer() {
+        WIDTH = container.offsetWidth;
+        HEIGHT = container.offsetHeight;
+        camera.aspect = WIDTH / HEIGHT;
+        camera.updateProjectionMatrix();
+        renderer.setSize(WIDTH, HEIGHT);
+    }
+
+    window.addEventListener('resize', function() {
+        Update3DContainer();
+    });
+
+
+    var container = document.getElementById('3js');
+    var WIDTH = container.offsetWidth;
+    var HEIGHT = container.offsetHeight;
+
+    var scene = new THREE.Scene();
+    var camera = new THREE.PerspectiveCamera(60, WIDTH/HEIGHT, 0.01, 100);
+    var renderer = new THREE.WebGLRenderer({antialias:true});
+    var controls = new THREE.OrbitControls(camera,  renderer.domElement);
+
+    // var rotation = new THREE.Euler(THREE.MathUtils.degToRad(0), THREE.MathUtils.degToRad(0), THREE.MathUtils.degToRad(0))
+    var loaded_obj = null;
+
+
+    function animate(){
+        renderer.render(scene,camera);
+        requestAnimationFrame(animate);
+    }
+
+    
+    function init() {
+        scene.background = new THREE.Color(0x151515);
+        camera.position.z = 0.5; // Default zoom so to speak
+        renderer.setSize(WIDTH, HEIGHT);
+        container.appendChild(renderer.domElement);
+
+        // Add some lights
+        var light = new THREE.HemisphereLight(0xffffff, 0x444444, 1.0);
+        light.position.set(0, 1, 0);
+        scene.add(light);
+
+        var light2 = new THREE.DirectionalLight(0xffffff, 1.0);
+        light2.position.set(0, 1, 0);
+        scene.add(light2);
+
+        controls.addEventListener('change', renderer);
+
+        animate();
+    }
+
+    async function uploadOBJ(event) {
+        return new Promise((resolve, reject) => {
+            let file = event.target.files[0];
+            let reader = new FileReader();
+
+            reader.readAsText(file);
+            reader.onload = e => {
+                let data = e.target.result;
+                eel.write_part_obj(data);
+                loadOBJ(data);
+                resolve(data);
+            }
+        });
+    }
+
+    function loadOBJ(data) {
+        const loader = new THREE.OBJLoader();
+        scene.remove(loaded_obj);
+        loaded_obj = loader.parse(data).children[0];
+        scene.add(loaded_obj);
+    }
+
+    function setTransparency(transparency) {
+        // Iterate through the children of the loaded object
+        loaded_obj.traverse(function(child) {
+            // Check if the child has a material
+            if (child.material) {
+                // Set the opacity of the material
+                child.material.opacity = transparency; // Set opacity to 50%
+                child.material.transparent = true; // Enable transparency
+            }
+        });
+    }
+
+    init();
+
+    // // Disable right click on editor page
+    document.addEventListener('contextmenu', function(event) {
+        event.preventDefault();
+    });
+</script>

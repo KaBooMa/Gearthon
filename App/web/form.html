@@ -1,0 +1,56 @@
+<template x-for="field in form?.filter(field => !field.metadata.hidden)">
+    <div>
+        <label class="form-label mt-2" x-text="field.metadata.label"></label>
+        <template x-if="field.type == 'int'">
+            <input class="form-control" type="number" x-model="data[field.name]" x-on:input="data[field.name] = parseInt(data[field.name])">
+        </template>
+        <template x-if="field.type == 'str' && !field.metadata.options && !field.metadata.multiline && !field.metadata.file">
+            <input class="form-control" x-model="data[field.name]">
+        </template>
+        <template x-if="field.type == 'str' && field.metadata.options">
+            <select class="form-select" x-model="data[field.name]">
+                <template x-for="option in field.metadata.options">
+                    <option x-text="option" x-bind:selected="option == data[field.name]"></option>
+                </template>
+            </select>
+        </template>
+        <template x-if="field.type == 'List'">
+            <select class="form-select" x-model="data[field.name]" multiple>
+                <template x-for="option in field.metadata.options">
+                    <option x-text="option" x-bind:selected="data[field.name].includes(option)"></option>
+                </template>
+            </select>
+        </template>
+        <template x-if="field.type == 'Vector3'">
+            <div class="d-flex gap-2">
+                <input class="form-control" type="number" step=".01" x-model="data[field.name].x" x-on:input="data[field.name].x = parseFloat(data[field.name].x); updatePositioning(data.position, false, true)">
+                <input class="form-control" type="number" step=".01" x-model="data[field.name].y" x-on:input="data[field.name].y = parseFloat(data[field.name].y); updatePositioning(data.position, false, true)">
+                <input class="form-control" type="number" step=".01" x-model="data[field.name].z" x-on:input="data[field.name].z = parseFloat(data[field.name].z); updatePositioning(data.position, false, true)">
+            </div>
+        </template>
+        
+        <template x-if="field.type == 'Vector3Int'">
+            <div class="d-flex gap-2">
+                <input class="form-control" type="number" step="1" x-model="data[field.name].x" x-on:input="data[field.name].x = parseFloat(data[field.name].x); updatePositioning(data.position, false, true)">
+                <input class="form-control" type="number" step="1" x-model="data[field.name].y" x-on:input="data[field.name].y = parseFloat(data[field.name].y); updatePositioning(data.position, false, true)">
+                <input class="form-control" type="number" step="1" x-model="data[field.name].z" x-on:input="data[field.name].z = parseFloat(data[field.name].z); updatePositioning(data.position, false, true)">
+            </div>
+        </template>
+        <template x-if="field.type == 'str' && field.metadata.multiline">
+            <textarea class="form-control" x-model="data[field.name]"></textarea>
+        </template>
+        <template x-if="field.type == 'str' && field.metadata.file">
+            <input 
+                class="form-control" 
+                type="file" 
+                x-init="loadOBJ(data[field.name])"
+                x-on:change="async () => { data[field.name] = await uploadOBJ($event) }">
+        </template>
+        <template x-if="field.type == 'float'">
+            <input class="form-control" type="number" x-model="data[field.name]" x-on:input="data[field.name] = parseFloat(data[field.name])">
+        </template>
+        <template x-if="field.type == 'bool'">
+            <input class="form-check-input" type="checkbox" x-model="data[field.name]">
+        </template>
+    </div>
+</template>
