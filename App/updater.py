@@ -26,22 +26,18 @@ def check_for_update():
 
     v1 = CURRENT_VERSION.split('.')
     v2 = latest_version.split('.')
-    print(CURRENT_VERSION)
-    print(latest_version)
 
     for i, v in enumerate(v2):
         if v1[i] > v:
             break
         
         if len(v2)-1 >= i and v > v1[i]:
-            print(v, v2[i])
-            print(f'{latest_version} is newer than {CURRENT_VERSION}')
             return True
 
     return False
         
 
-def download_latest():
+def download_latest_gearthon():
     res = requests.get(f'{GITHUB_URL}/Gearthon.zip')
     with open('gearthon.zip', 'wb') as f:
         f.write(res.content)

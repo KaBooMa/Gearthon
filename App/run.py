@@ -85,7 +85,7 @@ def gearthon_exists():
 
 
 @eel.expose
-def setup_bepinex():
+def update_bepinex():
     res = requests.get(BEPINEX_LINK)
     with open('bepinex.zip', 'wb') as f:
         f.write(res.content)
@@ -97,10 +97,14 @@ def setup_bepinex():
 
 
 @eel.expose
-def setup_gearlib():
+def update_gearlib():
     res = requests.get(GEARLIB_LINK)
     with open('gearlib.zip', 'wb') as f:
         f.write(res.content)
+
+    plugin_path = f'{appdata.gearblocks_path}/BepInEx/plugins'
+    if os.path.exists(f'{plugin_path}/GearLib'):
+        shutil.rmtree(f'{plugin_path}/GearLib')
 
     with zipfile.ZipFile('gearlib.zip', 'r') as zip:
         zip.extractall(f'{appdata.gearblocks_path}/BepInEx/plugins')
@@ -109,14 +113,24 @@ def setup_gearlib():
 
 
 @eel.expose
-def setup_gearthon():
+def update_gearthon():
+    res = requests.get(f'{updater.GITHUB_URL}/Gearthon.dll')
+    with open('Gearthon.dll', 'wb') as f:
+        f.write(res.content)
+        
+    plugin_path = f'{appdata.gearblocks_path}/BepInEx/plugins'
+    if os.path.exists(f'{plugin_path}/Gearthon.dll'):
+        os.remove(f'{plugin_path}/Gearthon.dll')
+
     shutil.copy('Gearthon.dll', f'{appdata.gearblocks_path}/BepInEx/plugins/')
 
 
 #### UPDATE API ####
 @eel.expose
 def update():
-    updater.download_latest()
+    updater.download_latest_gearthon()
+    update_gearlib()
+    update_gearthon()
     eel.close_window()
     time.sleep(1)
     subprocess.Popen(updater.APP_NAME)

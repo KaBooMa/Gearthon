@@ -1,9 +1,16 @@
 <div class="p-4 d-flex flex-column gap-4">
-    <div x-data="{ 'state': 'downloaded' }">
-        <button class="btn btn-success" :class="{ 'disabled': state == 'downloading' }" x-on:click="async () => { state = 'downloading'; await eel.setup_gearlib()(); state = 'downloaded'; }">Update GearLib <i class="fa-solid fa-download"></i></button>
-    </div>
-    <div x-data="{ 'state': 'downloaded' }">
-        <button class="btn btn-success" :class="{ 'disabled': state == 'downloading' }" x-on:click="async () => { state = 'downloading'; await eel.update()(); state = 'downloaded'; }">Update Gearthon <i class="fa-solid fa-download"></i></button>
+    <div x-data="{ 'state': 'downloaded', 'update_available': null }">
+        <template x-if="!update_available">
+            <button class="btn btn-primary" x-on:click="async () => {update_available = null; update_available = await eel.check_for_update()()}">Check for Updates</button>
+        </template>
+        <template x-if="update_available == false">
+            <p>
+                No updates available
+            </p>
+        </template>
+        <template x-if="update_available == true">
+            <button class="btn btn-success" :class="{ 'disabled': state == 'downloading' }" x-on:click="async () => { state = 'downloading'; await eel.update()(); state = 'downloaded'; }">Update Gearthon <i class="fa-solid fa-download"></i></button>
+        </template>
     </div>
     <div>
         <label class="form-label">Theme</label>
