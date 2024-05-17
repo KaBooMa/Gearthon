@@ -47,6 +47,22 @@ class AppData:
     version: str = field(default=CURRENT_VERSION)
     setup: bool = False
 
+    def bepinex_folder(self):
+        return f'{self.gearblocks_path}/BepInEx/plugins'
+
+
+    def gearlib_folder(self):
+        return f'{self.bepinex_folder()}/GearLib'
+
+
+    def gearthon_folder(self):
+        return f'{self.bepinex_folder()}/Gearthon'
+
+
+    def mods_folder(self):
+        return f'{self.gearthon_folder()}/mods'
+
+
     def save(self):
         data = json.dumps(asdict(self))
         with open(APPDATA_FILE, 'w') as f:

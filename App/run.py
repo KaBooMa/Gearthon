@@ -81,7 +81,7 @@ def gearlib_exists():
 
 @eel.expose
 def gearthon_exists():
-    return os.path.exists(f'{appdata.gearblocks_path}/BepInEx/plugins/Gearthon.dll')
+    return os.path.exists(f'{appdata.gearblocks_path}/BepInEx/plugins/Gearthon')
 
 
 @eel.expose
@@ -116,11 +116,13 @@ def update_gearlib():
 def update_gearthon():
     res = requests.get(f'{updater.GITHUB_DOWNLOAD_URL}/Gearthon.dll')
 
-    plugin_path = f'{appdata.gearblocks_path}/BepInEx/plugins'
-    if os.path.exists(f'{plugin_path}/Gearthon.dll'):
-        os.remove(f'{plugin_path}/Gearthon.dll')
+    if not os.path.exists(appdata.gearthon_folder()):
+        os.mkdir(appdata.gearthon_folder())
+        
+    if os.path.exists(f'{appdata.gearthon_folder()}/Gearthon.dll'):
+        os.remove(f'{appdata.gearthon_folder()}/Gearthon.dll')
 
-    with open(f'{plugin_path}/Gearthon.dll', 'wb') as f:
+    with open(f'{appdata.gearthon_folder()}/Gearthon.dll', 'wb') as f:
         f.write(res.content)
 
 
@@ -140,7 +142,6 @@ def check_for_update():
 
 
 #### MOD API ####
-MODS_FOLDER = 'mods'
 MODELS_FOLDER = 'models'
 MOD_FILE_NAME = 'mod.json'
 mod: Mod = None
@@ -149,7 +150,7 @@ def current_mod_path():
     if not mod:
         return None
     
-    mod_folder = f'{MODS_FOLDER}/{mod.name}'
+    mod_folder = f'{appdata.mods_folder()}/{mod.name}'
     if not os.path.exists(mod_folder):
         os.mkdir(mod_folder)
     
@@ -183,10 +184,10 @@ def get_mod():
 
 @eel.expose
 def get_mods():
-    if not os.path.exists(MODS_FOLDER):
+    if not os.path.exists(appdata.mods_folder()):
         return None
     
-    return os.listdir(MODS_FOLDER)
+    return os.listdir(appdata.mods_folder())
 
 
 @eel.expose
@@ -196,8 +197,8 @@ def save_mod():
     
     data = asdict(mod)
 
-    if not os.path.exists(MODS_FOLDER):
-        os.mkdir(MODS_FOLDER)
+    if not os.path.exists(appdata.mods_folder()):
+        os.mkdir(appdata.mods_folder())
 
     mod_path = current_mod_path()
     if not os.path.exists(mod_path):
@@ -210,7 +211,7 @@ def save_mod():
 
 @eel.expose
 def load_mod(name):
-    mod_path = f'{MODS_FOLDER}/{name}'
+    mod_path = f'{appdata.mods_folder()}/{name}'
     if not os.path.exists(mod_path):
         return
     
@@ -224,7 +225,7 @@ def load_mod(name):
 
 @eel.expose
 def delete_mod(name):
-    mod_path = f'{MODS_FOLDER}/{name}'
+    mod_path = f'{appdata.mods_folder()}/{name}'
     if not os.path.exists(mod_path):
         return
     
