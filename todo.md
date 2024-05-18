@@ -14,6 +14,7 @@
 - Open mods folder button somewhere
 - Try to parse quad objs by making two triangles if possible
 - joystick support
+- Add link types to parts
 
 - version control mods. So if a mod was made with v1 GearThon, v0.9 isn't allowed
 - Ability to create new of existing; For example, new wheel w/ WheelBehaviour
