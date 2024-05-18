@@ -10,7 +10,7 @@ else:
     DEBUG = True
 ##################################################
 
-import os, shutil, eel, json, random, requests, zipfile, updater, subprocess
+import os, shutil, eel, json, random, requests, zipfile, updater, subprocess, threading
 from dacite import from_dict
 from classes import *
 from dataclasses import asdict, fields
@@ -84,61 +84,117 @@ def gearthon_exists():
     return os.path.exists(f'{appdata.gearblocks_path}/BepInEx/plugins/Gearthon')
 
 
+#### UPDATE API ####
+progress = {}
+
 @eel.expose
 def update_bepinex():
-    res = requests.get(BEPINEX_LINK)
-    with open('bepinex.zip', 'wb') as f:
-        f.write(res.content)
+    def update():
+        global progress
 
-    with zipfile.ZipFile('bepinex.zip', 'r') as zip:
-        zip.extractall(appdata.gearblocks_path)
+        res = requests.get(BEPINEX_LINK, stream=True)
+        download_size = int(res.headers.get('Content-Length'))
 
-    os.remove('bepinex.zip')
+        total_downloaded = 0
+        with open('bepinex.zip', 'wb') as f:
+            for data in res.iter_content(1024):
+                total_downloaded += len(data)
+                status = round(total_downloaded / download_size * 100, 2)
+                f.write(data)
+                progress['bepinex'] = status
+
+        with zipfile.ZipFile('bepinex.zip', 'r') as zip:
+            zip.extractall(appdata.gearblocks_path)
+
+        os.remove('bepinex.zip')
+
+    thread = threading.Thread(target=update)
+    thread.start()
 
 
 @eel.expose
 def update_gearlib():
-    res = requests.get(GEARLIB_LINK)
-    with open('gearlib.zip', 'wb') as f:
-        f.write(res.content)
+    def update():
+        global progress
 
-    plugin_path = f'{appdata.gearblocks_path}/BepInEx/plugins'
-    if os.path.exists(f'{plugin_path}/GearLib'):
-        shutil.rmtree(f'{plugin_path}/GearLib')
+        res = requests.get(GEARLIB_LINK, stream=True)
+        download_size = int(res.headers.get('Content-Length'))
+        
+        total_downloaded = 0
+        with open('gearlib.zip', 'wb') as f:
+            for data in res.iter_content(1024):
+                total_downloaded += len(data)
+                status = round(total_downloaded / download_size * 100, 2)
+                f.write(data)
+                progress['gearlib'] = status
 
-    with zipfile.ZipFile('gearlib.zip', 'r') as zip:
-        zip.extractall(f'{appdata.gearblocks_path}/BepInEx/plugins')
+        plugin_path = f'{appdata.gearblocks_path}/BepInEx/plugins'
+        if os.path.exists(f'{plugin_path}/GearLib'):
+            shutil.rmtree(f'{plugin_path}/GearLib')
 
-    os.remove('gearlib.zip')
+        with zipfile.ZipFile('gearlib.zip', 'r') as zip:
+            zip.extractall(f'{appdata.gearblocks_path}/BepInEx/plugins')
+
+        os.remove('gearlib.zip')
+
+    thread = threading.Thread(target=update)
+    thread.start()
 
 
 @eel.expose
 def update_gearthon():
-    res = requests.get(f'{updater.GITHUB_DOWNLOAD_URL}/Gearthon.dll')
+    def update():
+        global progress
 
-    if not os.path.exists(appdata.gearthon_folder()):
-        os.mkdir(appdata.gearthon_folder())
+        # Ensure we got a path and cleanup existing
+        if not os.path.exists(appdata.gearthon_folder()):
+            os.mkdir(appdata.gearthon_folder())
+            
+        if os.path.exists(f'{appdata.gearthon_folder()}/Gearthon.dll'):
+            os.remove(f'{appdata.gearthon_folder()}/Gearthon.dll')
+
+        # Start downloading the file
+        res = requests.get(f'{updater.GITHUB_DOWNLOAD_URL}/Gearthon.dll', stream=True)
+        download_size = int(res.headers.get('Content-Length'))
         
-    if os.path.exists(f'{appdata.gearthon_folder()}/Gearthon.dll'):
-        os.remove(f'{appdata.gearthon_folder()}/Gearthon.dll')
+        total_downloaded = 0
+        with open(f'{appdata.gearthon_folder()}/Gearthon.dll', 'wb') as f:
+            for data in res.iter_content(1024):
+                total_downloaded += len(data)
+                status = round(total_downloaded / download_size * 100, 2)
+                f.write(data)
+                progress['gearthon'] = status
 
-    with open(f'{appdata.gearthon_folder()}/Gearthon.dll', 'wb') as f:
-        f.write(res.content)
+    thread = threading.Thread(target=update)
+    thread.start()
 
 
-#### UPDATE API ####
 @eel.expose
 def update():
-    update_gearlib()
-    update_gearthon()
-    updater.download_latest_gearthon()
-    eel.close_window()
-    subprocess.Popen(updater.APP_NAME)
+    def update():
+        update_gearlib()
+        update_gearthon()
+        for status in updater.download_latest_gearthon():
+            progress['editor'] = status
+
+        eel.close_window()
+        subprocess.Popen(updater.APP_NAME)
+
+    thread = threading.Thread(target=update)
+    thread.start()
 
 
 @eel.expose
 def check_for_update():
     return updater.check_for_update()
+
+
+@eel.expose
+def get_progress(key):
+    if key in progress:
+        return progress[key]
+    else:
+        return 0
 
 
 #### MOD API ####

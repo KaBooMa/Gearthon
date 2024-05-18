@@ -24,7 +24,7 @@ def verify_cleanup():
 def check_for_update():
     res = requests.get(GITHUB_API_URL)
     latest = res.json()
-    latest_version = latest['tag_name']
+    latest_version: str = latest['tag_name']
 
     v1 = CURRENT_VERSION.split('.')
     v2 = latest_version.split('.')
@@ -40,9 +40,16 @@ def check_for_update():
         
 
 def download_latest_gearthon():
-    res = requests.get(f'{GITHUB_DOWNLOAD_URL}/Gearthon.zip')
+    res = requests.get(f'{GITHUB_DOWNLOAD_URL}/Gearthon.zip', stream=True)
+    download_size = int(res.headers.get('Content-Length'))
+    
+    total_downloaded = 0
     with open('gearthon.zip', 'wb') as f:
-        f.write(res.content)
+        for data in res.iter_content(1024):
+            total_downloaded += len(data)
+            status = round(total_downloaded / download_size * 100, 2)
+            f.write(data)
+            yield status
 
     app_path = f'{APP_PATH}/{APP_NAME}'
     shutil.move(app_path, f'{app_path}.old')

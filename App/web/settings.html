@@ -1,5 +1,5 @@
 <div class="p-4 d-flex flex-column gap-4">
-    <div x-data="{ 'state': 'downloaded', 'update_available': null }">
+    <div class="d-flex flex-column w-100" x-data="{ 'state': 'downloaded', 'update_available': null }">
         <template x-if="!update_available">
             <button class="btn btn-primary" x-on:click="async () => {update_available = null; update_available = await eel.check_for_update()()}">Check for Updates</button>
         </template>
@@ -9,7 +9,20 @@
             </p>
         </template>
         <template x-if="update_available == true">
-            <button class="btn btn-success" :class="{ 'disabled': state == 'downloading' }" x-on:click="async () => { state = 'downloading'; await eel.update()(); state = 'downloaded'; }">Update Gearthon <i class="fa-solid fa-download"></i></button>
+            <div class="d-flex flex-column w-100">
+                <template x-if="state == 'downloading'">
+                    <div class="progress w-100 mb-4" x-data="{'progress': 0}">
+                        <div class="progress-bar" :style="{ width: progress + '%' }" x-init="
+                            setInterval(async () => {
+                                progress = await eel.get_progress('editor')(); 
+                                if (progress >= 100) {
+                                    state = 'downloaded'; 
+                                }
+                            }, 100);"></div>
+                    </div>
+                </template>
+                <button class="btn btn-success" :class="{ 'disabled': state == 'downloading' }" x-on:click="async () => { state = 'downloading'; eel.update()(); }">Update Gearthon <i class="fa-solid fa-download"></i></button>
+            </div>
         </template>
     </div>
     <div>
