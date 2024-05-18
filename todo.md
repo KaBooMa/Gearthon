@@ -8,7 +8,6 @@
 - Home page, hotkeys in editor
 - Hide is_part_pairing_limited for now
 - Description on the flags
-- Open mods folder button somewhere (scratch that, let's do import/export mod buttons)
 - Try to parse quad objs by making two triangles if possible
 - joystick support
 - Add link types to parts
