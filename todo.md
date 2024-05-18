@@ -10,7 +10,6 @@
 - Home page, hotkeys in editor
 - Hide is_part_pairing_limited for now
 - Description on the flags
-- Fix lag caused over time w/ lua scripts
 - Open mods folder button somewhere
 - Try to parse quad objs by making two triangles if possible
 - joystick support
