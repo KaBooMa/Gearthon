@@ -1,3 +1,9 @@
+- part friction sliders in editor
+- enable/disable mods
+- provide UX from toasts
+- alphabetize category list
+- Guidance in editor, maybe youtube video? link in editor if so
+- demo parts/mods available for download to view how things work
 - Delete tweakables
 - Swap x/z keys (maybe just do away with the keybinds and add better stepping?... Causes constant issues)
 - Right click add attachment possibility, if better than ctrl
@@ -5,6 +11,9 @@
 - Hide is_part_pairing_limited for now
 - Description on the flags
 - Fix lag caused over time w/ lua scripts
+- Open mods folder button somewhere
+- Try to parse quad objs by making two triangles if possible
+- joystick support
 
 - version control mods. So if a mod was made with v1 GearThon, v0.9 isn't allowed
 - Ability to create new of existing; For example, new wheel w/ WheelBehaviour
