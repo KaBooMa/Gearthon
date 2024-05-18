@@ -1,7 +1,6 @@
 - part friction sliders in editor
 - enable/disable mods
 - provide UX from toasts
-- alphabetize category list
 - Guidance in editor, maybe youtube video? link in editor if so
 - demo parts/mods available for download to view how things work
 - Delete tweakables
