@@ -11,11 +11,11 @@ namespace Gearthon.Lua;
 
 class LuaVariables : Il2CppSystem.Object
 {
-    public bool ACTIVE;
     public LuaPart PART;
     public LuaCollider COLLIDER;
     public LuaRigidbody RIGIDBODY;
     public LuaConstruction CONSTRUCTION;
+    public LuaScript SCRIPT;
     
 
     ScriptBehaviour script_behaviour;
@@ -31,21 +31,24 @@ class LuaVariables : Il2CppSystem.Object
         ClassInjector.DerivedConstructorBody(this);
         
         this.script_behaviour = script_behaviour;
-                
-        // Give lua access to our types
-        // script_behaviour.script.Globals.Set("Collider", UserData.Create(new LuaCollider(COLLIDER)));
-        
-        PART = new LuaPart(script_behaviour.descriptor);
-        ACTIVE = script_behaviour.IsActivated;
+
         // COLLIDER = UserData.Create(new LuaCollider(script_behaviour.descriptor.GetComponentInChildren<Collider>()));
+        PART = new LuaPart(script_behaviour.descriptor);
         CONSTRUCTION = new LuaConstruction(script_behaviour.descriptor.ParentConstruction);
         RIGIDBODY = new LuaRigidbody(script_behaviour.descriptor.parentComposite.GetComponent<Rigidbody>());
+        SCRIPT = new LuaScript(script_behaviour);
+        
+        // Static non-updating
+        script_behaviour.script.Globals.Set("Script", UserData.Create(SCRIPT));
+
+        // Dynamic, will need to update
+        script_behaviour.script.Globals.Set("Construction", UserData.Create(CONSTRUCTION));
+        script_behaviour.script.Globals.Set("Rigidbody", UserData.Create(RIGIDBODY));
+        script_behaviour.script.Globals.Set("Part", UserData.Create(PART));
 
         // Give lua access to our "helper" methods
         script_behaviour.script.Globals.Set("Debug", UserData.Create(new LuaDebug()));
         script_behaviour.script.Globals.Set("DataChannel", UserData.Create(new LuaDataChannel(script_behaviour)));
-
-        _UpdateVars();
     }
 
     /// <summary>
@@ -55,15 +58,9 @@ class LuaVariables : Il2CppSystem.Object
     public void _UpdateVars()
     {
         // Update our variables
-        ACTIVE = script_behaviour.IsActivated;
-        CONSTRUCTION.construction.Set(script_behaviour.descriptor.ParentConstruction);
         RIGIDBODY.rigidbody.Set(script_behaviour.descriptor.parentComposite.GetComponent<Rigidbody>());
+        CONSTRUCTION.construction.Set(script_behaviour.descriptor.ParentConstruction);
         PART.part.Set(script_behaviour.descriptor);
-
-        script_behaviour.script.Globals.Set("Active", DynValue.NewBoolean(ACTIVE));
-        script_behaviour.script.Globals.Set("Construction", UserData.Create(CONSTRUCTION));
-        script_behaviour.script.Globals.Set("Rigidbody", UserData.Create(RIGIDBODY));
-        script_behaviour.script.Globals.Set("Part", UserData.Create(PART));
         
         foreach (KeyValuePair<string, TweakableBase> pair in script_behaviour.tweakables_dict)
         {

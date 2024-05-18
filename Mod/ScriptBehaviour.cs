@@ -66,13 +66,13 @@ class ScriptBehaviour : GearLib.API.Behaviour
                 if (is_frozen)
                 {
                     is_frozen = false;
+                    lua_vars._UpdateVars();
 
                     // Call the unfrozen function if exists
                     DynValue unfrozen_function = script.Globals.Get("Unfrozen");
                     if (unfrozen_function.IsNotNil())
                     {
                         // Give lua access to updated part data
-                        lua_vars._UpdateVars();
                         script.Call(unfrozen_function);
 
                     }
@@ -84,7 +84,6 @@ class ScriptBehaviour : GearLib.API.Behaviour
                     if (update_function.IsNotNil())
                     {
                         // Give lua access to updated part data
-                        lua_vars._UpdateVars();
                         script.Call(update_function);
                     }
                 }
@@ -94,13 +93,13 @@ class ScriptBehaviour : GearLib.API.Behaviour
                 if (!is_frozen)
                 {
                     is_frozen = true;
+                    lua_vars._UpdateVars();
 
                     // Call the frozen function if exists
                     DynValue frozen_function = script.Globals.Get("Frozen");
                     if (frozen_function.IsNotNil())
                     {
                         // Give lua access to updated part data
-                        lua_vars._UpdateVars();
                         script.Call(frozen_function);
                     }
                 }
