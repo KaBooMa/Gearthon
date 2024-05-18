@@ -623,71 +623,8 @@
                 return;
               
             switch (event.keyCode) {
-                case 87: // W
-                    if (event.shiftKey)
-                    {
-                        selected_attachment.rotation.x += THREE.MathUtils.degToRad(45);
-                        this.updatePositioning(selected_attachment.position, true, false);
-                    } else {
-                        selected_attachment.position.add(new THREE.Vector3(0, 0, -0.01));
-                        this.updatePositioning(selected_attachment.position, false, true);
-                    }
-                    break;
-                case 65: // A
-                    if (event.shiftKey)
-                    {
-                        selected_attachment.rotation.z += THREE.MathUtils.degToRad(45);
-                        this.updatePositioning(selected_attachment.position, true, false);
-                    } else {
-                        selected_attachment.position.add(new THREE.Vector3(-0.01, 0, 0));
-                        this.updatePositioning(selected_attachment.position, false, true);
-                    }
-                    break;
-                case 83: // S
-                    if (event.shiftKey)
-                    {
-                        selected_attachment.rotation.x += THREE.MathUtils.degToRad(45);
-                        this.updatePositioning(selected_attachment.position, true, false);
-                    } else {
-                        selected_attachment.position.add(new THREE.Vector3(0, 0, 0.01));
-                        this.updatePositioning(selected_attachment.position, false, true);
-                    }
-                    break;
-                case 68: // D
-                    if (event.shiftKey)
-                    {
-                        selected_attachment.rotation.x -= THREE.MathUtils.degToRad(45);
-                        this.updatePositioning(selected_attachment.position, true, false);
-                    } else {
-                        selected_attachment.position.add(new THREE.Vector3(0.01, 0, 0));
-                        this.updatePositioning(selected_attachment.position, false, true);
-                    }
-                    break;
-                case 81: // Q
-                    if (event.shiftKey)
-                    {
-                        selected_attachment.rotation.y += THREE.MathUtils.degToRad(45);
-                        this.updatePositioning(selected_attachment.position, true, false);
-                    } else {
-                        selected_attachment.position.add(new THREE.Vector3(0, -0.01, 0));
-                        this.updatePositioning(selected_attachment.position, false, true);
-                    }
-                    break;
-                case 69: // E
-                    if (event.shiftKey)
-                    {
-                        selected_attachment.rotation.y -= THREE.MathUtils.degToRad(45);
-                        this.updatePositioning(selected_attachment.position, true, false);
-                    } else {
-                        selected_attachment.position.add(new THREE.Vector3(0, 0.01, 0));
-                        this.updatePositioning(selected_attachment.position, false, true);
-                    }
-                    break;
                 case 27: // Escape
                     this.DeselectAttachment();
-                    break;
-                default:
-                    // this.updatePositioning(selected_attachment.position, true, false);
                     break;
             }
         },

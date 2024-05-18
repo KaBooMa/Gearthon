@@ -3,7 +3,6 @@
 - provide UX from toasts
 - Guidance in editor, maybe youtube video? link in editor if so
 - demo parts/mods available for download to view how things work
-- Swap x/z keys (maybe just do away with the keybinds and add better stepping?... Causes constant issues)
 - Right click add attachment possibility, if better than ctrl
 - Home page, hotkeys in editor
 - Description on the flags
