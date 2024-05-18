@@ -146,50 +146,86 @@
                                         <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Add</a>
                                         <div class="dropdown-menu">
                                             <a class="dropdown-item" x-on:click="selected_part.int_tweakables.push({
-                                                'name': 'my_new_integer',
-                                                'label': 'New Integer',
-                                                'description': '',
-                                                'type': 'int',
-                                                'initial_value': 5,
-                                                'maximum': 10,
-                                                'minimum': 0
-                                            })">Integer</a>
+                                                    'name': 'my_new_integer',
+                                                    'label': 'New Integer',
+                                                    'description': '',
+                                                    'type': 'int',
+                                                    'initial_value': 5,
+                                                    'maximum': 10,
+                                                    'minimum': 0
+                                                });
+                                                
+                                                selected_tweakable = null;
+                                                setTimeout(async () => {
+                                                    selected_tweakable = selected_part.int_tweakables.at(-1);
+                                                }, 1);
+                                                ">Integer</a>
                                             <a class="dropdown-item" x-on:click="selected_part.string_tweakables.push({
-                                                'name': 'my_new_string',
-                                                'label': 'New String',
-                                                'description': '',
-                                                'type': 'string',
-                                                'initial_value': '',
-                                                'multiline': false
-                                            })">String</a>
+                                                    'name': 'my_new_string',
+                                                    'label': 'New String',
+                                                    'description': '',
+                                                    'type': 'string',
+                                                    'initial_value': '',
+                                                    'multiline': false
+                                                });
+                                                
+                                                selected_tweakable = null;
+                                                setTimeout(async () => {
+                                                    selected_tweakable = selected_part.string_tweakables.at(-1);
+                                                }, 1);
+                                                ">String</a>
                                             <a class="dropdown-item" x-on:click="selected_part.boolean_tweakables.push({
-                                                'name': 'my_new_boolean',
-                                                'label': 'New Boolean',
-                                                'description': '',
-                                                'type': 'boolean',
-                                                'initial_value': false
-                                            })">Boolean</a>
+                                                    'name': 'my_new_boolean',
+                                                    'label': 'New Boolean',
+                                                    'description': '',
+                                                    'type': 'boolean',
+                                                    'initial_value': false
+                                                });
+                                                
+                                                selected_tweakable = null;
+                                                setTimeout(async () => {
+                                                    selected_tweakable = selected_part.boolean_tweakables.at(-1);
+                                                }, 1);
+                                                ">Boolean</a>
                                             <a class="dropdown-item" x-on:click="selected_part.float_tweakables.push({
-                                                'name': 'my_new_float',
-                                                'label': 'New Float',
-                                                'description': '',
-                                                'type': 'float',
-                                                'initial_value': 0.5,
-                                                'maximum': 1.0,
-                                                'minimum': 0.0
-                                            })">Float</a>
+                                                    'name': 'my_new_float',
+                                                    'label': 'New Float',
+                                                    'description': '',
+                                                    'type': 'float',
+                                                    'initial_value': 0.5,
+                                                    'maximum': 1.0,
+                                                    'minimum': 0.0
+                                                });
+                                                
+                                                selected_tweakable = null;
+                                                setTimeout(async () => {
+                                                    selected_tweakable = selected_part.float_tweakables.at(-1);
+                                                }, 1);
+                                                ">Float</a>
                                             <a class="dropdown-item" x-on:click="selected_part.joystick_tweakables.push({
-                                                'name': 'my_new_joystick',
-                                                'label': 'New Joystick',
-                                                'description': '',
-                                                'type': 'joystick'
-                                            })">Joystick</a>
+                                                    'name': 'my_new_joystick',
+                                                    'label': 'New Joystick',
+                                                    'description': '',
+                                                    'type': 'joystick'
+                                                });
+                                                
+                                                selected_tweakable = null;
+                                                setTimeout(async () => {
+                                                    selected_tweakable = selected_part.joystick_tweakables.at(-1);
+                                                }, 1);
+                                                ">Joystick</a>
                                             <a class="dropdown-item" x-on:click="selected_part.inputaction_tweakables.push({
-                                                'name': 'my_new_inputaction',
-                                                'label': 'New Input Action',
-                                                'description': '',
-                                                'type': 'inputaction'
-                                            })">Input Action</a>
+                                                    'name': 'my_new_inputaction',
+                                                    'label': 'New Input Action',
+                                                    'description': '',
+                                                    'type': 'inputaction'
+                                                });
+                                                
+                                                selected_tweakable = null;
+                                                setTimeout(async () => {
+                                                    selected_tweakable = selected_part.inputaction_tweakables.at(-1);
+                                                }, 1);
+                                                ">Input Action</a>
                                         </div>
                                     </li>
                                     <li class="nav-item dropdown">
@@ -209,14 +245,6 @@
                                                         selected_tweakable = null;
                                                         setTimeout(async () => {
                                                             selected_tweakable = tweakable;
-                                                            form = selected_tweakable.type == 'int' ? await eel.get_form('IntTweakable')() :
-                                                            selected_tweakable.type == 'string' ? await eel.get_form('StringTweakable')() :
-                                                            selected_tweakable.type == 'boolean' ? await eel.get_form('BooleanTweakable')() :
-                                                            selected_tweakable.type == 'float' ? await eel.get_form('FloatTweakable')() :
-                                                            selected_tweakable.type == 'joystick' ? await eel.get_form('JoystickTweakable')() :
-                                                            selected_tweakable.type == 'inputaction' ? await eel.get_form('InputActionTweakable')() :
-                                                            null;
-        
                                                         }, 1);
                                                     }"></a>
                                             </template>
@@ -226,13 +254,33 @@
                             </div>
                         </nav>
                         <div class="p-2">
-                            <h3 class="text-center">Tweakable</h3>
-                            <hr>
-                            <template x-if="selected_tweakable && form">
-                                <div 
-                                    class="p-2" 
-                                    x-data="{ data: selected_tweakable }"
-                                    x-load="form.html"></div>
+                            <template x-if="selected_tweakable">
+                                <div x-data="{form: null}" x-init="
+                                    form = selected_tweakable.type == 'int' ? await eel.get_form('IntTweakable')() :
+                                    selected_tweakable.type == 'string' ? await eel.get_form('StringTweakable')() :
+                                    selected_tweakable.type == 'boolean' ? await eel.get_form('BooleanTweakable')() :
+                                    selected_tweakable.type == 'float' ? await eel.get_form('FloatTweakable')() :
+                                    selected_tweakable.type == 'joystick' ? await eel.get_form('JoystickTweakable')() :
+                                    selected_tweakable.type == 'inputaction' ? await eel.get_form('InputActionTweakable')() :
+                                    null
+                                    ">
+                                    <button class="btn btn-danger ms-2 mt-2" x-on:click="
+                                        selected_tweakable.type == 'int' ? selected_part.int_tweakables.splice(selected_part.int_tweakables.indexOf(selected_tweakable), 1) :
+                                        selected_tweakable.type == 'string' ? selected_part.string_tweakables.splice(selected_part.string_tweakables.indexOf(selected_tweakable), 1) :
+                                        selected_tweakable.type == 'boolean' ? selected_part.boolean_tweakables.splice(selected_part.boolean_tweakables.indexOf(selected_tweakable), 1) :
+                                        selected_tweakable.type == 'float' ? selected_part.float_tweakables.splice(selected_part.float_tweakables.indexOf(selected_tweakable), 1) :
+                                        selected_tweakable.type == 'joystick' ? selected_part.joystick_tweakables.splice(selected_part.joystick_tweakables.indexOf(selected_tweakable), 1) :
+                                        selected_tweakable.type == 'inputaction' ? selected_part.inputaction_tweakables.splice(selected_part.inputaction_tweakables.indexOf(selected_tweakable), 1) :
+                                        null;
+                                        selected_tweakable = null;
+                                        form = null;
+                                        "><i class="fa-solid fa-trash"></i></button>
+                                    <hr>
+                                    <div 
+                                        class="px-2" 
+                                        x-data="{ data: selected_tweakable }"
+                                        x-load="form.html"></div>
+                                </div>
                             </template>
                         </div>
                     </div>
