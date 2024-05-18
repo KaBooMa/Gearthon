@@ -43,7 +43,7 @@ class Attachment:
                 'is_bidirectional', 
                 'is_female', 
                 'is_interior', 
-                'is_part_pairing_limited'
+                # 'is_part_pairing_limited'
             ],
             'multiselect': True
         })
