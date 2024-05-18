@@ -16,6 +16,7 @@ from classes import *
 from dataclasses import asdict, fields
 from appdata import AppData, load_appdata
 from tkinter import filedialog, messagebox
+from pathlib import Path
 
 updater.verify_cleanup()
 
@@ -207,6 +208,9 @@ def current_mod_path():
         return None
     
     mod_folder = f'{appdata.mods_folder()}/{mod.name}'
+    if not os.path.exists(appdata.mods_folder()):
+        os.mkdir(appdata.mods_folder())
+
     if not os.path.exists(mod_folder):
         os.mkdir(mod_folder)
     
@@ -263,6 +267,27 @@ def save_mod():
     json_path = current_mod_file()
     with open(json_path, 'w') as f:
         f.write(json.dumps(data))
+
+
+@eel.expose
+def import_mod():
+    path = filedialog.askopenfilename(defaultextension='.gearthon', filetypes=[('Gearthon Mods', '*.gearthon')])
+
+    with zipfile.ZipFile(path) as zip:
+        first_dir = zip.filelist[0].filename
+        mod_path = f'{appdata.mods_folder}/{first_dir}'
+        if os.path.exists(mod_path):
+            os.remove(mod_path)
+
+        zip.extractall(appdata.mods_folder())
+
+
+@eel.expose
+def export_mod(name):
+    path = filedialog.askdirectory()
+    mod_path = Path(f'{appdata.mods_folder()}/{name}')
+    shutil.make_archive(f'{path}/{name}.gearthon', 'zip', root_dir=mod_path.parent, base_dir=f'./{name}')
+    shutil.move(f'{path}/{name}.gearthon.zip', f'{path}/{name}.gearthon')
 
 
 @eel.expose
