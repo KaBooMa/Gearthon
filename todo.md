@@ -10,6 +10,7 @@ Normal Priority
 - joystick support
 - Home page, hotkeys in editor
 - Try to parse quad objs by making two triangles if possible
+- Figure out better way to track updates across GearLib, Gearthon and Editor
 
 Low Priority
 - demo parts/mods available for download to view how things work
