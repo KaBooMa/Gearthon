@@ -1,16 +1,22 @@
+High Priority
+- Tweakables are not updating automatically during Update() calls
+- Add link types to parts
+- Mesh colliders need to be functional
+
+Normal Priority
+- Guidance in editor, maybe youtube video? link in editor if so
+- Right click add attachment possibility, if better than ctrl
+- Description on the flags
+- joystick support
+- Home page, hotkeys in editor
+- Try to parse quad objs by making two triangles if possible
+
+Low Priority
+- demo parts/mods available for download to view how things work
+- provide UX from toasts
 - part friction sliders in editor
 - enable/disable mods
-- provide UX from toasts
-- Guidance in editor, maybe youtube video? link in editor if so
-- demo parts/mods available for download to view how things work
-- Right click add attachment possibility, if better than ctrl
-- Home page, hotkeys in editor
-- Description on the flags
-- Try to parse quad objs by making two triangles if possible
-- joystick support
-- Add link types to parts
 - Implement is_part_pairing_limited
-
-- version control mods. So if a mod was made with v1 GearThon, v0.9 isn't allowed
 - Ability to create new of existing; For example, new wheel w/ WheelBehaviour
 - attachment images to show what there is available? Might have to cycle every x seconds. Or just a simple list when hovering
+- version control mods. So if a mod was made with v1 Gearthon, v0.9 isn't allowed
