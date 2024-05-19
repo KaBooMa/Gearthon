@@ -11,6 +11,7 @@ Normal Priority
 - Home page, hotkeys in editor
 - Try to parse quad objs by making two triangles if possible
 - Figure out better way to track updates across GearLib, Gearthon and Editor
+- Darkly (maybe others) cause the editor menu to be the same color text and bg
 
 Low Priority
 - demo parts/mods available for download to view how things work
