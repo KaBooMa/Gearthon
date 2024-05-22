@@ -167,6 +167,7 @@ class LuaPart : Il2CppSystem.Object
         {
             foreach (Collider collider2 in other_part_object.part.Get().GetComponentsInChildren<Collider>()) {
                 Physics.IgnoreCollision(collider1, collider2, !enabled);
+                Physics.IgnoreCollision(collider2, collider1, !enabled);
             }
         }
     }
