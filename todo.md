@@ -1,6 +1,8 @@
 High Priority
 - Add link types to parts
 - Move around the updating for BepInEx at least so it can pull the latest URL from the new release.
+- Add materials into the editor
+- Look into a way to handle multi-model objs. For like, painting individually, running Lua over them, etc. Think spinning blades inside a propeller
 
 Normal Priority
 - Guidance in editor, maybe youtube video? link in editor if so
