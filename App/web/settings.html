@@ -21,11 +21,34 @@
                             }, 100);"></div>
                     </div>
                 </template>
-                <button class="btn btn-success" :class="{ 'disabled': state == 'downloading' }" x-on:click="async () => { state = 'downloading'; eel.update()(); }">Update Gearthon <i class="fa-solid fa-download"></i></button>
+                <button class="btn btn-success" :class="{ 'disabled': state == 'downloading' }" x-on:click="async () => { state = 'downloading'; eel.update()(); }">Update All <i class="fa-solid fa-download"></i></button>
             </div>
         </template>
     </div>
+    <hr>
+    <div class="d-flex flex-column w-100" x-data="{ 'state': 'downloaded' }">
+        <template x-if="state == 'downloading'">
+            <div class="progress w-100 mb-4" x-data="{'progress': 0}">
+                <div class="progress-bar" :style="{ width: progress + '%' }" x-init="
+                    setInterval(async () => {
+                        progress = await eel.get_progress('bepinex')(); 
+                        if (progress >= 100) {
+                            state = 'downloaded'; 
+                        }
+                    }, 100);"></div>
+            </div>
+        </template>
+        <div class="w-100">
+            <h3>Reinstall Mods</h3>
+            <p>Utilize these when things are not working. These will forcefully reinstall the various mods for Gearthon to properly work.</p>
+            <button class="btn btn-warning" :class="{ 'disabled': state == 'downloading' }" x-on:click="async () => { state = 'downloading'; eel.update_bepinex()(); }">Reinstall BepInEx</button>
+            <button class="btn btn-warning" :class="{ 'disabled': state == 'downloading' }" x-on:click="async () => { state = 'downloading'; eel.update_gearlib()(); }">Reinstall GearLib</button>
+            <button class="btn btn-warning" :class="{ 'disabled': state == 'downloading' }" x-on:click="async () => { state = 'downloading'; eel.update_gearthon()(); }">Reinstall Gearthon</button>
+        </div>
+    </div>
+    <hr>
     <div>
+        <h3>Configuration</h3>
         <label class="form-label">Theme</label>
         <select class="form-select" x-model="appdata.theme" x-on:change="eel.update_appdata({'theme': $event.target.value})()">
             <option value="cerulean">Cerulean</option>

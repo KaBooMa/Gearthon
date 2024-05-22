@@ -24,7 +24,7 @@ eel.init('web', allowed_extensions=['.html'])
 
 #### APP API ####
 appdata: AppData = None
-BEPINEX_LINK = 'https://builds.bepinex.dev/projects/bepinex_be/688/BepInEx-Unity.IL2CPP-win-x86-6.0.0-be.688%2B4901521.zip'
+BEPINEX_LINK = 'https://builds.bepinex.dev/projects/bepinex_be/690/BepInEx-Unity.IL2CPP-win-x86-6.0.0-be.690%2B36d130f.zip'
 GEARLIB_LINK = 'https://github.com/KaBooMa/GearLib/releases/latest/download/GearLib.zip'
 
 @eel.expose
@@ -92,6 +92,7 @@ progress = {}
 def update_bepinex():
     def update():
         global progress
+        progress['bepinex'] = 0
 
         res = requests.get(BEPINEX_LINK, stream=True)
         download_size = int(res.headers.get('Content-Length'))
@@ -117,6 +118,7 @@ def update_bepinex():
 def update_gearlib():
     def update():
         global progress
+        progress['gearlib'] = 0
 
         res = requests.get(GEARLIB_LINK, stream=True)
         download_size = int(res.headers.get('Content-Length'))
@@ -146,6 +148,7 @@ def update_gearlib():
 def update_gearthon():
     def update():
         global progress
+        progress['gearthon'] = 0
 
         # Ensure we got a path and cleanup existing
         if not os.path.exists(appdata.gearthon_folder()):
@@ -175,6 +178,7 @@ def update():
     def update():
         update_gearlib()
         update_gearthon()
+        update_bepinex()
         for status in updater.download_latest_gearthon():
             progress['editor'] = status
 
