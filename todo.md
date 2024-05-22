@@ -1,5 +1,6 @@
 High Priority
 - Add link types to parts
+- Move around the updating for BepInEx at least so it can pull the latest URL from the new release.
 
 Normal Priority
 - Guidance in editor, maybe youtube video? link in editor if so
