@@ -5,7 +5,7 @@ using Il2CppInterop.Runtime.InteropTypes.Fields;
 using MoonSharp.Interpreter;
 using SmashHammer.Input;
 
-namespace Gearthon.Lua;
+namespace Gearthon.Lua.Tweakables;
 
 class LuaInputAction : Il2CppSystem.Object
 {

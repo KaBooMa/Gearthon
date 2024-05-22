@@ -44,13 +44,13 @@ class ScriptBehaviour : GearLib.API.Behaviour
             {
                 instanced = true;
 
-                // Give lua access to part data and modder-defined tweakables
-                lua_vars = new LuaVariables(this);
-                lua_vars._UpdateVars();
-
                 // Run our lua to init all declarations, etc.
                 if (Plugin.scripts[descriptor.AssetGUID] != null)
                 {
+                    // Give lua access to part data and modder-defined tweakables
+                    lua_vars = new LuaVariables(this);
+                    lua_vars._UpdateVars();
+
                     DynValue script_string = script.LoadString(Plugin.scripts[descriptor.AssetGUID]);
                     script.Call(script_string);
                 }
@@ -66,13 +66,13 @@ class ScriptBehaviour : GearLib.API.Behaviour
                 if (is_frozen)
                 {
                     is_frozen = false;
-                    lua_vars._UpdateVars();
 
                     // Call the unfrozen function if exists
                     DynValue unfrozen_function = script.Globals.Get("Unfrozen");
                     if (unfrozen_function.IsNotNil())
                     {
                         // Give lua access to updated part data
+                        lua_vars._UpdateVars();
                         script.Call(unfrozen_function);
 
                     }
@@ -84,6 +84,7 @@ class ScriptBehaviour : GearLib.API.Behaviour
                     if (update_function.IsNotNil())
                     {
                         // Give lua access to updated part data
+                        lua_vars._UpdateTweakables();
                         script.Call(update_function);
                     }
                 }
@@ -93,13 +94,13 @@ class ScriptBehaviour : GearLib.API.Behaviour
                 if (!is_frozen)
                 {
                     is_frozen = true;
-                    lua_vars._UpdateVars();
 
                     // Call the frozen function if exists
                     DynValue frozen_function = script.Globals.Get("Frozen");
                     if (frozen_function.IsNotNil())
                     {
                         // Give lua access to updated part data
+                        lua_vars._UpdateVars();
                         script.Call(frozen_function);
                     }
                 }
