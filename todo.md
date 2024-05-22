@@ -5,6 +5,7 @@ High Priority
 - Look into a way to handle multi-model objs. For like, painting individually, running Lua over them, etc. Think spinning blades inside a propeller
 
 Normal Priority
+- Add support for procedural parts
 - Guidance in editor, maybe youtube video? link in editor if so
 - Right click add attachment possibility, if better than ctrl
 - Description on the flags
