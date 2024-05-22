@@ -10,6 +10,7 @@ Normal Priority
 - Try to parse quad objs by making two triangles if possible
 - Figure out better way to track updates across GearLib, Gearthon and Editor
 - Darkly (maybe others) cause the editor menu to be the same color text and bg
+- Add option to recalculate the normal when loaded for part (RecalculateNormal() in OBJParser)
 
 Low Priority
 - demo parts/mods available for download to view how things work
