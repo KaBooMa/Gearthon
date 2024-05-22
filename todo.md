@@ -1,7 +1,6 @@
 High Priority
 - Tweakables are not updating automatically during Update() calls
 - Add link types to parts
-- Mesh colliders need to be functional
 
 Normal Priority
 - Guidance in editor, maybe youtube video? link in editor if so
