@@ -18,8 +18,6 @@ from appdata import AppData, load_appdata
 from tkinter import filedialog, messagebox
 from pathlib import Path
 
-updater.verify_cleanup()
-
 eel.init('web', allowed_extensions=['.html'])
 
 #### APP API ####
@@ -145,40 +143,8 @@ def update_gearlib():
 
 
 @eel.expose
-def update_gearthon():
-    def update():
-        global progress
-        progress['gearthon'] = 0
-
-        # Ensure we got a path and cleanup existing
-        if not os.path.exists(appdata.gearthon_folder()):
-            os.mkdir(appdata.gearthon_folder())
-            
-        if os.path.exists(f'{appdata.gearthon_folder()}/Gearthon.dll'):
-            os.remove(f'{appdata.gearthon_folder()}/Gearthon.dll')
-
-        # Start downloading the file
-        res = requests.get(f'{updater.GITHUB_DOWNLOAD_URL}/Gearthon.dll', stream=True)
-        download_size = int(res.headers.get('Content-Length'))
-        
-        total_downloaded = 0
-        with open(f'{appdata.gearthon_folder()}/Gearthon.dll', 'wb') as f:
-            for data in res.iter_content(1024):
-                total_downloaded += len(data)
-                status = round(total_downloaded / download_size * 100, 2)
-                f.write(data)
-                progress['gearthon'] = status
-
-    thread = threading.Thread(target=update)
-    thread.start()
-
-
-@eel.expose
 def update():
     def update():
-        update_gearlib()
-        update_gearthon()
-        update_bepinex()
         for status in updater.download_latest_gearthon():
             progress['editor'] = status
 
@@ -443,6 +409,14 @@ def get_form(class_name):
         })
 
     return field_data
+
+# Run any cleanups or whatever
+updater.verify_cleanup()
+
+OLD_GEARTHON_DLL_PATH = f'{appdata.gearthon_folder()}/Gearthon.dll'
+if os.path.exists(OLD_GEARTHON_DLL_PATH):
+    os.remove(OLD_GEARTHON_DLL_PATH)
+
 
 # Start the frontend
 eel.start('index.html?page=home', size=(1500, 800))

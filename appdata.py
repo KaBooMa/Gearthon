@@ -4,7 +4,7 @@ from tkinter import filedialog, messagebox
 import os, json
 
 APPDATA_FILE = 'data.json'
-CURRENT_VERSION = '1.0.3'
+CURRENT_VERSION = '1.0.4'
 
 def get_gearblocks_path():
     DEFAULT_PATHS = ['C:/Program Files (x86)/Steam/steamapps/common/GearBlocks']

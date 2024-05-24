@@ -43,7 +43,6 @@
             <p>Utilize these when things are not working. These will forcefully reinstall the various mods for Gearthon to properly work.</p>
             <button class="btn btn-warning" :class="{ 'disabled': state == 'downloading' }" x-on:click="async () => { state = 'downloading'; eel.update_bepinex()(); }">Reinstall BepInEx</button>
             <button class="btn btn-warning" :class="{ 'disabled': state == 'downloading' }" x-on:click="async () => { state = 'downloading'; eel.update_gearlib()(); }">Reinstall GearLib</button>
-            <button class="btn btn-warning" :class="{ 'disabled': state == 'downloading' }" x-on:click="async () => { state = 'downloading'; eel.update_gearthon()(); }">Reinstall Gearthon</button>
         </div>
     </div>
     <hr>

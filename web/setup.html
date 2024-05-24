@@ -1,7 +1,7 @@
 
 <div class="p-4" x-data="{ progress: 0 }">
     <div class="progress mb-4">
-        <div class="progress-bar" :style="{'width': (progress / 6 * 100) + '%' }"></div>
+        <div class="progress-bar" :style="{'width': (progress / 5 * 100) + '%' }"></div>
     </div>
     <template x-if="progress == 0">
         <div class="d-flex flex-column align-items-center w-50 mx-auto">
@@ -67,26 +67,6 @@
         </div>
     </template>
     <template x-if="progress == 4">
-        <div class="d-flex flex-column align-items-center w-50 mx-auto" x-data="{ 'state': null }" x-init='async () => { if (await eel.gearthon_exists()()) { progress++ }}'>
-            <h1>Gearthon Modding Library</h1>
-            <p>Last one! Let's setup Gearthon as a mod now.</p>
-            <p>Lets install Gearthon together!</p>
-            <template x-if="state == 'downloading'">
-                <div class="progress w-100 mb-4" x-data="{'progress': 0}">
-                    <div class="progress-bar" :style="{ width: progress + '%' }" x-init="
-                        setInterval(async () => {
-                            progress = await eel.get_progress('gearthon')(); 
-                            if (progress >= 100) { 
-                                state = 'downloaded'; 
-                            }
-                        }, 100);"></div>
-                </div>
-            </template>
-            <button class="btn btn-success" :class="{ 'disabled': state == 'downloading' }" x-show="state != 'downloaded'" x-on:click="state = 'downloading'; eel.update_gearthon()();">Install Gearthon <i class="fa-solid fa-download"></i></button>
-            <button class="btn btn-primary mt-2" x-show="state == 'downloaded'" x-on:click="progress++">Continue</button>
-        </div>
-    </template>
-    <template x-if="progress == 5">
         <div class="d-flex flex-column align-items-center w-50 mx-auto">
             <h1>Make It Yours</h1>
             <p>Feel free to customize Gearthon with some of the pre-built themes. They ain't pretty, but they're free!</p>
