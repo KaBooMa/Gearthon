@@ -112,9 +112,6 @@
                             <button class="nav-link" :class="{ 'active': current_page == 'home', 'disabled': !appdata.setup}" x-on:click="loadPage('home')">Home</button>
                         </li>
                         <li class="nav-item">
-                            <button class="nav-link" :class="{ 'active': current_page == 'mods', 'disabled': !appdata.setup}" x-on:click="loadPage('mods')">Mods</button>
-                        </li>
-                        <li class="nav-item">
                             <button class="nav-link" :class="{ 'active': current_page == 'editor', 'disabled': !appdata.setup}" x-on:click="loadPage('editor')">Editor</button>
                         </li>
                     </ul>

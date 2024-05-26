@@ -2,20 +2,20 @@
     <div>
         <label class="form-label mt-2" x-text="field.metadata.label"></label>
         <template x-if="field.type == 'int'">
-            <input class="form-control" type="number" x-model="data[field.name]" x-on:input="data[field.name] = parseInt(data[field.name])">
+            <input class="form-control" type="number" x-model="data[field.name]" x-on:input="data[field.name] = parseInt(data[field.name]); update_func(data)">
         </template>
         <template x-if="field.type == 'str' && !field.metadata.options && !field.metadata.multiline && !field.metadata.file">
-            <input class="form-control" x-model="data[field.name]">
+            <input class="form-control" x-model="data[field.name]" x-on:input="update_func(data)">
         </template>
         <template x-if="field.type == 'str' && field.metadata.options">
-            <select class="form-select" x-model="data[field.name]">
+            <select class="form-select" x-model="data[field.name]" x-on:change="update_func(data)">
                 <template x-for="option in field.metadata.options">
                     <option x-text="option" x-bind:selected="option == data[field.name]"></option>
                 </template>
             </select>
         </template>
         <template x-if="field.type == 'List'">
-            <select class="form-select" x-model="data[field.name]" multiple>
+            <select class="form-select" x-model="data[field.name]" multiple x-on:change="update_func(data)">
                 <template x-for="option in field.metadata.options">
                     <option x-text="option" x-bind:selected="data[field.name].includes(option)"></option>
                 </template>
@@ -23,34 +23,59 @@
         </template>
         <template x-if="field.type == 'Vector3'">
             <div class="d-flex gap-2">
-                <input class="form-control" type="number" step=".01" x-model="data[field.name].x" x-on:input="data[field.name].x = parseFloat(data[field.name].x); updatePositioning(data.position, false, true)">
-                <input class="form-control" type="number" step=".01" x-model="data[field.name].y" x-on:input="data[field.name].y = parseFloat(data[field.name].y); updatePositioning(data.position, false, true)">
-                <input class="form-control" type="number" step=".01" x-model="data[field.name].z" x-on:input="data[field.name].z = parseFloat(data[field.name].z); updatePositioning(data.position, false, true)">
+                <input class="form-control" type="number" step=".01" x-model="data[field.name].x" x-on:input="data[field.name].x = parseFloat(data[field.name].x); updatePositioning(data.position, false, true); update_func(data)">
+                <input class="form-control" type="number" step=".01" x-model="data[field.name].y" x-on:input="data[field.name].y = parseFloat(data[field.name].y); updatePositioning(data.position, false, true); update_func(data)">
+                <input class="form-control" type="number" step=".01" x-model="data[field.name].z" x-on:input="data[field.name].z = parseFloat(data[field.name].z); updatePositioning(data.position, false, true); update_func(data)">
             </div>
         </template>
         
         <template x-if="field.type == 'Vector3Int'">
             <div class="d-flex gap-2">
-                <input class="form-control" type="number" step="1" x-model="data[field.name].x" x-on:input="data[field.name].x = parseFloat(data[field.name].x); updatePositioning(data.position, false, true)">
-                <input class="form-control" type="number" step="1" x-model="data[field.name].y" x-on:input="data[field.name].y = parseFloat(data[field.name].y); updatePositioning(data.position, false, true)">
-                <input class="form-control" type="number" step="1" x-model="data[field.name].z" x-on:input="data[field.name].z = parseFloat(data[field.name].z); updatePositioning(data.position, false, true)">
+                <input class="form-control" type="number" step="1" x-model="data[field.name].x" x-on:input="data[field.name].x = parseFloat(data[field.name].x); updatePositioning(data.position, false, true); update_func(data)">
+                <input class="form-control" type="number" step="1" x-model="data[field.name].y" x-on:input="data[field.name].y = parseFloat(data[field.name].y); updatePositioning(data.position, false, true); update_func(data)">
+                <input class="form-control" type="number" step="1" x-model="data[field.name].z" x-on:input="data[field.name].z = parseFloat(data[field.name].z); updatePositioning(data.position, false, true); update_func(data)">
             </div>
         </template>
         <template x-if="field.type == 'str' && field.metadata.multiline">
-            <textarea class="form-control" x-model="data[field.name]"></textarea>
+            <textarea class="form-control" x-model="data[field.name]" x-on:input="update_func(data)"></textarea>
         </template>
         <template x-if="field.type == 'str' && field.metadata.file">
             <input 
                 class="form-control" 
                 type="file" 
                 x-init="loadOBJ(data[field.name])"
-                x-on:change="async () => { data[field.name] = await uploadOBJ($event) }">
+                x-on:change="async () => { data[field.name] = await uploadOBJ($event); update_func(data) }">
         </template>
         <template x-if="field.type == 'float'">
-            <input class="form-control" type="number" x-model="data[field.name]" x-on:input="data[field.name] = parseFloat(data[field.name])">
+            <input class="form-control" type="number" x-model="data[field.name]" x-on:input="data[field.name] = parseFloat(data[field.name]); update_func(data)">
         </template>
         <template x-if="field.type == 'bool'">
-            <input class="form-check-input" type="checkbox" x-model="data[field.name]">
+            <input class="form-check-input" type="checkbox" x-model="data[field.name]" x-on:change="update_func(data)">
+        </template>
+        <template x-if="field.type == 'Color'">
+            <div class="d-flex gap-2">
+                <div class="d-flex rounded border" style="
+                    width: 10rem;
+                    background-image: linear-gradient(45deg, #808080 25%, transparent 25%), linear-gradient(-45deg, #808080 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #808080 75%), linear-gradient(-45deg, transparent 75%, #808080 75%);
+                    background-size: 10px 10px;
+                    background-position: 0 0, 0 5px, 5px -5px, -5px 0px;
+                ">
+                    <div class="flex-grow-1 rounded" :style="{
+                        'background-color': `rgba(${data[field.name].r}, ${data[field.name].g}, ${data[field.name].b}, ${data[field.name].a})`
+                    }"></div>
+                </div>
+                <!-- <label>Red </label> -->
+                <input class="form-control" style="background-color: red" type="range" step="1" x-model="data[field.name].r" min="0" max="255" x-on:input="data[field.name].r = parseFloat(data[field.name].r); update_func(data)">
+                
+                <!-- <label>Green </label> -->
+                <input class="form-control" style="background-color: green" type="range" step="1" x-model="data[field.name].g" min="0" max="255" x-on:input="data[field.name].g = parseFloat(data[field.name].g); update_func(data)">
+                
+                <!-- <label>Blue </label> -->
+                <input class="form-control" style="background-color: blue" type="range" step="1" x-model="data[field.name].b" min="0" max="255" x-on:input="data[field.name].b = parseFloat(data[field.name].b); update_func(data)">
+
+                <!-- <label>Alpha </label> -->
+                <input class="form-control" type="range" step=".01" x-model="data[field.name].a" min="0" max="1" x-on:input="data[field.name].a = parseFloat(data[field.name].a); update_func(data)">
+            </div>
         </template>
     </div>
 </template>

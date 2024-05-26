@@ -1,7 +1,6 @@
-<div x-data="{mod: null}" x-init="async () => { mod = await eel.get_mod()();}">
+<div x-data="{mod: null, show_controls: false}" x-init="async () => { mod = await eel.get_mod()(); }">
     <div x-show="!mod" class="h-100" x-load="loading.html"></div>
     <div x-show="mod">
-
         <div class="d-flex h-100" x-data="editor">
             <div class="w-25 p-2 border-end">
                 <div class="d-flex flex-column">
@@ -16,276 +15,391 @@
                     <button 
                         class="btn btn-success mt-2 w-100" 
                         type="submit" 
-                        x-on:click="selected_part['attachments'] = attachments; eel.update_selected_part(selected_part)(); eel.save_mod(); loadPage('editor')">
+                        x-on:click="eel.save_mod(); loadPage('editor')">
                         Save Mod
                     </button>
                 </div>
                 <hr>
+
+                <!-- Part Listing -->
                 <div x-data="{ deleting: false, collapsed: false }">
                     <h5 class="d-flex">
                         <button class="btn fa-solid" :class="{ 'fa-chevron-up': !collapsed, 'fa-chevron-down': collapsed }" x-on:click="collapsed = !collapsed"></button>
                         Parts
-                        <button class="btn fa-solid fa-plus ms-auto" x-on:click="if (selected_part) { selected_part['attachments'] = attachments; eel.update_selected_part(selected_part)(); } eel.create_part(); loadPage('editor')"></button>
+                        <button class="btn fa-solid fa-plus ms-auto" x-on:click="eel.create_part(); loadPage('editor')"></button>
                         <button class="btn fa-solid fa-trash" x-on:click="deleting = !deleting"></button>
                     </h5>
                     <ul class="nav nav-pills flex-column" x-transition x-show="!collapsed">
                         <template x-for="part in mod?.parts">
                             <li class="nav-item d-flex">
-                                <button class="btn btn-danger fa-solid fa-trash m-2" x-show="deleting" x-transition x-on:click="if (selected_part) { selected_part['attachments'] = attachments; eel.update_selected_part(selected_part)(); } eel.delete_part(part.uid); loadPage('editor')"></button>
+                                <button class="btn btn-danger fa-solid fa-trash m-2" x-show="deleting" x-transition x-on:click="eel.delete_part(part.uid); loadPage('editor')"></button>
                                 <button 
                                     class="btn w-100 my-2" 
                                     :class="{ 'btn-primary': part.uid == selected_part?.uid, 'btn-dark': part.uid != selected_part?.uid }" 
                                     x-text="part.display_name" 
-                                    x-on:click="if (selected_part) { selected_part['attachments'] = attachments; eel.update_selected_part(selected_part)(); } eel.select_part(part.uid); loadPage('editor')"></button>
+                                    x-on:click="eel.select_part(part.uid); loadPage('editor')"></button>
                             </li>
                         </template>
                     </ul>
                 </div>
-                <!-- TODO: Add these other modding options -->
-                <!-- <h5 class="d-flex" x-data="{ deleting: false, collapsed: false }">
-                    <button class="btn fa-solid" :class="{ 'fa-chevron-up': !collapsed, 'fa-chevron-down': collapsed }" x-on:click="collapsed = !collapsed"></button>
-                    Link Types
-                    <button class="btn fa-solid fa-plus ms-auto"></button>
-                    <button class="btn fa-solid fa-trash" x-on:click="deleting = !deleting"></button>
-                </h5>
                 <hr>
-                <h5 class="d-flex" x-data="{ deleting: false, collapsed: false }">
-                    <button class="btn fa-solid" :class="{ 'fa-chevron-up': !collapsed, 'fa-chevron-down': collapsed }" x-on:click="collapsed = !collapsed"></button>
-                    Materials
-                    <button class="btn fa-solid fa-plus ms-auto"></button>
-                    <button class="btn fa-solid fa-trash" x-on:click="deleting = !deleting"></button>
-                </h5> -->
-            </div>
-            <div class="d-flex flex-column p-0 w-50" style="min-width: 0rem;">
-                <nav class="nav navbar-expand navbar border-bottom">
-                    <div class="container-fluid">
-                        <ul class="navbar-nav">
-                            <li class="nav-item" x-data="{ open_file_browser: function() { $refs.filebrowser.click(); }}">
-                                <a class="nav-link" role="button" x-on:click="open_file_browser()">Upload Model</a>
-                                <input 
-                                    class="form-control" 
-                                    type="file" 
-                                    hidden
-                                    accept=".obj"
-                                    x-ref="filebrowser"
-                                    x-on:change="async () => { await uploadOBJ($event) }">
+
+                <!-- Link Type Listing -->
+                <div x-data="{ deleting: false, collapsed: false }">
+                    <h5 class="d-flex">
+                        <button class="btn fa-solid" :class="{ 'fa-chevron-up': !collapsed, 'fa-chevron-down': collapsed }" x-on:click="collapsed = !collapsed"></button>
+                        Link Types
+                        <button class="btn fa-solid fa-plus ms-auto" x-on:click="eel.create_link_type(); loadPage('editor')"></button>
+                        <button class="btn fa-solid fa-trash" x-on:click="deleting = !deleting"></button>
+                    </h5>
+                    <ul class="nav nav-pills flex-column" x-transition x-show="!collapsed">
+                        <template x-for="link_type in mod?.link_types">
+                            <li class="nav-item d-flex">
+                                <button class="btn btn-danger fa-solid fa-trash m-2" x-show="deleting" x-transition x-on:click="eel.delete_link_type(part.uid); loadPage('editor')"></button>
+                                <button 
+                                    class="btn w-100 my-2" 
+                                    :class="{ 'btn-primary': link_type.uid == selected_link_type?.uid, 'btn-dark': link_type.uid != selected_link_type?.uid }" 
+                                    x-text="link_type.display_name" 
+                                    x-on:click="eel.select_link_type(link_type.uid); loadPage('editor')"></button>
                             </li>
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Mode</a>
-                                <div class="dropdown-menu">
-                                    <a class="dropdown-item" x-on:click="UpdateMode('View')">View <span class="text-secondary">[Ctrl+1]</span></a>
-                                    <a class="dropdown-item" x-on:click="UpdateMode('Attachments')">Attachments <span class="text-secondary">[Ctrl+2]</span></a>
-                                    <a class="dropdown-item" x-on:click="UpdateMode('Scripting')">Scripting <span class="text-secondary">[Ctrl+3]</span></a>
-                                    <a class="dropdown-item" x-on:click="UpdateMode('Tweakables')">Tweakables <span class="text-secondary">[Ctrl+4]</span></a>
-                                </div>
+                        </template>
+                    </ul>
+                </div>
+                <hr>
+
+                <!-- Material Listing -->
+                <div x-data="{ deleting: false, collapsed: false }">
+                    <h5 class="d-flex">
+                        <button class="btn fa-solid" :class="{ 'fa-chevron-up': !collapsed, 'fa-chevron-down': collapsed }" x-on:click="collapsed = !collapsed"></button>
+                        Materials
+                        <button class="btn fa-solid fa-plus ms-auto" x-on:click="eel.create_material(); loadPage('editor')"></button>
+                        <button class="btn fa-solid fa-trash" x-on:click="deleting = !deleting"></button>
+                    </h5>
+                    <ul class="nav nav-pills flex-column" x-transition x-show="!collapsed">
+                        <template x-for="material in mod?.materials">
+                            <li class="nav-item d-flex">
+                                <button class="btn btn-danger fa-solid fa-trash m-2" x-show="deleting" x-transition x-on:click="eel.delete_material(material.uid); loadPage('editor')"></button>
+                                <button 
+                                    class="btn w-100 my-2" 
+                                    :class="{ 'btn-primary': material.uid == selected_material?.uid, 'btn-dark': material.uid != selected_material?.uid }" 
+                                    x-text="material.display_name" 
+                                    x-on:click="eel.select_material(material.uid); loadPage('editor')"></button>
                             </li>
-                        </ul>
-                    </div>
-                </nav>
-                <div class="d-flex flex-column h-100 w-100">
-                    <div class="h-100" id="3js" x-on:mousemove="MouseMove" x-on:mousedown="MouseDown" x-on:keydown="KeyDown" x-init="async() => { loadOBJ(await eel.load_part_obj()())}"></div>
-                    <template x-if="mode == 'Scripting'">
-                        <div class="h-100 w-50 p-2 position-fixed">
-                            <!-- <textarea 
-                                class="form-control h-75"
-                                style="tab-size: 2; white-space: nowrap; resize: none;"
-                                x-model="selected_part.script"></textarea> -->
-                            <div id="editor" x-init="DisplayAce" class="h-75 rounded border shadow"></div>
-                        </div>
-                    </template>
+                        </template>
+                    </ul>
                 </div>
             </div>
-        
-        
-            <div class="bg-dark w-25 h-100 border-start overflow-auto">
-                <template x-if="mode == 'View' && selected_part"> <!--class="bg-dark p-4 col border-start overflow-scroll"--> 
-                    <div class="p-2">
+
+            <!-- UI FOR MATERIAL EDITING -->
+            <template x-if="selected_material">
+                <div class="d-flex p-0 w-75" x-data="{ img_data: null }">
+                    <div class="d-flex flex-column w-75">
+                        <button class="btn btn-primary m-2" x-on:click="async () => { await eel.upload_material_texture()(); loadPage('editor') }">Upload</button>
+                        <img class="rounded img-fluid border m-2" style="pointer-events: none;" x-bind:src="img_data" x-init="async () => {img_data = await eel.get_material_texture()()}">
+                        
+                    </div>
+                    <div class="d-flex flex-column w-25 border-start p-2">
                         <h3 class="text-center">Settings</h3>
                         <hr>
                         <div 
                             class="p-2"
                             x-load="form.html" 
-                            x-data="{ form: null, data: selected_part }" 
-                            x-init="async () => { form = await eel.get_form('Part')() }"></div>
+                            x-data="{ form: null, data: selected_material, update_func: eel.update_material }" 
+                            x-init="async () => { form = await eel.get_form('Material')() }"></div>
                     </div>
-                </template>
-                <template x-if="mode == 'Attachments' && SelectedAttachment()">
-                    <div class="p-2">
-                        <h3 class="text-center">Attachment</h3>
-                        <hr>
-                        <div 
-                            class="p-2" 
-                            x-load="form.html" 
-                            x-data="{ form: null, data: SelectedAttachment() }" 
-                            x-init="async () => { form = await eel.get_form('Attachment')() }"></div>
-                    </div>
-                </template>
-                <template x-if="mode == 'Scripting'">
-                    <div class="p-2">
-                        <h3 class="text-center">Tweakables</h3>
-                        <hr>
-                        <template x-for="tweakable in selected_part?.int_tweakables.concat(
-                            selected_part?.boolean_tweakables,
-                            selected_part?.joystick_tweakables,
-                            selected_part?.float_tweakables,
-                            selected_part?.string_tweakables,
-                            selected_part?.inputaction_tweakables,
-                        )">
-                            <div class="p-2">
-                                <b x-text="tweakable.name"></b> - <span x-text="tweakable.type"></span>
-                            </div>
-                        </template>
-                    </div>
-                </template>
-                <template x-if="mode == 'Tweakables'">
-                    <div class="" x-data="{ selected_tweakable: null, form: null }">
+                </div>
+            </template>
+
+            <!-- UI FOR LINK TYPE EDITING -->
+            <template x-if="selected_link_type">
+                <div class="d-flex flex-column p-4 w-75">
+                    <h3 class="text-center">Settings</h3>
+                    <hr>
+                    <div 
+                        class="p-2"
+                        x-load="form.html" 
+                        x-data="{ form: null, data: selected_link_type, update_func: eel.update_link_type }" 
+                        x-init="async () => { form = await eel.get_form('LinkType')() }"></div>
+                </div>
+            </template>
+        
+            <!-- UI FOR PART EDITING -->
+            <template x-if="selected_part">
+                <div class="d-flex p-0 w-75">
+                    <div class="d-flex flex-column p-0 w-75" style="min-width: 0rem;">
                         <nav class="nav navbar-expand navbar border-bottom">
                             <div class="container-fluid">
                                 <ul class="navbar-nav">
-                                    <li class="nav-item dropdown">
-                                        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Add</a>
-                                        <div class="dropdown-menu">
-                                            <a class="dropdown-item" x-on:click="selected_part.int_tweakables.push({
-                                                    'name': 'my_new_integer',
-                                                    'label': 'New Integer',
-                                                    'description': '',
-                                                    'type': 'int',
-                                                    'initial_value': 5,
-                                                    'maximum': 10,
-                                                    'minimum': 0
-                                                });
-                                                
-                                                selected_tweakable = null;
-                                                setTimeout(async () => {
-                                                    selected_tweakable = selected_part.int_tweakables.at(-1);
-                                                }, 1);
-                                                ">Integer</a>
-                                            <a class="dropdown-item" x-on:click="selected_part.string_tweakables.push({
-                                                    'name': 'my_new_string',
-                                                    'label': 'New String',
-                                                    'description': '',
-                                                    'type': 'string',
-                                                    'initial_value': '',
-                                                    'multiline': false
-                                                });
-                                                
-                                                selected_tweakable = null;
-                                                setTimeout(async () => {
-                                                    selected_tweakable = selected_part.string_tweakables.at(-1);
-                                                }, 1);
-                                                ">String</a>
-                                            <a class="dropdown-item" x-on:click="selected_part.boolean_tweakables.push({
-                                                    'name': 'my_new_boolean',
-                                                    'label': 'New Boolean',
-                                                    'description': '',
-                                                    'type': 'boolean',
-                                                    'initial_value': false
-                                                });
-                                                
-                                                selected_tweakable = null;
-                                                setTimeout(async () => {
-                                                    selected_tweakable = selected_part.boolean_tweakables.at(-1);
-                                                }, 1);
-                                                ">Boolean</a>
-                                            <a class="dropdown-item" x-on:click="selected_part.float_tweakables.push({
-                                                    'name': 'my_new_float',
-                                                    'label': 'New Float',
-                                                    'description': '',
-                                                    'type': 'float',
-                                                    'initial_value': 0.5,
-                                                    'maximum': 1.0,
-                                                    'minimum': 0.0
-                                                });
-                                                
-                                                selected_tweakable = null;
-                                                setTimeout(async () => {
-                                                    selected_tweakable = selected_part.float_tweakables.at(-1);
-                                                }, 1);
-                                                ">Float</a>
-                                            <a class="dropdown-item" x-on:click="selected_part.joystick_tweakables.push({
-                                                    'name': 'my_new_joystick',
-                                                    'label': 'New Joystick',
-                                                    'description': '',
-                                                    'type': 'joystick'
-                                                });
-                                                
-                                                selected_tweakable = null;
-                                                setTimeout(async () => {
-                                                    selected_tweakable = selected_part.joystick_tweakables.at(-1);
-                                                }, 1);
-                                                ">Joystick</a>
-                                            <a class="dropdown-item" x-on:click="selected_part.inputaction_tweakables.push({
-                                                    'name': 'my_new_inputaction',
-                                                    'label': 'New Input Action',
-                                                    'description': '',
-                                                    'type': 'inputaction'
-                                                });
-                                                
-                                                selected_tweakable = null;
-                                                setTimeout(async () => {
-                                                    selected_tweakable = selected_part.inputaction_tweakables.at(-1);
-                                                }, 1);
-                                                ">Input Action</a>
-                                        </div>
+                                    <li class="nav-item" x-data="{ open_file_browser: function() { $refs.filebrowser.click(); }}">
+                                        <a class="nav-link" role="button" x-on:click="open_file_browser()">Upload Model</a>
+                                        <input 
+                                            class="form-control" 
+                                            type="file" 
+                                            hidden
+                                            accept=".obj"
+                                            x-ref="filebrowser"
+                                            x-on:change="async () => { await uploadOBJ($event) }">
                                     </li>
                                     <li class="nav-item dropdown">
-                                        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Edit</a>
+                                        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Mode</a>
                                         <div class="dropdown-menu">
-                                            <template x-for="tweakable in [
-                                                ...selected_part?.int_tweakables, 
-                                                ...selected_part?.float_tweakables, 
-                                                ...selected_part?.boolean_tweakables, 
-                                                ...selected_part?.joystick_tweakables, 
-                                                ...selected_part?.inputaction_tweakables, 
-                                                ...selected_part?.string_tweakables
-                                            ]">
-                                                <a class="dropdown-item" 
-                                                    x-text="tweakable.name"
-                                                    x-on:click="() => {
-                                                        selected_tweakable = null;
-                                                        setTimeout(async () => {
-                                                            selected_tweakable = tweakable;
-                                                        }, 1);
-                                                    }"></a>
-                                            </template>
+                                            <a class="dropdown-item" x-on:click="UpdateMode('View')">View <span class="text-secondary">[Ctrl+1]</span></a>
+                                            <a class="dropdown-item" x-on:click="UpdateMode('Attachments')">Attachments <span class="text-secondary">[Ctrl+2]</span></a>
+                                            <a class="dropdown-item" x-on:click="UpdateMode('Scripting')">Scripting <span class="text-secondary">[Ctrl+3]</span></a>
+                                            <a class="dropdown-item" x-on:click="UpdateMode('Tweakables')">Tweakables <span class="text-secondary">[Ctrl+4]</span></a>
                                         </div>
+                                    </li>
+                                </ul>
+                                <ul class="navbar-nav ms-auto">
+                                    <li class="nav-item d-flex" x-data="{ open_file_browser: function() { $refs.filebrowser.click(); }}">
+                                        <button class="btn me-2" :class="{'btn-outline-primary': show_controls, 'btn-outline-danger': !show_controls}" x-on:click="show_controls = !show_controls" x-text="show_controls ? 'Hide Controls' : 'Show Controls'">Show Controls</button>
                                     </li>
                                 </ul>
                             </div>
                         </nav>
-                        <div class="p-2">
-                            <template x-if="selected_tweakable">
-                                <div x-data="{form: null}" x-init="
-                                    form = selected_tweakable.type == 'int' ? await eel.get_form('IntTweakable')() :
-                                    selected_tweakable.type == 'string' ? await eel.get_form('StringTweakable')() :
-                                    selected_tweakable.type == 'boolean' ? await eel.get_form('BooleanTweakable')() :
-                                    selected_tweakable.type == 'float' ? await eel.get_form('FloatTweakable')() :
-                                    selected_tweakable.type == 'joystick' ? await eel.get_form('JoystickTweakable')() :
-                                    selected_tweakable.type == 'inputaction' ? await eel.get_form('InputActionTweakable')() :
-                                    null
-                                    ">
-                                    <button class="btn btn-danger ms-2 mt-2" x-on:click="
-                                        selected_tweakable.type == 'int' ? selected_part.int_tweakables.splice(selected_part.int_tweakables.indexOf(selected_tweakable), 1) :
-                                        selected_tweakable.type == 'string' ? selected_part.string_tweakables.splice(selected_part.string_tweakables.indexOf(selected_tweakable), 1) :
-                                        selected_tweakable.type == 'boolean' ? selected_part.boolean_tweakables.splice(selected_part.boolean_tweakables.indexOf(selected_tweakable), 1) :
-                                        selected_tweakable.type == 'float' ? selected_part.float_tweakables.splice(selected_part.float_tweakables.indexOf(selected_tweakable), 1) :
-                                        selected_tweakable.type == 'joystick' ? selected_part.joystick_tweakables.splice(selected_part.joystick_tweakables.indexOf(selected_tweakable), 1) :
-                                        selected_tweakable.type == 'inputaction' ? selected_part.inputaction_tweakables.splice(selected_part.inputaction_tweakables.indexOf(selected_tweakable), 1) :
-                                        null;
-                                        selected_tweakable = null;
-                                        form = null;
-                                        "><i class="fa-solid fa-trash"></i></button>
-                                    <hr>
-                                    <div 
-                                        class="px-2" 
-                                        x-data="{ data: selected_tweakable }"
-                                        x-load="form.html"></div>
+                        <div class="d-flex flex-column h-100 w-100">
+                            <div class="h-100" id="3js" x-on:mousemove="MouseMove" x-on:mousedown="MouseDown" x-on:keydown="KeyDown" x-init="async() => { init3js(); loadOBJ(await eel.load_part_obj()()); }"></div>
+                            <template x-if="mode == 'Scripting'">
+                                <div class="h-100 w-50 p-2 position-fixed">
+                                    <div id="editor" x-init="DisplayAce" class="h-75 rounded border shadow"></div>
                                 </div>
                             </template>
                         </div>
                     </div>
-                </template>
-            </div>
+                    <div class="bg-dark w-25 h-100 border-start overflow-auto">
+                        <template x-if="mode == 'View'">
+                            <div class="p-2">
+                                <template x-if="show_controls">
+                                    <div>
+                                        <h3 class="text-center">Controls</h3>
+                                        <hr>
+                                        <ul>
+                                            <li>Left Mouse - Rotate around model</li>
+                                            <li>Right Mouse - Pan model</li>
+                                            <li>Scroll Wheel - Zoom in/out of model</li>
+                                        </ul>
+                                    </div>
+                                </template>
+                                <!-- <template x-if="selected_part"> -->
+                                    <div>
+                                        <h3 class="text-center">Settings</h3>
+                                        <hr>
+                                        <div 
+                                            class="p-2"
+                                            x-load="form.html" 
+                                            x-data="{ form: null, data: selected_part, update_func: eel.update_part }" 
+                                            x-init="async () => { form = await eel.get_form('Part')() }"></div>
+                                    </div>
+                                <!-- </template> -->
+                            </div>
+                        </template>
+                        <template x-if="mode == 'Attachments'">
+                            <div class="p-2">
+                                <template x-if="show_controls">
+                                    <div>
+                                        <h3 class="text-center">Controls</h3>
+                                        <hr>
+                                        <ul>
+                                            <li>Left Click - Select attachment at cursor</li>
+                                            <li>Ctrl + Left Click - Add new attachment</li>
+                                            <li>Right Click - Remove attachment at cursor</li>
+                                            <li>Ctrl + Mouse Move - Move selected attachment to model at cursor</li>
+                                            <li>Escape - Unselect current attachment</li>
+                                        </ul>
+                                    </div>
+                                </template>
+                                <template x-if="SelectedAttachment()">
+                                    <div>
+                                        <h3 class="text-center">Attachment</h3>
+                                        <hr>
+                                        <div 
+                                            class="p-2" 
+                                            x-load="form.html" 
+                                            x-data="{ form: null, data: SelectedAttachment(), update_func: (kwargs) => { eel.update_part(kwargs)(); eel.update_part({'attachments': attachments})} }" 
+                                            x-init="async () => { form = await eel.get_form('Attachment')() }"></div>
+                                    </div>
+                                </template>
+                                <template x-if="SelectedLink()">
+                                    <div>
+                                        <h3 class="text-center">Link</h3>
+                                        <hr>
+                                        <div 
+                                            class="p-2" 
+                                            x-load="form.html" 
+                                            x-data="{ form: null, data: SelectedLink(), update_func: (kwargs) => { eel.update_part(kwargs)(); eel.update_part({'links': links})} }" 
+                                            x-init="async () => { form = await eel.get_form('Link')() }"></div>
+                                    </div>
+                                </template>
+                            </div>
+                        </template>
+                        <template x-if="mode == 'Scripting'">
+                            <div class="p-2">
+                                <h3 class="text-center">Tweakables</h3>
+                                <hr>
+                                <template x-for="tweakable in selected_part?.int_tweakables.concat(
+                                    selected_part?.boolean_tweakables,
+                                    selected_part?.joystick_tweakables,
+                                    selected_part?.float_tweakables,
+                                    selected_part?.string_tweakables,
+                                    selected_part?.inputaction_tweakables,
+                                )">
+                                    <div class="p-2">
+                                        <b x-text="tweakable.name"></b> - <span x-text="tweakable.type"></span>
+                                    </div>
+                                </template>
+                            </div>
+                        </template>
+                        <template x-if="mode == 'Tweakables'">
+                            <div class="" x-data="{ selected_tweakable: null, form: null }">
+                                <nav class="nav navbar-expand navbar border-bottom">
+                                    <div class="container-fluid">
+                                        <ul class="navbar-nav">
+                                            <li class="nav-item dropdown">
+                                                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Add</a>
+                                                <div class="dropdown-menu">
+                                                    <a class="dropdown-item" x-on:click="selected_part.int_tweakables.push({
+                                                            'name': 'my_new_integer',
+                                                            'label': 'New Integer',
+                                                            'description': '',
+                                                            'type': 'int',
+                                                            'initial_value': 5,
+                                                            'maximum': 10,
+                                                            'minimum': 0
+                                                        });
+                                                        
+                                                        selected_tweakable = null;
+                                                        setTimeout(async () => {
+                                                            selected_tweakable = selected_part.int_tweakables.at(-1);
+                                                        }, 1);
+                                                        ">Integer</a>
+                                                    <a class="dropdown-item" x-on:click="selected_part.string_tweakables.push({
+                                                            'name': 'my_new_string',
+                                                            'label': 'New String',
+                                                            'description': '',
+                                                            'type': 'string',
+                                                            'initial_value': '',
+                                                            'multiline': false
+                                                        });
+                                                        
+                                                        selected_tweakable = null;
+                                                        setTimeout(async () => {
+                                                            selected_tweakable = selected_part.string_tweakables.at(-1);
+                                                        }, 1);
+                                                        ">String</a>
+                                                    <a class="dropdown-item" x-on:click="selected_part.boolean_tweakables.push({
+                                                            'name': 'my_new_boolean',
+                                                            'label': 'New Boolean',
+                                                            'description': '',
+                                                            'type': 'boolean',
+                                                            'initial_value': false
+                                                        });
+                                                        
+                                                        selected_tweakable = null;
+                                                        setTimeout(async () => {
+                                                            selected_tweakable = selected_part.boolean_tweakables.at(-1);
+                                                        }, 1);
+                                                        ">Boolean</a>
+                                                    <a class="dropdown-item" x-on:click="selected_part.float_tweakables.push({
+                                                            'name': 'my_new_float',
+                                                            'label': 'New Float',
+                                                            'description': '',
+                                                            'type': 'float',
+                                                            'initial_value': 0.5,
+                                                            'maximum': 1.0,
+                                                            'minimum': 0.0
+                                                        });
+                                                        
+                                                        selected_tweakable = null;
+                                                        setTimeout(async () => {
+                                                            selected_tweakable = selected_part.float_tweakables.at(-1);
+                                                        }, 1);
+                                                        ">Float</a>
+                                                    <a class="dropdown-item" x-on:click="selected_part.joystick_tweakables.push({
+                                                            'name': 'my_new_joystick',
+                                                            'label': 'New Joystick',
+                                                            'description': '',
+                                                            'type': 'joystick'
+                                                        });
+                                                        
+                                                        selected_tweakable = null;
+                                                        setTimeout(async () => {
+                                                            selected_tweakable = selected_part.joystick_tweakables.at(-1);
+                                                        }, 1);
+                                                        ">Joystick</a>
+                                                    <a class="dropdown-item" x-on:click="selected_part.inputaction_tweakables.push({
+                                                            'name': 'my_new_inputaction',
+                                                            'label': 'New Input Action',
+                                                            'description': '',
+                                                            'type': 'inputaction'
+                                                        });
+                                                        
+                                                        selected_tweakable = null;
+                                                        setTimeout(async () => {
+                                                            selected_tweakable = selected_part.inputaction_tweakables.at(-1);
+                                                        }, 1);
+                                                        ">Input Action</a>
+                                                </div>
+                                            </li>
+                                            <li class="nav-item dropdown">
+                                                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Edit</a>
+                                                <div class="dropdown-menu">
+                                                    <template x-for="tweakable in [
+                                                        ...selected_part?.int_tweakables, 
+                                                        ...selected_part?.float_tweakables, 
+                                                        ...selected_part?.boolean_tweakables, 
+                                                        ...selected_part?.joystick_tweakables, 
+                                                        ...selected_part?.inputaction_tweakables, 
+                                                        ...selected_part?.string_tweakables
+                                                    ]">
+                                                        <a class="dropdown-item" 
+                                                            x-text="tweakable.name"
+                                                            x-on:click="() => {
+                                                                selected_tweakable = null;
+                                                                setTimeout(async () => {
+                                                                    selected_tweakable = tweakable;
+                                                                }, 1);
+                                                            }"></a>
+                                                    </template>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </nav>
+                                <div class="p-2">
+                                    <template x-if="selected_tweakable">
+                                        <div x-data="{form: null}" x-init="
+                                            form = selected_tweakable.type == 'int' ? await eel.get_form('IntTweakable')() :
+                                            selected_tweakable.type == 'string' ? await eel.get_form('StringTweakable')() :
+                                            selected_tweakable.type == 'boolean' ? await eel.get_form('BooleanTweakable')() :
+                                            selected_tweakable.type == 'float' ? await eel.get_form('FloatTweakable')() :
+                                            selected_tweakable.type == 'joystick' ? await eel.get_form('JoystickTweakable')() :
+                                            selected_tweakable.type == 'inputaction' ? await eel.get_form('InputActionTweakable')() :
+                                            null
+                                            ">
+                                            <button class="btn btn-danger ms-2 mt-2" x-on:click="
+                                                selected_tweakable.type == 'int' ? selected_part.int_tweakables.splice(selected_part.int_tweakables.indexOf(selected_tweakable), 1) :
+                                                selected_tweakable.type == 'string' ? selected_part.string_tweakables.splice(selected_part.string_tweakables.indexOf(selected_tweakable), 1) :
+                                                selected_tweakable.type == 'boolean' ? selected_part.boolean_tweakables.splice(selected_part.boolean_tweakables.indexOf(selected_tweakable), 1) :
+                                                selected_tweakable.type == 'float' ? selected_part.float_tweakables.splice(selected_part.float_tweakables.indexOf(selected_tweakable), 1) :
+                                                selected_tweakable.type == 'joystick' ? selected_part.joystick_tweakables.splice(selected_part.joystick_tweakables.indexOf(selected_tweakable), 1) :
+                                                selected_tweakable.type == 'inputaction' ? selected_part.inputaction_tweakables.splice(selected_part.inputaction_tweakables.indexOf(selected_tweakable), 1) :
+                                                null;
+                                                selected_tweakable = null;
+                                                form = null;
+                                                "><i class="fa-solid fa-trash"></i></button>
+                                            <hr>
+                                            <div 
+                                                class="px-2" 
+                                                x-data="{ data: selected_tweakable }"
+                                                x-load="form.html"></div>
+                                        </div>
+                                    </template>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+            </template>
         </div>
     </div>
 </div>
@@ -294,8 +408,12 @@
     Alpine.data('editor', () => ({
         attachments: [],
         selected_attachment_index: null,
+        links: [],
+        selected_link_index: null,
         mode: 'View',
         selected_part: null,
+        selected_material: null,
+        selected_link_type: null,
         part_form: null,
 
         async init() {
@@ -304,8 +422,11 @@
             });
 
             this.selected_part = await eel.get_selected_part()(); 
+            this.selected_material = await eel.get_material()(); 
+            this.selected_link_type = await eel.get_link_type()(); 
             this.part_form = await eel.get_form('Part')();
             this.RenderExistingAttachments(this.selected_part.attachments);
+            this.RenderExistingLinks(this.selected_part.links);
             setTimeout(Update3DContainer, 100);
         },
 
@@ -318,6 +439,7 @@
             editor.getSession().on('change', (e) => {
                 var code = editor.getValue();
                 this.selected_part.script = code;
+                eel.update_part({'script': code});
             });
             // var LuaCompleter = {
             //     getCompletions: function(editor, session, pos, prefix, callback) {
@@ -343,6 +465,7 @@
             // editor.completers.push(LuaCompleter);
         },
 
+        // ATTACHMENT SPECIFIC
         AddNewAttachment(position) {
             var obj = this.AddAttachment(
                 'Attachment',
@@ -424,8 +547,11 @@
 
         SelectAttachmentByIndex(index) {
             this.DeselectAttachment();
-            this.selected_attachment_index = index;
-            this.SelectedAttachmentObject().material.color.set(0x0000ff);
+            setTimeout(() => {
+                this.selected_attachment_index = index;
+                this.SelectedAttachmentObject().material.color.set(0x0000ff);
+
+            },1);
         },
 
         DeselectAttachment() {
@@ -450,10 +576,109 @@
                 );
             });
         },
+        
+        // LINK SPECIFIC
+        AddNewLink(position) {
+            var obj = this.AddLink(
+                'Link',
+                'Power',
+                position,
+            );
+            this.SelectLinkByObject(obj);
+        },
+
+        AddLink(name, link_type_name, position) {
+            var geometry = new THREE.SphereGeometry(0.02, 8, 8);
+            var material = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+            var obj = new THREE.Mesh(geometry, material);
+
+            this.links.push({
+                'uuid': obj.uuid,
+                'name': name,
+                'link_type_name': link_type_name,
+                'position': position,
+            });
+            obj.name = 'link';
+
+            // Add the attachment to the scene
+            scene.add(obj);
+            obj.position.copy(position);
+            this.updatePositioning(obj.position, true, false);
+            return obj;
+        },
+
+        SelectedLink() {
+            return this.links[this.selected_link_index];
+        },
+
+        SelectedLinkObject() {
+            var selected_link = this.links[this.selected_link_index];
+            if (selected_link == null)
+                return;
+
+            return scene.children.filter(obj => obj.uuid == selected_link.uuid)[0];
+        },
+
+        SelectLinkByObject(obj) {
+            for (i = 0; i < this.links.length; i++)
+            {
+                var link = this.links[i];
+                if (link.uuid == obj.uuid)
+                {
+                    this.SelectLinkByIndex(i);
+                    break;
+                }
+            }
+        },
+
+        RemoveLinkByObject(obj) {
+            for (i = 0; i < this.links.length; i++)
+            {
+                var link = this.links[i];
+                if (link.uuid == obj.uuid)
+                {
+                    this.links.pop(i);
+                    if (this.selected_link_index == i)
+                        this.selected_link_index = null;
+                    scene.remove(obj);
+                    break;
+                }
+            }
+        },
+
+        SelectLinkByIndex(index) {
+            this.DeselectLink();
+            setTimeout(() => {
+                this.selected_link_index = index;
+                this.SelectedLinkObject().material.color.set(0x0000ff);
+
+            },1);
+        },
+
+        DeselectLink() {
+            if (this.selected_link_index == null)
+                return;
+
+
+            this.SelectedLinkObject().material.color.set(0xff0000);
+            this.selected_link_index = null;
+        },
+
+        RenderExistingLinks(links) {
+            links.forEach((link, index) => {
+                console.log(link);
+                this.AddLink(
+                    name=link.name,
+                    link_type_name=link.link_type_name,
+                    position=link.position,
+                );
+            });
+        },
 
         UpdateMode(new_mode) {
             this.mode = new_mode;
             this.DeselectAttachment();
+            this.DeselectLink();
             if (this.mode == "View") {
             }
             
@@ -468,50 +693,82 @@
         },
 
         updatePositioning(exact_position, round, only_update_values) {
+            
+            var link = this.SelectedLinkObject();
             var attachment = this.SelectedAttachmentObject();
-            var attachment_data = this.SelectedAttachment();
 
-            if (!attachment)
-                return;
-
-            // Update with floats as this is the data we're expecting, not text
-            attachment_data.orientation.x = parseFloat(attachment_data.orientation.x);
-            attachment_data.orientation.y = parseFloat(attachment_data.orientation.y);
-            attachment_data.orientation.z = parseFloat(attachment_data.orientation.z);
-            attachment_data.position.x = parseFloat(attachment_data.position.x);
-            attachment_data.position.y = parseFloat(attachment_data.position.y);
-            attachment_data.position.z = parseFloat(attachment_data.position.z);
-
-            // Update the position of the selected attachments
-            if (round == true)
+            if (attachment)
             {
-                var position = new THREE.Vector3(
-                    Math.round(exact_position.x * 40) / 40,
-                    Math.round(exact_position.y * 40) / 40,
-                    Math.round(exact_position.z * 40) / 40
-                );
-            }
-            else
-            {
-                var position = exact_position;
-            }
-            attachment.position.copy(position);
+                var attachment_data = this.SelectedAttachment();
 
-            // Update attachment data
-            attachment_data.position = position;
-            attachment.rotation.x = THREE.MathUtils.degToRad(attachment_data.orientation.x);
-            attachment.rotation.y = THREE.MathUtils.degToRad(attachment_data.orientation.y);
-            attachment.rotation.z = THREE.MathUtils.degToRad(attachment_data.orientation.z);
-
-            if (!only_update_values) {
-                // Reposition for rotation
-                var relativePosition = new THREE.Vector3(0, 0.01, 0);
-                var rotationMatrix = new THREE.Matrix4();
-                rotationMatrix.extractRotation(attachment.matrixWorld); // Extract rotation matrix from cone's world matrix
-                relativePosition.applyMatrix4(rotationMatrix);
-                // attachment.rotation.copy();
-                // attachment.position.add(relativePosition);
+                // Update with floats as this is the data we're expecting, not text
+                attachment_data.orientation.x = parseFloat(attachment_data.orientation.x);
+                attachment_data.orientation.y = parseFloat(attachment_data.orientation.y);
+                attachment_data.orientation.z = parseFloat(attachment_data.orientation.z);
+                attachment_data.position.x = parseFloat(attachment_data.position.x);
+                attachment_data.position.y = parseFloat(attachment_data.position.y);
+                attachment_data.position.z = parseFloat(attachment_data.position.z);
+    
+                // Update the position of the selected attachments
+                if (round == true)
+                {
+                    var position = new THREE.Vector3(
+                        Math.round(exact_position.x * 40) / 40,
+                        Math.round(exact_position.y * 40) / 40,
+                        Math.round(exact_position.z * 40) / 40
+                    );
+                }
+                else
+                {
+                    var position = exact_position;
+                }
+                attachment.position.copy(position);
+    
+                // Update attachment data
+                attachment_data.position = position;
+                attachment.rotation.x = THREE.MathUtils.degToRad(attachment_data.orientation.x);
+                attachment.rotation.y = THREE.MathUtils.degToRad(attachment_data.orientation.y);
+                attachment.rotation.z = THREE.MathUtils.degToRad(attachment_data.orientation.z);
+    
+                if (!only_update_values) {
+                    // Reposition for rotation
+                    var relativePosition = new THREE.Vector3(0, 0.01, 0);
+                    var rotationMatrix = new THREE.Matrix4();
+                    rotationMatrix.extractRotation(attachment.matrixWorld); // Extract rotation matrix from cone's world matrix
+                    relativePosition.applyMatrix4(rotationMatrix);
+                    // attachment.rotation.copy();
+                    // attachment.position.add(relativePosition);
+                }
+    
+                eel.update_part({'attachments': this.attachments});
+            } else if (link) {
+                var link_data = this.SelectedLink();
+                // Update with floats as this is the data we're expecting, not text
+                link_data.position.x = parseFloat(link_data.position.x);
+                link_data.position.y = parseFloat(link_data.position.y);
+                link_data.position.z = parseFloat(link_data.position.z);
+    
+                // Update the position of the selected attachments
+                if (round == true)
+                {
+                    var position = new THREE.Vector3(
+                        Math.round(exact_position.x * 40) / 40,
+                        Math.round(exact_position.y * 40) / 40,
+                        Math.round(exact_position.z * 40) / 40
+                    );
+                }
+                else
+                {
+                    var position = exact_position;
+                }
+                link.position.copy(position);
+    
+                // Update attachment data
+                link_data.position = position;
+    
+                eel.update_part({'links': this.links});
             }
+
         },
 
         MouseDown(event) {
@@ -526,6 +783,7 @@
 
             if (this.mode == "Attachments") {
                 var selected_attachment = this.SelectedAttachmentObject();
+                var selected_link = this.SelectedLinkObject();
 
                 // Raycasting
                 var raycaster = new THREE.Raycaster();
@@ -543,11 +801,29 @@
                             return;
                         }
 
+                        this.DeselectLink();
                         this.SelectAttachmentByObject(obj);
 
                         if (event.button == 2) {
                             // TODO: ADD REMOVE FOR ATTACHMENTS
                             this.RemoveAttachmentByObject(obj);
+                            event.preventDefault();
+                            return;
+                        }
+
+                        return;
+                    } else if (obj.name == 'link') {
+                        if (selected_link == obj) {
+                            this.DeselectLink();
+                            return;
+                        }
+
+                        this.DeselectAttachment();
+                        this.SelectLinkByObject(obj);
+
+                        if (event.button == 2) {
+                            // TODO: ADD REMOVE FOR ATTACHMENTS
+                            this.RemoveLinkByObject(obj);
                             event.preventDefault();
                             return;
                         }
@@ -569,7 +845,11 @@
 
                     if (intersects.length > 0) {
                         var intersectionPoint = intersects[0].point;
-                        this.AddNewAttachment(intersectionPoint);
+                        if (event.shiftKey) {
+                            this.AddNewLink(intersectionPoint);
+                        } else {
+                            this.AddNewAttachment(intersectionPoint);
+                        }
                     }
                 } 
             }
@@ -577,6 +857,7 @@
         
         MouseMove(event) {
             var selected_attachment = this.SelectedAttachmentObject();
+            var selected_link = this.SelectedLinkObject();
             // Mouse coordinates
             var mouse = new THREE.Vector2();
             mouse.x = ((event.clientX - container.offsetLeft) / WIDTH) * 2 - 1;
@@ -587,11 +868,16 @@
             raycaster.setFromCamera(mouse, camera);
 
             // Intersect with the plane
-            var scene_objects = scene.children.filter(obj => obj !== selected_attachment);
+            var scene_objects = scene.children;
+            if (selected_attachment) {
+                scene_objects = scene_objects.filter(obj => obj !== selected_attachment);
+            } else if (selected_link) {
+                scene_objects = scene_objects.filter(obj => obj !== selected_link);
+            }
             var intersects = raycaster.intersectObjects(scene_objects, true);
-            
+
             if (intersects.length > 0) {
-                if (selected_attachment && event.ctrlKey) {
+                if ((selected_attachment || selected_link) && event.ctrlKey) {
                     this.updatePositioning(intersects[0].point, true, false);
                 }
             }
@@ -643,18 +929,19 @@
     });
 
 
-    var container = document.getElementById('3js');
-    var WIDTH = container.offsetWidth;
-    var HEIGHT = container.offsetHeight;
+    var container;
+    var WIDTH;
+    var HEIGHT;
 
-    var scene = new THREE.Scene();
-    var camera = new THREE.PerspectiveCamera(60, WIDTH/HEIGHT, 0.01, 100);
-    var renderer = new THREE.WebGLRenderer({antialias:true});
-    var controls = new THREE.OrbitControls(camera,  renderer.domElement);
+    var scene;
+    var camera;
+    var renderer;
+    var controls;
 
     // var rotation = new THREE.Euler(THREE.MathUtils.degToRad(0), THREE.MathUtils.degToRad(0), THREE.MathUtils.degToRad(0))
     var loaded_obj = null;
 
+    
 
     function animate(){
         renderer.render(scene,camera);
@@ -662,7 +949,16 @@
     }
 
     
-    function init() {
+    function init3js() {
+        container = document.getElementById('3js');
+        WIDTH = container.offsetWidth;
+        HEIGHT = container.offsetHeight;
+
+        scene = new THREE.Scene();
+        camera = new THREE.PerspectiveCamera(60, WIDTH/HEIGHT, 0.01, 100);
+        renderer = new THREE.WebGLRenderer({antialias:true});
+        controls = new THREE.OrbitControls(camera,  renderer.domElement);
+
         scene.background = new THREE.Color(0x151515);
         camera.position.z = 0.5; // Default zoom so to speak
         renderer.setSize(WIDTH, HEIGHT);
@@ -680,6 +976,19 @@
         controls.addEventListener('change', renderer);
 
         animate();
+    }
+
+    async function upload(path, file_name, event) {
+        return new Promise((resolve, reject) => {
+            let file = event.target.files[0];
+            let reader = new FileReader();
+            reader.readAsBinaryString(file);
+            reader.onload = e => {
+                let data = e.target.result;
+                eel.write_data(path, file_name, data);
+                resolve(data);
+            }
+        });
     }
 
     async function uploadOBJ(event) {
