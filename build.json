@@ -7,7 +7,7 @@
   },
   {
    "optionDest": "filenames",
-   "value": "C:/Users/kaboo/Development/GearBlocks/Gearthon/App/run.py"
+   "value": "C:/Users/kaboo/Development/GearBlocks/Gearthon/run.py"
   },
   {
    "optionDest": "onefile",
@@ -19,7 +19,7 @@
   },
   {
    "optionDest": "icon_file",
-   "value": "C:/Users/kaboo/Development/GearBlocks/Gearthon/App/web/favico.ico"
+   "value": "C:/Users/kaboo/Development/GearBlocks/Gearthon/web/favico.ico"
   },
   {
    "optionDest": "name",
@@ -59,7 +59,7 @@
   },
   {
    "optionDest": "datas",
-   "value": "C:/Users/kaboo/Development/GearBlocks/Gearthon/App/web;web/"
+   "value": "C:/Users/kaboo/Development/GearBlocks/Gearthon/web;web/"
   }
  ],
  "nonPyinstallerOptions": {
