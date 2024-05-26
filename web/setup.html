@@ -27,7 +27,7 @@
         </div>
     </template>
     <template x-if="progress == 2">
-        <div class="d-flex flex-column align-items-center w-50 mx-auto" x-data="{ 'state': null }" x-init='async () => { if (await eel.bepinex_exists()()) { progress++ }}'>
+        <div class="d-flex flex-column align-items-center w-50 mx-auto" x-data="{ 'state': null }">
             <h1>BepInEx Modding Library</h1>
             <p>These next couple are some chores we gotta do. Let's do them together! In order to use Gearthon, you need a few other mods.</p>
             <p>Lets install BepInEx together!</p>
@@ -47,7 +47,7 @@
         </div>
     </template>
     <template x-if="progress == 3">
-        <div class="d-flex flex-column align-items-center w-50 mx-auto" x-data="{ 'state': null }" x-init='async () => { if (await eel.gearlib_exists()()) { progress++ }}'>
+        <div class="d-flex flex-column align-items-center w-50 mx-auto" x-data="{ 'state': null }">
             <h1>GearLib Modding Library</h1>
             <p>We're also going to need GearLib, as it powers everything Gearthon will do for us.</p>
             <p>Lets install GearLib together!</p>
