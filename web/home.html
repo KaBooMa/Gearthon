@@ -22,7 +22,8 @@
                          setInterval(async () => {
                              progress = await eel.get_progress('gearlib')(); 
                              if (progress >= 100) {
-                                 state = 'downloaded'; 
+                                 state = 'downloaded';
+                                 gearlib_updated = true;
                              }
                          }, 100);"></div>
                  </div>
@@ -41,7 +42,8 @@
                          setInterval(async () => {
                              progress = await eel.get_progress('editor')(); 
                              if (progress >= 100) {
-                                 state = 'downloaded'; 
+                                 state = 'downloaded';
+                                 gearthon_updated = true;
                              }
                          }, 100);"></div>
                  </div>
@@ -60,6 +62,7 @@
                              progress = await eel.get_progress('bepinex')(); 
                              if (progress >= 100) {
                                  state = 'downloaded'; 
+                                 bepinex_updated = true;
                              }
                          }, 100);"></div>
                  </div>
