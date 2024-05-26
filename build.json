@@ -60,6 +60,14 @@
   {
    "optionDest": "datas",
    "value": "C:/Users/kaboo/Development/GearBlocks/Gearthon/web;web/"
+  },
+  {
+   "optionDest": "datas",
+   "value": "C:/Users/kaboo/Development/GearBlocks/Gearthon/backend;backend/"
+  },
+  {
+   "optionDest": "datas",
+   "value": "C:/Users/kaboo/Development/GearBlocks/Gearthon/classes;classes/"
   }
  ],
  "nonPyinstallerOptions": {
