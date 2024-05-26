@@ -56,7 +56,6 @@ def rename_mod(name, new_name, new_description):
 
     mod_data['name'] = new_name
     mod_data['description'] = new_description
-    # mod_data['author'] = new_author
 
     with open(mod_json_path, 'w') as mod_json:
         json.dump(mod_data, mod_json, indent=4)
