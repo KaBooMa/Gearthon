@@ -104,9 +104,9 @@
                         <template x-for="mod in mods">
                             <tr>
                                 <td x-text="mod"></td>
-                                <td x-data="{ confirmed_delete: false, mod_rename: false }">
+                                <td x-data="{ confirmed_delete: false, mod_rename: false, new_mod_name: '', new_mod_description: '' }">
                                     <button class="btn btn-primary" x-on:click="eel.load_mod(mod); loadPage('editor')">Edit</button>
-                                    <button class="btn btn-primary" x-on:click="mod_rename = true">Rename</button>
+                                    <button class="btn btn-primary" x-on:click="mod_rename = true; new_mod_name = mod; new_mod_description = ''">Rename</button>
                                     <button class="btn btn-warning" x-on:click="eel.export_mod(mod)">Export</button>
                                     <button class="btn btn-danger" x-on:click="confirmed_delete = true">Delete</button>
                                     <div class="border border-danger rounded p-4 m-4 shadow" x-show="confirmed_delete" x-transition>

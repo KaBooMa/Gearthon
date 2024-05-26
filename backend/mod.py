@@ -45,32 +45,6 @@ def create_mod(name):
     
 
 @eel.expose
-def rename_mod(name, new_name, new_description):
-    from backend.appdata import appdata
-    mod_path = Path(f'{appdata.mods_folder()}/{name}')
-    new_mod_path = Path(f'{appdata.mods_folder()}/{new_name}')
-    mod_json_path = Path(f'{appdata.mods_folder()}/{name}/mod.json')
-
-    with open(mod_json_path, 'r') as mod_json:
-        mod_data = json.load(mod_json)
-
-    mod_data['name'] = new_name
-    mod_data['description'] = new_description
-
-    with open(mod_json_path, 'w') as mod_json:
-        json.dump(mod_data, mod_json, indent=4)
-    
-    os.mkdir(new_mod_path)
-
-    for item in os.listdir(mod_path):
-        shutil.move(os.path.join(mod_path, item), new_mod_path)
-
-    shutil.rmtree(mod_path)
-
-    from backend.editor import clear_selected
-    clear_selected()
-
-@eel.expose
 def get_mod():
     if not mod:
         return None
@@ -106,6 +80,32 @@ def save_mod():
     with open(json_path, 'w') as f:
         f.write(json.dumps(data))
 
+
+@eel.expose
+def rename_mod(name, new_name, new_description):
+    from backend.appdata import appdata
+    mod_path = Path(f'{appdata.mods_folder()}/{name}')
+    new_mod_path = Path(f'{appdata.mods_folder()}/{new_name}')
+    mod_json_path = Path(f'{appdata.mods_folder()}/{name}/mod.json')
+
+    with open(mod_json_path, 'r') as mod_json:
+        mod_data = json.load(mod_json)
+
+    mod_data['name'] = new_name
+    mod_data['description'] = new_description
+
+    with open(mod_json_path, 'w') as mod_json:
+        json.dump(mod_data, mod_json, indent=4)
+    
+    os.mkdir(new_mod_path)
+
+    for item in os.listdir(mod_path):
+        shutil.move(os.path.join(mod_path, item), new_mod_path)
+
+    shutil.rmtree(mod_path)
+
+    from backend.editor import clear_selected
+    clear_selected()
 
 @eel.expose
 def import_mod():
