@@ -49,8 +49,7 @@ def update_gearlib():
         from backend.appdata import appdata
         global progress
         progress['gearlib'] = 0
-
-        res = requests.get(github.get_download_url(github.Repos.GEARLIB, 'latest'), stream=True)
+        res = requests.get(f'{github.get_download_url(github.Repos.GEARLIB, 'latest')}/GearLib.zip', stream=True)
         version = github.get_tag(github.Repos.GEARLIB, 'latest')
         download_size = int(res.headers.get('Content-Length'))
         
