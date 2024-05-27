@@ -190,8 +190,8 @@
     -- Define the update function, which will be triggered on every frame of the game
     function Update()
         -- Check if the player has enabled the script (E on Part)
-        if not Script:Isfw-bold() then
-            -- If not fw-bold, return out of the update function
+        if not Script:IsActive() then
+            -- If not active, return out of the update function
             return
         end
     
