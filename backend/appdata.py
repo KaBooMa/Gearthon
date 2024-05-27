@@ -9,6 +9,8 @@ import requests
 
 BEPINEX_VERSION = 'https://builds.bepinex.dev/projects/bepinex_be/690/BepInEx-Unity.IL2CPP-win-x86-6.0.0-be.690%2B36d130f.zip'
 APPDATA_FILE = 'data.json'
+APPDATA_FOLDER = f'{os.getenv("LOCALAPPDATA")}/Gearthon'
+APPDATA_PATH = f'{APPDATA_FOLDER}/{APPDATA_FILE}'
 CURRENT_VERSION = '1.0.6'
 
 def get_gearblocks_path():
@@ -29,12 +31,16 @@ def get_gearblocks_path():
 
 
 def load_appdata():
+    # Make our Gearthon folder if it doesn't exist
+    if not os.path.exists(APPDATA_FOLDER):
+        os.mkdir(APPDATA_FOLDER)
+
     # Create if doesn't exist
-    if not os.path.exists(APPDATA_FILE):
+    if not os.path.exists(APPDATA_PATH):
         appdata = AppData()
         appdata.save()
     else: # Lets load the existing appdata
-        raw_data = open(APPDATA_FILE).read()
+        raw_data = open(APPDATA_PATH).read()
         data = json.loads(raw_data)
         appdata = from_dict(AppData, data)
 
@@ -101,7 +107,7 @@ class AppData:
 
     def save(self):
         data = json.dumps(asdict(self))
-        with open(APPDATA_FILE, 'w') as f:
+        with open(APPDATA_PATH, 'w') as f:
             f.write(data)
 
 

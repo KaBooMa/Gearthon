@@ -40,7 +40,7 @@
                  <div class="progress w-100 mb-4" x-data="{'progress': 0}">
                      <div class="progress-bar" :style="{ width: progress + '%' }" x-init="
                          setInterval(async () => {
-                             progress = await eel.get_progress('editor')(); 
+                             progress = await eel.get_progress('gearthon')(); 
                              if (progress >= 100) {
                                  state = 'downloaded';
                                  gearthon_updated = true;
@@ -49,7 +49,7 @@
                  </div>
              </template>
              <div class="w-100">
-                 <button class="btn btn-success" :class="{ 'disabled': state == 'downloading' }" x-show="!gearthon_updated" x-on:click="async () => { state = 'downloading'; eel.update()(); }">Update Gearthon</button>
+                 <button class="btn btn-success" :class="{ 'disabled': state == 'downloading' }" x-show="!gearthon_updated" x-on:click="async () => { state = 'downloading'; eel.update_gearthon()(); }">Update Gearthon</button>
              </div>
          </div>
 

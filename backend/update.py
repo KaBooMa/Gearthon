@@ -2,12 +2,27 @@ import os
 import shutil
 import subprocess
 import threading
+import time
 import zipfile
 import eel
 import requests
+
 import helpers.github as github
-import helpers.updater as updater
 from backend.appdata import BEPINEX_VERSION
+
+INTERNALS_NAME = '_internal'
+APP_NAME = ['editor.exe', 'Gearthon.exe']
+APP_PATH = '.'
+
+def update_cleanup():
+    for name in APP_NAME:
+        OLD_APP_PATH = f'{APP_PATH}/{name}.old'
+        if os.path.exists(OLD_APP_PATH):
+            os.remove(OLD_APP_PATH)
+        
+    OLD_INTERNAL_PATH = f'{APP_PATH}/{INTERNALS_NAME}.old'
+    if os.path.exists(OLD_INTERNAL_PATH):
+        shutil.rmtree(OLD_INTERNAL_PATH)
 
 #### API ####
 progress = {}
@@ -79,13 +94,35 @@ def update_gearlib():
 
 
 @eel.expose
-def update():
+def update_gearthon():
     def update():
-        for status in updater.download_latest_gearthon():
-            progress['editor'] = status
+        res = requests.get(f'{github.get_download_url(github.Repos.GEARTHON, "latest")}/Gearthon.zip', stream=True)
+        download_size = int(res.headers.get('Content-Length'))
+        
+        total_downloaded = 0
+        with open('gearthon.zip', 'wb') as f:
+            for data in res.iter_content(1024):
+                total_downloaded += len(data)
+                status = round(total_downloaded / download_size * 100, 2)
+                f.write(data)
+                progress['gearthon'] = status
+
+        for name in APP_NAME:
+            app_path = f'{APP_PATH}/{name}'
+            if os.path.exists(app_path):
+                shutil.move(app_path, f'{app_path}.old')
+
+        internals_path = f'{APP_PATH}/{INTERNALS_NAME}'
+        if os.path.exists(internals_path):
+            shutil.move(internals_path, f'{internals_path}.old')
+
+        with zipfile.ZipFile('gearthon.zip', 'r') as zip:
+            zip.extractall()
+
+        os.remove('gearthon.zip')
 
         eel.close_window()
-        subprocess.Popen(updater.APP_NAME)
+        subprocess.Popen(APP_NAME)
 
     thread = threading.Thread(target=update)
     thread.start()
