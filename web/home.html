@@ -49,7 +49,7 @@
                  </div>
              </template>
              <div class="w-100">
-                 <button class="btn btn-success" :class="{ 'disabled': state == 'downloading' }" x-show="!gearthon_updated" x-on:click="async () => { state = 'downloading'; eel.update_gearthon()(); }">Update Gearthon</button>
+                 <button class="btn btn-success" :class="{ 'disabled': state == 'downloading' }" x-show="!gearthon_updated" x-on:click="async () => { state = 'downloading'; eel.update()(); }">Update Gearthon</button>
              </div>
          </div>
 
