@@ -1,0 +1,296 @@
+<!-- This should be containerized! But i don't want to mess anything up. -->
+
+<div class="d-flex h-100" x-data="{route: 'getting-started/overview'}">
+<!-- Start Sidebar -->
+<aside class="flex-shrink-0 p-3 h-100 border-end border-gray-300" style="width: 200px;">
+    <ul class="list-unstyled ps-0">
+      <li class="mb-1">
+        <button class="btn btn-toggle align-items-center rounded" data-bs-toggle="collapse" data-bs-target="#home-collapse" aria-expanded="true">
+          Getting Started
+        </button>
+        <div class="collapse show" id="home-collapse">
+          <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+            <li><a class="nav-link ms-3" role="button" x-on:click="route = 'getting-started/overview'; console.log('home')">Overview</a></li>
+            <li><a class="nav-link ms-3" role="button" x-on:click="route = 'getting-started/first-mod'">Create your First Mod</a></li>
+            <li><a class="nav-link ms-3" role="button" x-on:click="route = 'getting-started/help'">Help</a></li>
+          </ul>
+        </div>
+      </li>
+      <li class="mb-1">
+        <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#dashboard-collapse" aria-expanded="false">
+          3D Modeling
+        </button>
+        <div class="collapse" id="dashboard-collapse">
+          <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+            <li><a class="nav-link ms-3" role="button">Overview</a></li>
+            <li><a class="nav-link ms-3" role="button">Tools</a></li>
+            <li><a class="nav-link ms-3" role="button">Meshes</a></li>
+            <li><a class="nav-link ms-3" role="button">Exporting</a></li>
+          </ul>
+        </div>
+      </li>
+      <li class="mb-1">
+        <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#orders-collapse" aria-expanded="false">
+          Lua Scripting
+        </button>
+        <div class="collapse" id="orders-collapse">
+          <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+            <li><a class="nav-link ms-3" role="button">Overview</a></li>
+            <li><a class="nav-link ms-3" role="button">Examples</a></li>
+            <li><a class="nav-link ms-3" role="button">Classes</a></li>
+            <li><a class="nav-link ms-3" role="button">Syntax</a></li>
+          </ul>
+        </div>
+      </li>
+    </ul>
+</aside>
+<!-- End Sidebar -->
+
+<!-- Start Getting Started/Overview -->
+<main x-show="route === 'getting-started/overview'" class="p-4 overflow-y-scroll w-100">
+
+    <!-- Start Header -->
+    <section>
+        <h2>Getting Started</h2>
+        <p><strong>Overview</strong></p>
+    </section>
+    <!-- End Header -->
+
+    <!-- Start About -->
+    <section>
+        <h4>About Gearthon</h4>
+        <p>Gearthon is an advanced modding tool designed to bring everyone into the world of modding with ease and excitement. Our goal is to provide a comprehensive suite of tools to simplify the often challenging and time-consuming process of modding with BepInEx. With Gearthon, you have the freedom to create anything you can imagine, all within a single, intuitive editor. Whether you're crafting intricate aerodynamic wings, custom joints, unique wheels, new engines, or simply adding cosmetic parts, Gearthon empowers you to bring your creative visions to life. Join us and dive into the limitless possibilities of modding!</p>
+    </section>
+    <!-- End About -->
+
+    <!-- Start Possibilities -->
+    <section>
+        <h4>Modding Possibilities</h4>
+        <p><strong>Gearthon offers a variety of tools and capabilities, including:</strong></p>
+        <ul>
+            <li>Importing OBJ files</li>
+            <li>Creating mesh colliders</li>
+            <li>Designing with custom materials</li>
+            <li>Utilizing ingame tweakables for fine-tuning</li>
+            <li>Creating versatile attachments</li>
+            <li>Implementing Lua scripting for advanced modifications</li>
+            <li>Defining and using various link types</li>
+            <li>And more exciting features to come!</li>
+        </ul>
+    </section>
+    <!-- End Possibilities -->
+
+    <!-- Start Tools -->
+    <section>
+        <h4>What You Need to Get Started</h4>
+        <p>To begin your journey with Gearblocks modding, you'll need the following:</p>
+        <ul>
+            <li><a target="_blank" href="https://www.blender.org/">Blender</a> (recommended 3D modeling tool, free to use)</li>
+        </ul>
+    </section>
+    <!-- End Tools -->
+</main>
+<!-- End Getting Started/Overview -->
+
+<!-- Start Getting Started/Create Your First Mod -->
+<main x-show="route === 'getting-started/first-mod'" class="p-4 overflow-y-scroll w-100">
+    <!-- Start Header -->
+    <section>
+        <h2>Getting Started</h2>
+        <p><strong>Create your first Mod</strong></p>
+    </section>
+    <!-- End Header -->
+
+    <!-- Start Setup -->
+    <section>
+        <h4>Setup (For Beginners in 3D Modeling)</h4>
+        <ol>
+            <li> Download or use your preferred 3D modeling tool (we recommend <a target="_blank" href="https://www.blender.org/">Blender</a>).</li>
+            <li> Open Blender and press <code>A</code> to select everything in the scene, then press <code>X</code> to delete all selected items.</li>
+            <li> Press <code>Shift + A</code> to add a new mesh. For this example, choose a Cube.</li>
+            <li> Press <code>Tab</code> to enter edit mode.</li>
+            <li> Press <code>A</code> again to select every vertex (<code>1</code>), edge (<code>2</code>), or face (<code>3</code>).</li>
+            <li> Press <code>Ctrl + T</code> to triangulate the mesh. (This is important because Gearblocks requires triangulated meshes.)</li>
+            <li> Go to <em>File</em> in the top left corner, and click on <em>Export</em> &gt; <em>Wavefront (.obj)</em>.</li>
+        </ol>
+        <p>For further guidance in Blender, check out the <a target="_blank" href="https://www.youtube.com/watch?v=B0J27sf9N1Y&list=PLjEaoINr3zgEPv5y--4MKpciLaoQYZB1Z">Blender Donut Tutorial</a>.</p>
+    </section>
+    <!-- End Setup -->
+
+
+    <!-- Start Create Mod -->
+    <section>
+        <h4>Create a Mod</h4>
+        <p><strong>To create a new mod:</strong></p>
+        <ol>
+            <li>Go to the Home page and click on <strong>Create New Mod</strong>.</li>
+            <li>Enter your Mod Name and Description, then press <strong>Create</strong>.</li>
+        </ol>
+        
+        <p><strong>In the Editor:</strong></p>
+        <ul>
+            <li>Click on the <strong>+</strong> next to Parts to create your first part.</li>
+            <li>Select the part and click on <strong>Upload Model</strong>. Choose the OBJ model you want to upload. Currently, only one mesh per part is allowed.</li>
+            <li>If you cannot see your model, scroll out to view it.</li>
+            <li>Choose a name, category, weight, mass, and other properties for your part:
+                <ul>
+                    <li>Whether it should be paintable</li>
+                    <li>If it should have a custom material</li>
+                    <li>If it should use a mesh collider</li>
+                </ul>
+            </li>
+        </ul>
+        
+        <p><strong>Working with attachments:</strong></p>
+        <p>If you select Attachments under Mode or with <code>Ctrl + 2</code>, you can <code>Ctrl + Right Click</code> to create a new attachment. This is where you can attach it to other objects in the game. There are several options available:</p>
+        
+        <ul>
+            <li><strong>Name:</strong> The name of your attachment.</li>
+            <li><strong>Attachment Flags:</strong> Flags that define how the attachment behaves:</li>
+            <ul>
+                <!-- TODO: Add definition to Attachment Flags -->
+                <li><strong>linear_bearing:</strong> Allows your attachment to move linearly relative to its attachment point.</li>
+                <li><strong>rotary_bearing:</strong> Allows your attachment to rotate around the attachment point.</li>
+                <li><strong>constant_velocity_joint:</strong></li>
+                <li><strong>fixed:</strong> Allows the part to be rigidly connected.</li>
+                <li><strong>knuckle_joint:</strong></li>
+                <li><strong>spherical_bearing:</strong> Allows your attachment to freely rotate.</li>
+            </ul>
+            <li><strong>Alignment Flags:</strong> Flags that define alignment behavior:</li>
+            <ul>
+                <!-- TODO: Add definition to Alignment Flags -->
+                <li><strong>clamp_180:</strong></li>
+                <li><strong>clamp_90:</strong></li>
+                <li><strong>is_bidirectional:</strong></li>
+                <li><strong>is_female:</strong></li>
+                <li><strong>is_interior:</strong></li>
+            </ul>
+            <li><strong>Position:</strong> The position of your attachment.</li>
+            <li><strong>Orientation/Rotation:</strong> The orientation or rotation of your attachment.</li>
+            <li><strong>Size:</strong> The size of your attachment.</li>
+            <li><strong>Pivot:</strong> The pivot point of your attachment.</li>
+        </ul>
+        <p><strong>Working with Scripting:</strong></p>
+        <p>If you select Scripting under Mode or with <code>Ctrl + 3</code>, you can add custom logic to your part using Lua scripting.</p>        
+
+        <!-- I honestly have no clue when it comes to lua ;) -->
+
+        <!-- Start Hopping Part -->
+        <div class="card my-2">
+            <div class="card-body">
+                <h5 class="card-title">Create a Hopping Part</h5>
+                <div class="border border-gray-300 rounded">
+                    <pre class="m-0"><code>
+    -- Import the time module from os
+    time = os.time()
+    
+    -- Define the delay
+    delay = 1
+    
+    -- Define the update function, which will be triggered on every frame of the game
+    function Update()
+        -- Check if the player has enabled the script (E on Part)
+        if not Script:IsActive() then
+            -- If not active, return out of the update function
+            return
+        end
+    
+        -- Check if the delay is over
+        if os.time() >= time + delay then
+            -- Add 5 units of force to the y / Vertical axis of the part
+            Rigidbody:AddForce(0, 5, 0)
+            -- Reset the time for the next update
+            time = os.time()
+        end
+    end
+                    </code></pre>
+                </div>
+            </div>
+        </div>
+        <!-- End Hopping Part -->
+
+        <!-- Start Counting Cube -->
+        <div class="card my-2">
+            <div class="card-body">
+                <h5 class="card-title">Create a Counting Cube</h5>
+                <div class="border border-gray-300 rounded">
+                    <pre class="m-0"><code>
+    -- This script will count all parts in the construction and debug the results
+    -- It will only happen upon unfreezing the construction to save on performance
+    -- Check your BepInEx console for the results!
+
+    -- Define the Unfrozen function, which will be triggered every time you unfreeze your build
+    function Unfrozen()
+        -- Use the #Construction:GetParts() Hook to get all the connected parts
+        local total_parts = #Construction:GetParts()
+        -- Print out the number of total parts inside the BepInEx console
+        Debug:Log("Total parts in construction is: "..total_parts)
+    end                        
+                    </code></pre>
+                </div>
+            </div>
+        </div>
+        <!-- End Counting Cube -->
+        
+        <!-- Start Tweakables -->
+        <p><strong>Working with Tweakables:</strong></p>
+        <p>If you select Tweakables under Mode or with <code>Ctrl + 4</code>, you can add various types of tweakables:</p>
+        <ul>
+            <li>Integer (non-decimal number)</li>
+            <li>String (text)</li>
+            <li>Boolean (true or false)</li>
+            <li>Float (decimal number)</li>
+            <li>Joystick action (button or range from -1 to 1)</li>
+            <li>Input action (keyboard input ranging from 0 to 1)</li>
+        </ul>
+        <p>There are several options available for customization.</p>
+        <ul>
+            <li><strong>Label:</strong> The name of your Tweakable.</li>
+            <li><strong>Description:</strong> The Description of your Tweakable.</li>
+            <li><strong>Variable Name:</strong> The name through which you can access it in Scripting.</li>
+            <li><strong>Checkbox:</strong></li>
+        </ul>
+        <!-- End Tweakables -->
+
+        <!-- Start Tweakable Cube -->
+        <div class="card my-2">
+            <div class="card-body">
+                <h5 class="card-title">Create a Tweakable Cube</h5>
+                <p>For this to work you have to go to Tweakables under Mode or <code>Ctrl + 4</code> and add the following 4 Tweakables:</p>
+
+                <ul>
+                    <li><strong>whole_number</strong> - int</li>
+                    <li><strong>checkbox</strong> - boolean</li>
+                    <li><strong>decimal_number</strong> - float</li>
+                    <li><strong>textbox</strong> - string</li>
+                </ul>
+                <div class="border border-gray-300 rounded">
+                    <pre class="m-0"><code>
+    -- This script will print out what the values of our tweakables constantly.
+    -- For fun, we're also multiplying our integer and float, then printing that result.
+    -- Check the BepInEx console to see the results!
+    
+    -- You must select a value in game for this to work.
+    -- Current GearLib (1.0.2 as of release) has a bug and doesn't use the default.
+    
+    function Update()
+        Debug:Log("whole_number has a value of "..tostring(whole_number))
+        Debug:Log("checkbox has a value of "..tostring(checkbox))
+        Debug:Log("decimal_number has a value of "..tostring(decimal_number))
+        Debug:Log("textbox has a value of "..tostring(textbox))
+        
+        local multiplied = whole_number * decimal_number
+        Debug:Log("Numbers multiplied to the value of "..tostring(multiplied))
+    end                    
+                    </code></pre>
+                </div>
+            </div>
+        </div>
+        <!-- End Tweakable Cube -->
+
+    </section>
+    <!-- End Create Mod -->
+
+</main>
+<!-- End Getting Started/Create Your First Mod -->
+</div>
