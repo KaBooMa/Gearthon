@@ -1,5 +1,5 @@
 <template x-for="field in form?.filter(field => !field.metadata.hidden)">
-    <div>
+    <div :class="field.type === 'bool' ? 'd-flex align-items-center' : ''">
         <label class="form-label mt-2" x-text="field.metadata.label"></label>
         <template x-if="field.type == 'int'">
             <input class="form-control" type="number" x-model="data[field.name]" x-on:input="data[field.name] = parseInt(data[field.name]); update_func(data)">
@@ -50,7 +50,7 @@
             <input class="form-control" type="number" x-model="data[field.name]" x-on:input="data[field.name] = parseFloat(data[field.name]); update_func(data)">
         </template>
         <template x-if="field.type == 'bool'">
-            <input class="form-check-input" type="checkbox" x-model="data[field.name]" x-on:change="update_func(data)">
+            <input class="form-check-input ms-3" type="checkbox" x-model="data[field.name]" x-on:change="update_func(data)">
         </template>
         <template x-if="field.type == 'Color'">
             <div class="d-flex gap-2">
