@@ -11,7 +11,7 @@ BEPINEX_VERSION = 'https://builds.bepinex.dev/projects/bepinex_be/690/BepInEx-Un
 APPDATA_FILE = 'data.json'
 APPDATA_FOLDER = f'{os.getenv("LOCALAPPDATA")}/Gearthon'
 APPDATA_PATH = f'{APPDATA_FOLDER}/{APPDATA_FILE}'
-CURRENT_VERSION = '1.0.6'
+CURRENT_VERSION = '1.0.7'
 
 def get_gearblocks_path():
     DEFAULT_PATHS = ['C:/Program Files (x86)/Steam/steamapps/common/GearBlocks']

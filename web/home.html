@@ -112,11 +112,11 @@
                                 <td x-data="{ confirmed_delete: false, mod_rename: false, new_mod_name: '', new_mod_description: '' }">
                                     <button class="btn fa-solid fa-folder-open" title="Open in Editor" x-on:click="eel.load_mod(mod.name); loadPage('editor')"></button>
                                     <button class="btn fa-solid fa-pencil" title="Edit" x-on:click="mod_rename = true; new_mod_name = mod.name; new_mod_description = mod.description"></button>
-                                    <button class="btn fa-solid fa-file-export" title="Export" x-on:click="eel.export_mod(mod)"></button>
+                                    <button class="btn fa-solid fa-file-export" title="Export" x-on:click="eel.export_mod(mod.name)"></button>
                                     <button class="btn fa-solid fa-trash" title="Delete" x-on:click="confirmed_delete = true"></button>
                                     <div class="border border-danger rounded p-4 m-4 shadow" x-show="confirmed_delete" x-transition>
                                         <h4>Are you sure you want to delete?</h4>
-                                        <button class="btn btn-outline-danger" x-on:click="eel.delete_mod(mod); loadPage('home')">Delete</button>
+                                        <button class="btn btn-outline-danger" x-on:click="eel.delete_mod(mod.name); loadPage('home')">Delete</button>
                                         <button class="btn btn-primary" x-on:click="confirmed_delete = false">Cancel</button>
                                     </div>
                                     <div class="border border-danger rounded p-4 m-4 shadow" x-show="mod_rename" x-transition>
@@ -125,7 +125,7 @@
                                         <input class="form-control mb-2" x-model="new_mod_name">
                                         <label class="form-label">Mod Description</label>
                                         <textarea class="form-control mb-2" x-model="new_mod_description" placeholder="Mod description"></textarea>
-                                        <button class="btn btn-outline-danger" x-on:click="eel.rename_mod(mod, new_mod_name, new_mod_description); loadPage('home'); mod_rename = false">Save</button>
+                                        <button class="btn btn-outline-danger" x-on:click="eel.rename_mod(mod.name, new_mod_name, new_mod_description); loadPage('home'); mod_rename = false">Save</button>
                                         <button class="btn btn-primary" x-on:click="mod_rename = false">Cancel</button>
                                     </div>
                                 </td>
