@@ -2,7 +2,7 @@
 
 <div class="d-flex h-100" x-data="{route: 'getting-started/overview'}">
 <!-- Start Sidebar -->
-<aside class="flex-shrink-0 p-3 h-100 border-end border-gray-300" style="width: 200px;">
+<aside class="bg-primary flex-shrink-0 p-3 h-100 border-end border-gray-300" style="width: 200px;">
     <ul class="list-unstyled ps-0">
       <li class="mb-1">
         <button class="btn btn-toggle align-items-center rounded" data-bs-toggle="collapse" data-bs-target="#home-collapse" aria-expanded="true">
@@ -10,9 +10,9 @@
         </button>
         <div class="collapse show" id="home-collapse">
           <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-            <li><a class="nav-link ms-3" role="button" x-on:click="route = 'getting-started/overview'; console.log('home')">Overview</a></li>
-            <li><a class="nav-link ms-3" role="button" x-on:click="route = 'getting-started/first-mod'">Create your First Mod</a></li>
-            <li><a class="nav-link ms-3" role="button" x-on:click="route = 'getting-started/help'">Help</a></li>
+            <li><a class="nav-link ms-3" :class="{ 'fw-bold': route == 'getting-started/overview'}" role="button" x-on:click="route = 'getting-started/overview'; console.log('home')">Overview</a></li>
+            <li><a class="nav-link ms-3" :class="{ 'fw-bold': route == 'getting-started/first-mod'}" role="button" x-on:click="route = 'getting-started/first-mod'">Create your First Mod</a></li>
+            <li><a class="nav-link ms-3" :class="{ 'fw-bold': route == 'getting-started/help'}" role="button" x-on:click="route = 'getting-started/help'">Help</a></li>
           </ul>
         </div>
       </li>
@@ -22,10 +22,10 @@
         </button>
         <div class="collapse" id="dashboard-collapse">
           <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-            <li><a class="nav-link ms-3" role="button">Overview</a></li>
-            <li><a class="nav-link ms-3" role="button">Tools</a></li>
-            <li><a class="nav-link ms-3" role="button">Meshes</a></li>
-            <li><a class="nav-link ms-3" role="button">Exporting</a></li>
+            <li><a class="nav-link ms-3" :class="{ 'fw-bold': route == '3d-modeling/overview'}" role="button" x-on:click="route = '3d-modeling/overview'">Overview</a></li>
+            <li><a class="nav-link ms-3" :class="{ 'fw-bold': route == '3d-modeling/tools'}" role="button" x-on:click="route = '3d-modeling/tools'">Tools</a></li>
+            <li><a class="nav-link ms-3" :class="{ 'fw-bold': route == '3d-modeling/meshes'}" role="button" x-on:click="route = '3d-modeling/meshes'">Meshes</a></li>
+            <li><a class="nav-link ms-3" :class="{ 'fw-bold': route == '3d-modeling/exporting'}" role="button" x-on:click="route = '3d-modeling/exporting'">Exporting</a></li>
           </ul>
         </div>
       </li>
@@ -35,10 +35,10 @@
         </button>
         <div class="collapse" id="orders-collapse">
           <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-            <li><a class="nav-link ms-3" role="button">Overview</a></li>
-            <li><a class="nav-link ms-3" role="button">Examples</a></li>
-            <li><a class="nav-link ms-3" role="button">Classes</a></li>
-            <li><a class="nav-link ms-3" role="button">Syntax</a></li>
+            <li><a class="nav-link ms-3" :class="{ 'fw-bold': route == 'lua-scripting/overview'}" role="button" x-on:click="route = 'lua-scripting/overview'">Overview</a></li>
+            <li><a class="nav-link ms-3" :class="{ 'fw-bold': route == 'lua-scripting/examples'}" role="button" x-on:click="route = 'lua-scripting/examples'">Examples</a></li>
+            <li><a class="nav-link ms-3" :class="{ 'fw-bold': route == 'lua-scripting/classes'}" role="button" x-on:click="route = 'lua-scripting/classes'">Classes</a></li>
+            <li><a class="nav-link ms-3" :class="{ 'fw-bold': route == 'lua-scripting/syntax'}" role="button" x-on:click="route = 'lua-scripting/syntax'">Syntax</a></li>
           </ul>
         </div>
       </li>
@@ -190,8 +190,8 @@
     -- Define the update function, which will be triggered on every frame of the game
     function Update()
         -- Check if the player has enabled the script (E on Part)
-        if not Script:IsActive() then
-            -- If not active, return out of the update function
+        if not Script:Isfw-bold() then
+            -- If not fw-bold, return out of the update function
             return
         end
     
@@ -293,4 +293,105 @@
 
 </main>
 <!-- End Getting Started/Create Your First Mod -->
+
+<!-- Start Getting Started/Help -->
+<main x-show="route === 'getting-started/help'" class="p-4 overflow-y-scroll w-100">
+    <!-- Start Header -->
+    <section>
+        <h2>Getting Started</h2>
+        <p><strong>Help</strong></p>
+    </section>
+    <!-- End Header -->
+</main>
+<!-- End Getting Started/Help -->
+
+<!-- Start 3D Modeling/Overview -->
+<main x-show="route === '3d-modeling/overview'" class="p-4 overflow-y-scroll w-100">
+    <!-- Start Header -->
+    <section>
+        <h2>3D Modeling</h2>
+        <p><strong>Overview</strong></p>
+    </section>
+    <!-- End Header -->
+</main>
+<!-- End 3D Modeling/Overview -->
+
+<!-- Start 3D Modeling/Tools -->
+<main x-show="route === '3d-modeling/tools'" class="p-4 overflow-y-scroll w-100">
+    <!-- Start Header -->
+    <section>
+        <h2>3D Modeling</h2>
+        <p><strong>Tools</strong></p>
+    </section>
+    <!-- End Header -->
+</main>
+<!-- End 3D Modeling/Tools -->
+
+<!-- Start 3D Modeling/Meshes -->
+<main x-show="route === '3d-modeling/meshes'" class="p-4 overflow-y-scroll w-100">
+    <!-- Start Header -->
+    <section>
+        <h2>3D Modeling</h2>
+        <p><strong>Meshes</strong></p>
+    </section>
+    <!-- End Header -->
+</main>
+<!-- End 3D Modeling/Meshes -->
+
+<!-- Start 3D Modeling/Exporting -->
+<main x-show="route === '3d-modeling/exporting'" class="p-4 overflow-y-scroll w-100">
+    <!-- Start Header -->
+    <section>
+        <h2>3D Modeling</h2>
+        <p><strong>Exporting</strong></p>
+    </section>
+    <!-- End Header -->
+</main>
+<!-- End 3D Modeling/Exporting -->
+
+<!-- Start Lua Scripting/Overview -->
+<main x-show="route === 'lua-scripting/overview'" class="p-4 overflow-y-scroll w-100">
+    <!-- Start Header -->
+    <section>
+        <h2>Lua Scripting</h2>
+        <p><strong>Overview</strong></p>
+    </section>
+    <!-- End Header -->
+</main>
+<!-- End Lua Scripting/Overview -->
+
+<!-- Start Lua Scripting/Examples -->
+<main x-show="route === 'lua-scripting/examples'" class="p-4 overflow-y-scroll w-100">
+    <!-- Start Header -->
+    <section>
+        <h2>Lua Scripting</h2>
+        <p><strong>Examples</strong></p>
+    </section>
+    <!-- End Header -->
+</main>
+<!-- End Lua Scripting/Examples -->
+
+<!-- Start Lua Scripting/Classes -->
+<main x-show="route === 'lua-scripting/classes'" class="p-4 overflow-y-scroll w-100">
+    <!-- Start Header -->
+    <section>
+        <h2>Lua Scripting</h2>
+        <p><strong>Classes</strong></p>
+    </section>
+    <!-- End Header -->
+</main>
+<!-- End Lua Scripting/Classes -->
+
+<!-- Start Lua Scripting/Syntax -->
+<main x-show="route === 'lua-scripting/syntax'" class="p-4 overflow-y-scroll w-100">
+    <!-- Start Header -->
+    <section>
+        <h2>Lua Scripting</h2>
+        <p><strong>Syntax</strong></p>
+    </section>
+    <!-- End Header -->
+</main>
+<!-- End Lua Scripting/Syntax -->
+
+
 </div>
