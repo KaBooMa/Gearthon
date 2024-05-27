@@ -267,6 +267,7 @@
                                                             'maximum': 10,
                                                             'minimum': 0
                                                         });
+                                                        eel.update_part({'int_tweakables': selected_part.int_tweakables});
                                                         
                                                         selected_tweakable = null;
                                                         setTimeout(async () => {
@@ -281,6 +282,7 @@
                                                             'initial_value': '',
                                                             'multiline': false
                                                         });
+                                                        eel.update_part({'string_tweakables': selected_part.string_tweakables});
                                                         
                                                         selected_tweakable = null;
                                                         setTimeout(async () => {
@@ -294,6 +296,7 @@
                                                             'type': 'boolean',
                                                             'initial_value': false
                                                         });
+                                                        eel.update_part({'boolean_tweakables': selected_part.boolean_tweakables});
                                                         
                                                         selected_tweakable = null;
                                                         setTimeout(async () => {
@@ -309,6 +312,7 @@
                                                             'maximum': 1.0,
                                                             'minimum': 0.0
                                                         });
+                                                        eel.update_part({'float_tweakables': selected_part.float_tweakables});
                                                         
                                                         selected_tweakable = null;
                                                         setTimeout(async () => {
@@ -321,6 +325,7 @@
                                                             'description': '',
                                                             'type': 'joystick'
                                                         });
+                                                        eel.update_part({'joystick_tweakables': selected_part.joystick_tweakables});
                                                         
                                                         selected_tweakable = null;
                                                         setTimeout(async () => {
@@ -333,6 +338,7 @@
                                                             'description': '',
                                                             'type': 'inputaction'
                                                         });
+                                                        eel.update_part({'inputaction_tweakables': selected_part.inputaction_tweakables});
                                                         
                                                         selected_tweakable = null;
                                                         setTimeout(async () => {
@@ -391,7 +397,14 @@
                                             <hr>
                                             <div 
                                                 class="px-2" 
-                                                x-data="{ data: selected_tweakable }"
+                                                x-data="{ data: selected_tweakable, update_func: (kwargs) => { eel.update_part(kwargs)(); eel.update_part({
+                                                    'int_tweakables': selected_part.int_tweakables,
+                                                    'string_tweakables': selected_part.string_tweakables,
+                                                    'boolean_tweakables': selected_part.boolean_tweakables,
+                                                    'float_tweakables': selected_part.float_tweakables,
+                                                    'joystick_tweakables': selected_part.joystick_tweakables,
+                                                    'inputaction_tweakables': selected_part.inputaction_tweakables,
+                                                })}}"
                                                 x-load="form.html"></div>
                                         </div>
                                     </template>
