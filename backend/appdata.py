@@ -9,7 +9,7 @@ import requests
 
 BEPINEX_VERSION = 'https://builds.bepinex.dev/projects/bepinex_be/690/BepInEx-Unity.IL2CPP-win-x86-6.0.0-be.690%2B36d130f.zip'
 APPDATA_FILE = 'data.json'
-CURRENT_VERSION = '1.0.4'
+CURRENT_VERSION = '1.0.5'
 
 def get_gearblocks_path():
     DEFAULT_PATHS = ['C:/Program Files (x86)/Steam/steamapps/common/GearBlocks']
