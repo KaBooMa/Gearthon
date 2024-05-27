@@ -36,9 +36,9 @@ def current_mod_file():
 
 #### API ####
 @eel.expose
-def create_mod(name):
+def create_mod(name, description):
     global mod
-    mod = Mod(name)
+    mod = Mod(name=name, description=description)
 
     from backend.editor import clear_selected
     clear_selected()
@@ -58,7 +58,12 @@ def get_mods():
     if not os.path.exists(appdata.mods_folder()):
         return None
     
-    return os.listdir(appdata.mods_folder())
+    mods = []
+    for mod_folder in os.listdir(appdata.mods_folder()):
+        mod_data = json.loads(open(f'{appdata.mods_folder()}/{mod_folder}/{MOD_FILE_NAME}').read())
+        mods.append(mod_data)
+
+    return mods
 
 
 @eel.expose
@@ -86,7 +91,7 @@ def rename_mod(name, new_name, new_description):
     from backend.appdata import appdata
     mod_path = Path(f'{appdata.mods_folder()}/{name}')
     new_mod_path = Path(f'{appdata.mods_folder()}/{new_name}')
-    mod_json_path = Path(f'{appdata.mods_folder()}/{name}/mod.json')
+    mod_json_path = Path(f'{appdata.mods_folder()}/{name}/{MOD_FILE_NAME}')
 
     with open(mod_json_path, 'r') as mod_json:
         mod_data = json.load(mod_json)
