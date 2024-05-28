@@ -2,43 +2,61 @@
 
 <div class="d-flex h-100" x-data="{route: 'getting-started/overview'}">
 <!-- Start Sidebar -->
-<aside class="bg-primary flex-shrink-0 p-3 h-100 border-end border-gray-300" style="width: 200px;">
+<aside class="flex-shrink-0 p-3 h-100 border-end border-gray-300" style="width: 200px;">
     <ul class="list-unstyled ps-0">
-      <li class="mb-1">
-        <button class="btn btn-toggle align-items-center rounded" data-bs-toggle="collapse" data-bs-target="#home-collapse" aria-expanded="true">
-          Getting Started
-        </button>
-        <div class="collapse show" id="home-collapse">
-          <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-            <li><a class="nav-link ms-3" :class="{ 'fw-bold': route == 'getting-started/overview'}" role="button" x-on:click="route = 'getting-started/overview'; console.log('home')">Overview</a></li>
-            <li><a class="nav-link ms-3" :class="{ 'fw-bold': route == 'getting-started/first-mod'}" role="button" x-on:click="route = 'getting-started/first-mod'">Create your First Mod</a></li>
-            <li><a class="nav-link ms-3" :class="{ 'fw-bold': route == 'getting-started/help'}" role="button" x-on:click="route = 'getting-started/help'">Help</a></li>
-          </ul>
+        <li class="mb-1" x-data="{ collapsed: true }">
+            <div class="d-flex align-items-center"
+                x-on:click="collapsed = !collapsed"
+                data-bs-toggle="collapse" 
+                data-bs-target="#get-started-collapse"
+                aria-expanded="true"
+            >
+                <button class="btn fa-solid" :class="{ 'fa-chevron-up': !collapsed, 'fa-chevron-down': collapsed }"></button>
+                Getting Started
+            </div>
+            <div class="collapse show" id="get-started-collapse">
+                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                    <li><a class="nav-link ms-3" :class="{ 'fw-bold': route == 'getting-started/overview'}" role="button" @click="route = 'getting-started/overview'; console.log('home')">Overview</a></li>
+                    <li><a class="nav-link ms-3" :class="{ 'fw-bold': route == 'getting-started/first-mod'}" role="button" @click="route = 'getting-started/first-mod'">Create your First Mod</a></li>
+                    <li><a class="nav-link ms-3" :class="{ 'fw-bold': route == 'getting-started/help'}" role="button" @click="route = 'getting-started/help'">Help</a></li>
+                </ul>
+            </div>
+        </li>
+        <li class="mb-1" x-data="{ collapsed: false }">
+            <div class="d-flex align-items-center"
+                x-on:click="collapsed = !collapsed"
+                data-bs-toggle="collapse" 
+                data-bs-target="#3d-modeling-collapse"
+                aria-expanded="true"
+            >
+            <button class="btn fa-solid" :class="{ 'fa-chevron-up': !collapsed, 'fa-chevron-down': collapsed }"></button>
+            3D Modeling
         </div>
-      </li>
-      <li class="mb-1">
-        <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#dashboard-collapse" aria-expanded="false">
-          3D Modeling
-        </button>
-        <div class="collapse" id="dashboard-collapse">
+        <div class="collapse" id="3d-modeling-collapse">
           <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
             <li><a class="nav-link ms-3" :class="{ 'fw-bold': route == '3d-modeling/overview'}" role="button" x-on:click="route = '3d-modeling/overview'">Overview</a></li>
-            <li><a class="nav-link ms-3" :class="{ 'fw-bold': route == '3d-modeling/tools'}" role="button" x-on:click="route = '3d-modeling/tools'">Tools</a></li>
+            <li><a class="nav-link ms-3" :class="{ 'fw-bold': route == '3d-modeling/example-models'}" role="button" x-on:click="route = '3d-modeling/example-models'">Example Models</a></li>
             <li><a class="nav-link ms-3" :class="{ 'fw-bold': route == '3d-modeling/meshes'}" role="button" x-on:click="route = '3d-modeling/meshes'">Meshes</a></li>
             <li><a class="nav-link ms-3" :class="{ 'fw-bold': route == '3d-modeling/exporting'}" role="button" x-on:click="route = '3d-modeling/exporting'">Exporting</a></li>
           </ul>
         </div>
       </li>
-      <li class="mb-1">
-        <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#orders-collapse" aria-expanded="false">
-          Lua Scripting
-        </button>
-        <div class="collapse" id="orders-collapse">
+      <li class="mb-1" x-data="{ collapsed: false }">
+            <div class="d-flex align-items-center"
+                    x-on:click="collapsed = !collapsed"
+                    data-bs-toggle="collapse" 
+                    data-bs-target="#lua-scripting-collapse"
+                    aria-expanded="true"
+                >
+                <button class="btn fa-solid" :class="{ 'fa-chevron-up': !collapsed, 'fa-chevron-down': collapsed }"></button>
+                Lua Scripting
+            </div>
+        <div class="collapse" id="lua-scripting-collapse">
           <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-            <li><a class="nav-link ms-3" :class="{ 'fw-bold': route == 'lua-scripting/overview'}" role="button" x-on:click="route = 'lua-scripting/overview'">Overview</a></li>
-            <li><a class="nav-link ms-3" :class="{ 'fw-bold': route == 'lua-scripting/examples'}" role="button" x-on:click="route = 'lua-scripting/examples'">Examples</a></li>
-            <li><a class="nav-link ms-3" :class="{ 'fw-bold': route == 'lua-scripting/classes'}" role="button" x-on:click="route = 'lua-scripting/classes'">Classes</a></li>
-            <li><a class="nav-link ms-3" :class="{ 'fw-bold': route == 'lua-scripting/syntax'}" role="button" x-on:click="route = 'lua-scripting/syntax'">Syntax</a></li>
+            <li><a class="nav-link ms-3 color-secondary disabled" disabled :class="{ 'fw-bold': route == 'lua-scripting/overview'}" role="button" x-on:click="route = 'lua-scripting/overview'"><del>Overview</del></a></li>
+            <li><a class="nav-link ms-3 color-secondary disabled" disabled :class="{ 'fw-bold': route == 'lua-scripting/examples'}" role="button" x-on:click="route = 'lua-scripting/examples'"><del>Examples</del></a></li>
+            <li><a class="nav-link ms-3 color-secondary disabled" disabled :class="{ 'fw-bold': route == 'lua-scripting/classes'}" role="button" x-on:click="route = 'lua-scripting/classes'"><del>Classes</del></a></li>
+            <li><a class="nav-link ms-3 color-secondary disabled" disabled :class="{ 'fw-bold': route == 'lua-scripting/syntax'}" role="button" x-on:click="route = 'lua-scripting/syntax'"><del>Syntax</del></a></li>
           </ul>
         </div>
       </li>
@@ -50,21 +68,21 @@
 <main x-show="route === 'getting-started/overview'" class="p-4 overflow-y-scroll w-100">
 
     <!-- Start Header -->
-    <section>
+    <section class="pt-4">
         <h2>Getting Started</h2>
         <p><strong>Overview</strong></p>
     </section>
     <!-- End Header -->
 
     <!-- Start About -->
-    <section>
+    <section class="pt-4">
         <h4>About Gearthon</h4>
         <p>Gearthon is an advanced modding tool designed to bring everyone into the world of modding with ease and excitement. Our goal is to provide a comprehensive suite of tools to simplify the often challenging and time-consuming process of modding with BepInEx. With Gearthon, you have the freedom to create anything you can imagine, all within a single, intuitive editor. Whether you're crafting intricate aerodynamic wings, custom joints, unique wheels, new engines, or simply adding cosmetic parts, Gearthon empowers you to bring your creative visions to life. Join us and dive into the limitless possibilities of modding!</p>
     </section>
     <!-- End About -->
 
     <!-- Start Possibilities -->
-    <section>
+    <section class="pt-4">
         <h4>Modding Possibilities</h4>
         <p><strong>Gearthon offers a variety of tools and capabilities, including:</strong></p>
         <ul>
@@ -81,7 +99,7 @@
     <!-- End Possibilities -->
 
     <!-- Start Tools -->
-    <section>
+    <section class="pt-4">
         <h4>What You Need to Get Started</h4>
         <p>To begin your journey with Gearblocks modding, you'll need the following:</p>
         <ul>
@@ -95,14 +113,14 @@
 <!-- Start Getting Started/Create Your First Mod -->
 <main x-show="route === 'getting-started/first-mod'" class="p-4 overflow-y-scroll w-100">
     <!-- Start Header -->
-    <section>
+    <section class="pt-4">
         <h2>Getting Started</h2>
         <p><strong>Create your first Mod</strong></p>
     </section>
     <!-- End Header -->
 
     <!-- Start Setup -->
-    <section>
+    <section class="pt-4">
         <h4>Setup (For Beginners in 3D Modeling)</h4>
         <ol>
             <li> Download or use your preferred 3D modeling tool (we recommend <a target="_blank" href="https://www.blender.org/">Blender</a>).</li>
@@ -119,7 +137,7 @@
 
 
     <!-- Start Create Mod -->
-    <section>
+    <section class="pt-4">
         <h4>Create a Mod</h4>
         <p><strong>To create a new mod:</strong></p>
         <ol>
@@ -297,62 +315,221 @@
 <!-- Start Getting Started/Help -->
 <main x-show="route === 'getting-started/help'" class="p-4 overflow-y-scroll w-100">
     <!-- Start Header -->
-    <section>
+    <section class="pt-4">
         <h2>Getting Started</h2>
         <p><strong>Help</strong></p>
     </section>
     <!-- End Header -->
+
+    <!-- Start Discord -->
+    <section class="pt-4">
+        <h4>Get help via our Discord</h4>
+        <p>In the Gearblocks Modding Club Discord, we are happy to help you in the Help section with your problems.</p>
+        <a href="https://discord.gg/pJrYVrKA" target="_blank" class="btn btn-primary">Join Gearblocks Modding Club</a>
+    </section>
+    <!-- End Discord -->
 </main>
 <!-- End Getting Started/Help -->
 
 <!-- Start 3D Modeling/Overview -->
 <main x-show="route === '3d-modeling/overview'" class="p-4 overflow-y-scroll w-100">
     <!-- Start Header -->
-    <section>
+    <section class="pt-4">
         <h2>3D Modeling</h2>
         <p><strong>Overview</strong></p>
     </section>
     <!-- End Header -->
+
+    <!-- Start Overview Section -->
+    <section class="mt-4">
+        <h4>Introduction to 3D Modeling for Mods</h4>
+        <p>Creating your own mods can be an incredibly rewarding experience, especially when you get to design your own 3D models. This overview will help you get started with the essentials of 3D modeling, focusing on techniques and best practices that will ensure your models are optimized for use in Gearblocks.</p>
+        
+        <h4>Understanding Mesh Structure</h4>
+        <p>All 3D models are constructed from meshes, which are made up of vertices, edges, and faces. Here are some key points to remember:</p>
+        <ul>
+            <li><strong>Triangles (Tris) Only</strong>: Ensure your meshes are made up of triangles. This is crucial because triangles are the most universally compatible shape in 3D modeling and rendering.</li>
+            <li><strong>Face Limit</strong>: Keep your models within a limit of 15,000 faces. This helps maintain performance and ensures your models load quickly and run smoothly.</li>
+        </ul>
+
+        <h4>Common 3D Modeling Tools</h4>
+        <p>There are several powerful tools available for creating 3D models. Here are some of the most widely used:</p>
+        <ul>
+            <li><strong>Blender</strong>: A free and open-source 3D creation suite that supports everything from modeling and rigging to animation and rendering. It's highly recommended for beginners and professionals alike.</li>
+            <li><strong>Autodesk Maya</strong>: A professional-grade software used extensively in the film, television, and gaming industries for modeling, animation, and rendering.</li>
+            <li><strong>3ds Max</strong>: Known for its modeling, animation, and rendering capabilities, this tool is popular in game development and architectural visualization.</li>
+            <li><strong>ZBrush</strong>: Ideal for digital sculpting and painting, ZBrush is perfect for creating highly detailed models and characters.</li>
+            <li><strong>SketchUp</strong>: User-friendly and great for architectural and interior design, SketchUp is perfect for quickly creating 3D models.</li>
+        </ul>
+
+        <h4>Best Practices for 3D Modeling</h4>
+        <p>Follow these best practices to ensure your models are high-quality and optimized for use in Gearblocks:</p>
+        <ul>
+            <li><strong>Start with Simple Shapes</strong>: Begin with basic geometric shapes and gradually refine them into more complex models. This approach helps maintain clean topology and reduces errors.</li>
+            <li><strong>Optimize Your Mesh</strong>: Remove unnecessary vertices and faces to keep your model efficient. This improves performance and makes your model easier to work with.</li>
+            <li><strong>Use Reference Images</strong>: Always use reference images to guide your modeling process. This ensures accuracy and helps achieve realistic proportions and details.</li>
+            <li><strong>Proper UV Mapping</strong>: Ensure your models have proper UV maps for texturing. Good UV mapping prevents texture stretching and distortion.</li>
+            <li><strong>Regularly Save Your Work</strong>: Frequently save your progress and maintain different versions of your model. This protects against data loss and allows you to revert to previous stages if needed.</li>
+        </ul>
+
+        <h4>Exporting Your Model</h4>
+        <p>Once your model is ready, you need to export it in a format that Gearblocks can use. Follow these steps to export your model from Blender:</p>
+        <ol>
+            <li>Select your model and ensure it is properly triangulated (press <code>Ctrl + T</code> in Edit Mode).</li>
+            <li>Go to <em>File</em> > <em>Export</em> > <em>Wavefront (.obj)</em>.</li>
+            <li>In the export settings, ensure that "Selection Only" is checked, and set the scale to 1.0.</li>
+            <li>Click <em>Export OBJ</em> to save your model.</li>
+        </ol>
+
+        <h4>Conclusion</h4>
+        <p>By following this overview, you'll be well on your way to creating efficient and high-quality 3D models for your mods. With the right tools and techniques, you can bring your creative visions to life and enhance your Gearblocks experience. Happy modeling!</p>
+    </section>
+    <!-- End Overview Section -->
 </main>
 <!-- End 3D Modeling/Overview -->
 
-<!-- Start 3D Modeling/Tools -->
-<main x-show="route === '3d-modeling/tools'" class="p-4 overflow-y-scroll w-100">
+<!-- Start 3D Modeling/Example Models -->
+<main x-show="route === '3d-modeling/example-models'" class="p-4 overflow-y-scroll w-100">
     <!-- Start Header -->
-    <section>
+    <section class="pt-4">
         <h2>3D Modeling</h2>
-        <p><strong>Tools</strong></p>
+        <p><strong>Example Models</strong></p>
     </section>
     <!-- End Header -->
-</main>
-<!-- End 3D Modeling/Tools -->
 
-<!-- Start 3D Modeling/Meshes -->
+    <!-- Start Example Models Section -->
+    <section class="mt-4">
+        <div class="row row-cols-1 row-cols-md-4 g-4">
+            <div class="col">
+                <div class="card border-dark">
+                    <div class="card-header">Beam</div>
+                    <img src="./imgs/placeholder_example_parts.png" alt="Beam" class="img-fluid mb-2 w-100">
+                    <div class="card-body">
+                        <p class="card-text">Use this beam piece for scale and reference.</p>
+                        <a href="path/to/beam-model.obj" download><button type="button" class="btn btn-primary">Download Beam</button></a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="card border-dark">
+                    <div class="card-header">Axle</div>
+                    <img src="./imgs/placeholder_example_parts.png" alt="Axle" class="img-fluid mb-2 w-100">
+                    <div class="card-body">
+                        <p class="card-text">The axle model is essential for understanding scale in the game.</p>                 
+                        <a href="path/to/axle-model.obj" download><button type="button" class="btn btn-primary">Download Axle</button></a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="card border-dark">
+                    <div class="card-header">Angle 4 x 90</div>
+                    <img src="./imgs/placeholder_example_parts.png" alt="Angle 4 x 90" class="img-fluid mb-2 w-100">
+                    <div class="card-body">
+                        <p class="card-text">This model demonstrates the scale of connection pieces.</p>           
+                        <a href="path/to/angle-model.obj" download><button type="button" class="btn btn-primary">Download Angle 4 x 90</button></a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="card border-dark">
+                    <div class="card-header">Player model</div>
+                    <img src="./imgs/placeholder_example_parts.png" alt="Player model Piece" class="img-fluid mb-2 w-100">
+                    <div class="card-body">
+                        <p class="card-text">Use this player model piece for scale and reference.</p>
+                        <a href="path/to/playermodel.obj" download><button type="button" class="btn btn-primary">Download Player model</button></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h4>Using the Example Models</h4>
+        <p>To use these example models in your own projects, follow these steps:</p>
+        <ol>
+            <li>Download the desired model using the provided links.</li>
+            <li>Import the model into your 3D modeling software (e.g., Blender) by going to <em>File</em> > <em>Import</em> > <em>Wavefront (.obj)</em>.</li>
+            <li>Examine the model to understand its scale, proportions, and structure.</li>
+            <li>Use the model as a reference when creating your own parts to ensure consistency and accuracy.</li>
+        </ol>
+
+        <p>These example models are designed to help you get started quickly and efficiently. By studying these references, you'll gain a better understanding of the standards and techniques used in 3D modeling for Gearblocks.</p>
+
+        <p>If you have requests for any other parts that should be featured, let us know in our <a href="https://discord.gg/pJrYVrKA" target="_blank">Discord</a>.</p>
+    </section>
+    <!-- End Example Models Section -->
+</main>
+<!-- End 3D Modeling/Example Models -->
+
+<!-- Start Meshes Page -->
 <main x-show="route === '3d-modeling/meshes'" class="p-4 overflow-y-scroll w-100">
     <!-- Start Header -->
-    <section>
+    <section class="pt-4">
         <h2>3D Modeling</h2>
-        <p><strong>Meshes</strong></p>
+        <p><strong>Understanding Meshes for Gearthon</strong></p>
     </section>
     <!-- End Header -->
+
+    <!-- Start Meshes Information -->
+    <section class="mt-4">
+        <h4>What are Meshes?</h4>
+        <p>A mesh is a collection of vertices, edges, and faces that define the shape of a 3D object in Gearblocks. It serves as the fundamental component for all 3D models in the game world.</p>
+
+        <h4>Face Limitations</h4>
+        <p>Gearthon is currently limited to about 15000 faces. Models should adhere to these limitations to maintain visual quality.</p>
+
+        <h4>Flat Normals</h4>
+        <p>In Gearthon, all mesh normals will be flat. In the future we will add custom normals, so you can utilize smoothed normals.</p>
+
+        <h4>Modeling Guidelines for Gearthon</h4>
+        <p>When creating models for Gearthon, it's essential to follow certain guidelines to ensure compatibility and optimal performance:</p>
+        <ul>
+            <li>Centered Models: Models should be centered at the origin point (0, 0, 0) to maintain consistency and ease of placement within the game world.</li>
+            <li>Optimized Geometry: Use efficient modeling techniques to minimize unnecessary geometry and keep the mesh complexity within acceptable limits.</li>
+        </ul>
+
+        <h4>Optimizing Meshes</h4>
+        <p>To optimize meshes for Gearblocks:</p>
+        <ul>
+            <li>Ensure models comply with the specified face limitations to prevent visual issues.</li>
+            <li>Regularly test models in Gearblocks to identify and address any issues.</li>
+            <li>Ensure that all visible faces have outward-facing normals! Otherwise, they will be invisible.</li>
+        </ul>
+
+        <h4>Conclusion</h4>
+        <p>Understanding mesh limitations and adhering to modeling guidelines are essential for creating content in Gearblocks. By following these principles, you can ensure compatibility, performance, and visual quality in Gearblocks.</p>
+    </section>
+    <!-- End Meshes Information -->
 </main>
-<!-- End 3D Modeling/Meshes -->
+<!-- End Meshes Page -->
 
 <!-- Start 3D Modeling/Exporting -->
 <main x-show="route === '3d-modeling/exporting'" class="p-4 overflow-y-scroll w-100">
     <!-- Start Header -->
-    <section>
+    <section class="pt-4">
         <h2>3D Modeling</h2>
         <p><strong>Exporting</strong></p>
     </section>
     <!-- End Header -->
+    
+    <section class="pt-4">
+        <h4>Exporting Your Model</h4>
+        <p>Once your model is ready, you need to export it in a format that Gearblocks can use. Follow these steps to export your model from Blender:</p>
+        <ol>
+            <li>Select your model and ensure it is properly triangulated (press <code>Ctrl + T</code> in Edit Mode).</li>
+            <li>Go to <em>File</em> > <em>Export</em> > <em>Wavefront (.obj)</em>.</li>
+            <li>In the export settings, ensure that "Selection Only" is checked, and set the scale to 1.0.</li>
+            <li>Click <em>Export OBJ</em> to save your model.</li>
+        </ol>
+    </section>
 </main>
 <!-- End 3D Modeling/Exporting -->
 
 <!-- Start Lua Scripting/Overview -->
 <main x-show="route === 'lua-scripting/overview'" class="p-4 overflow-y-scroll w-100">
     <!-- Start Header -->
-    <section>
+    <section class="pt-4">
         <h2>Lua Scripting</h2>
         <p><strong>Overview</strong></p>
     </section>
@@ -363,7 +540,7 @@
 <!-- Start Lua Scripting/Examples -->
 <main x-show="route === 'lua-scripting/examples'" class="p-4 overflow-y-scroll w-100">
     <!-- Start Header -->
-    <section>
+    <section class="pt-4">
         <h2>Lua Scripting</h2>
         <p><strong>Examples</strong></p>
     </section>
@@ -374,7 +551,7 @@
 <!-- Start Lua Scripting/Classes -->
 <main x-show="route === 'lua-scripting/classes'" class="p-4 overflow-y-scroll w-100">
     <!-- Start Header -->
-    <section>
+    <section class="pt-4">
         <h2>Lua Scripting</h2>
         <p><strong>Classes</strong></p>
     </section>
@@ -385,7 +562,7 @@
 <!-- Start Lua Scripting/Syntax -->
 <main x-show="route === 'lua-scripting/syntax'" class="p-4 overflow-y-scroll w-100">
     <!-- Start Header -->
-    <section>
+    <section class="pt-4">
         <h2>Lua Scripting</h2>
         <p><strong>Syntax</strong></p>
     </section>
