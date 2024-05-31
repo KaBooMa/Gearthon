@@ -1,0 +1,568 @@
+<!-- This should be containerized! But i don't want to mess anything up. -->
+
+<div class="d-flex h-100" x-data="{route: 'getting-started/overview'}">
+<!-- Start Sidebar -->
+<aside class="flex-shrink-0 p-3 h-100 border-end border-gray-300" style="width: 200px;">
+    <ul class="list-unstyled ps-0">
+        <li class="mb-1" x-data="{ collapsed: true }">
+            <div class="d-flex align-items-center"
+                x-on:click="collapsed = !collapsed"
+                data-bs-toggle="collapse" 
+                data-bs-target="#get-started-collapse"
+                aria-expanded="true"
+            >
+                <button class="btn fa-solid" :class="{ 'fa-chevron-up': !collapsed, 'fa-chevron-down': collapsed }"></button>
+                Getting Started
+            </div>
+            <div class="collapse show" id="get-started-collapse">
+                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                    <li><a class="nav-link ms-3" :class="{ 'fw-bold': route == 'getting-started/overview'}" role="button" @click="route = 'getting-started/overview'; console.log('home')">Overview</a></li>
+                    <li><a class="nav-link ms-3" :class="{ 'fw-bold': route == 'getting-started/first-mod'}" role="button" @click="route = 'getting-started/first-mod'">Create your First Mod</a></li>
+                    <li><a class="nav-link ms-3" :class="{ 'fw-bold': route == 'getting-started/help'}" role="button" @click="route = 'getting-started/help'">Help</a></li>
+                </ul>
+            </div>
+        </li>
+        <li class="mb-1" x-data="{ collapsed: false }">
+            <div class="d-flex align-items-center"
+                x-on:click="collapsed = !collapsed"
+                data-bs-toggle="collapse" 
+                data-bs-target="#3d-modeling-collapse"
+                aria-expanded="true"
+            >
+            <button class="btn fa-solid" :class="{ 'fa-chevron-up': !collapsed, 'fa-chevron-down': collapsed }"></button>
+            3D Modeling
+        </div>
+        <div class="collapse" id="3d-modeling-collapse">
+          <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+            <li><a class="nav-link ms-3" :class="{ 'fw-bold': route == '3d-modeling/overview'}" role="button" x-on:click="route = '3d-modeling/overview'">Overview</a></li>
+            <li><a class="nav-link ms-3" :class="{ 'fw-bold': route == '3d-modeling/example-models'}" role="button" x-on:click="route = '3d-modeling/example-models'">Example Models</a></li>
+            <li><a class="nav-link ms-3" :class="{ 'fw-bold': route == '3d-modeling/meshes'}" role="button" x-on:click="route = '3d-modeling/meshes'">Meshes</a></li>
+            <li><a class="nav-link ms-3" :class="{ 'fw-bold': route == '3d-modeling/exporting'}" role="button" x-on:click="route = '3d-modeling/exporting'">Exporting</a></li>
+          </ul>
+        </div>
+      </li>
+      <li class="mb-1" x-data="{ collapsed: false }">
+            <div class="d-flex align-items-center"
+                    x-on:click="collapsed = !collapsed"
+                    data-bs-toggle="collapse" 
+                    data-bs-target="#lua-scripting-collapse"
+                    aria-expanded="true"
+                >
+                <button class="btn fa-solid" :class="{ 'fa-chevron-up': !collapsed, 'fa-chevron-down': collapsed }"></button>
+                Lua Scripting
+            </div>
+        <div class="collapse" id="lua-scripting-collapse">
+          <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+            <li><a class="nav-link ms-3 color-secondary disabled" disabled :class="{ 'fw-bold': route == 'lua-scripting/overview'}" role="button" x-on:click="route = 'lua-scripting/overview'"><del>Overview</del></a></li>
+            <li><a class="nav-link ms-3 color-secondary disabled" disabled :class="{ 'fw-bold': route == 'lua-scripting/examples'}" role="button" x-on:click="route = 'lua-scripting/examples'"><del>Examples</del></a></li>
+            <li><a class="nav-link ms-3 color-secondary disabled" disabled :class="{ 'fw-bold': route == 'lua-scripting/classes'}" role="button" x-on:click="route = 'lua-scripting/classes'"><del>Classes</del></a></li>
+            <li><a class="nav-link ms-3 color-secondary disabled" disabled :class="{ 'fw-bold': route == 'lua-scripting/syntax'}" role="button" x-on:click="route = 'lua-scripting/syntax'"><del>Syntax</del></a></li>
+          </ul>
+        </div>
+      </li>
+    </ul>
+</aside>
+<!-- End Sidebar -->
+
+<!-- Start Getting Started/Overview -->
+<main x-show="route === 'getting-started/overview'" class="p-4 overflow-y-scroll w-100">
+
+    <!-- Start Header -->
+    <section class="pt-4">
+        <h2>Getting Started</h2>
+        <p><strong>Overview</strong></p>
+    </section>
+    <!-- End Header -->
+
+    <!-- Start About -->
+    <section class="pt-4">
+        <h4>About Gearthon</h4>
+        <p>This tool provides a easy-to-use interface for both players and modders alike to mod the game. Players can install mods from modders into their mod folder and experience them in their game, just like that.<br><br>
+            This tool utilizes GearLib to perform what it does.</p>
+    </section>
+    <!-- End About -->
+
+    <!-- Start Possibilities -->
+    <section class="pt-4">
+        <h4>Modding Possibilities</h4>
+        <p><strong>Gearthon offers a variety of tools and capabilities, including:</strong></p>
+        <ul>
+            <li>Importing OBJ files</li>
+            <li>Creating mesh colliders</li>
+            <li>Designing with custom materials</li>
+            <li>Utilizing ingame tweakables for fine-tuning</li>
+            <li>Creating versatile attachments</li>
+            <li>Implementing Lua scripting for advanced modifications</li>
+            <li>Defining and using various link types</li>
+            <li>And more exciting features to come!</li>
+        </ul>
+    </section>
+    <!-- End Possibilities -->
+
+    <!-- Start Tools -->
+    <section class="pt-4">
+        <h4>What You Need to Get Started</h4>
+        <p>To begin your journey with Gearblocks modding, you'll need the following:</p>
+        <ul>
+            <li><a target="_blank" href="https://www.blender.org/">Blender</a> (recommended 3D modeling tool, free to use)</li>
+        </ul>
+    </section>
+    <!-- End Tools -->
+</main>
+<!-- End Getting Started/Overview -->
+
+<!-- Start Getting Started/Create Your First Mod -->
+<main x-show="route === 'getting-started/first-mod'" class="p-4 overflow-y-scroll w-100">
+    <!-- Start Header -->
+    <section class="pt-4">
+        <h2>Getting Started</h2>
+        <p><strong>Create your first Mod</strong></p>
+    </section>
+    <!-- End Header -->
+
+    <!-- Start Setup -->
+    <section class="pt-4">
+        <h4>Setup (For Beginners in 3D Modeling)</h4>
+        <ol>
+            <li> Download or use your preferred 3D modeling tool (we recommend <a target="_blank" href="https://www.blender.org/">Blender</a>).</li>
+            <li> Open Blender and press <code>A</code> to select everything in the scene, then press <code>X</code> to delete all selected items.</li>
+            <li> Press <code>Shift + A</code> to add a new mesh. For this example, choose a Cube. (Set the size to 10cm)</li>
+            <li> Press <code>Tab</code> to enter edit mode.</li>
+            <li> Press <code>A</code> again to select every vertex (<code>1</code>), edge (<code>2</code>), or face (<code>3</code>).</li>
+            <li> Press <code>Ctrl + T</code> to triangulate the mesh. (This is important because Gearblocks requires triangulated meshes.)</li>
+            <li> Go to <em>File</em> in the top left corner, and click on <em>Export</em> &gt; <em>Wavefront (.obj)</em>.</li>
+        </ol>
+        <p>For further guidance in Blender, check out the <a target="_blank" href="https://www.youtube.com/watch?v=B0J27sf9N1Y&list=PLjEaoINr3zgEPv5y--4MKpciLaoQYZB1Z">Blender Donut Tutorial</a>.</p>
+    </section>
+    <!-- End Setup -->
+
+
+    <!-- Start Create Mod -->
+    <section class="pt-4">
+        <h4>Create a Mod</h4>
+        <p><strong>To create a new mod:</strong></p>
+        <ol>
+            <li>Go to the Home page and click on <strong>Create New Mod</strong>.</li>
+            <li>Enter your Mod Name and Description, then press <strong>Create</strong>.</li>
+        </ol>
+        
+        <p><strong>In the Editor:</strong></p>
+        <ul>
+            <li>Click on the <strong>+</strong> next to Parts to create your first part.</li>
+            <li>Select the part and click on <strong>Upload Model</strong>. Choose the OBJ model you want to upload. Currently, only one mesh per part is allowed.</li>
+            <li>If you cannot see your model, scroll out to view it.</li>
+            <li>Choose a name, category, weight, mass, and other properties for your part:
+                <ul>
+                    <li>Whether it should be paintable</li>
+                    <li>Whether materials can be applied</li>
+                    <li>If it should use a mesh collider</li>
+                </ul>
+            </li>
+        </ul>
+        <!-- Start Attachments-->
+        <p><strong>Working with attachments:</strong></p>
+        <p>If you select Attachments under Mode or with <code>Ctrl + 2</code>, you can <code>Ctrl + Left Click</code> to create a new attachment. This is where you can attach it to other objects in the game. There are several options available:</p>
+        
+        <ul>
+            <li><strong>Name:</strong> The name of your attachment. (Useful if you later want to reference it in lua!)</li>
+            <li><strong>Attachment Flags:</strong> Flags that define how the attachment behaves:</li>
+            <ul>
+                <!-- TODO: Add definition to Attachment Flags -->
+                <li><strong>linear_bearing:</strong> Allows your attachment to move linearly relative to its attachment point.</li>
+                <li><strong>rotary_bearing:</strong> Allows your attachment to rotate around the attachment point.</li>
+                <li><strong>constant_velocity_joint:</strong></li>
+                <li><strong>fixed:</strong> Allows the part to be rigidly connected.</li>
+                <li><strong>knuckle_joint:</strong></li>
+                <li><strong>spherical_bearing:</strong> Allows your attachment to freely rotate.</li>
+            </ul>
+            <li><strong>Alignment Flags:</strong> Flags that define alignment behavior:</li>
+            <ul>
+                <!-- TODO: Add definition to Alignment Flags -->
+                <li><strong>clamp_180:</strong></li>
+                <li><strong>clamp_90:</strong></li>
+                <li><strong>is_bidirectional:</strong></li>
+                <li><strong>is_female:</strong></li>
+                <li><strong>is_interior:</strong></li>
+            </ul>
+            <li><strong>Position:</strong> The position of your attachment.</li>
+            <li><strong>Orientation/Rotation:</strong> The orientation or rotation of your attachment.</li>
+            <li><strong>Size:</strong> The size of your attachment.</li>
+            <li><strong>Pivot:</strong> The pivot point of your attachment.</li>
+        </ul>
+        <!-- End Attachments-->
+
+        <!-- Start Scripting -->
+        <p><strong>Working with Scripting:</strong></p>
+        <p>If you select Scripting under Mode or with <code>Ctrl + 3</code>, you can add custom logic to your part using Lua scripting.</p>        
+
+        <!-- I honestly have no clue when it comes to lua ;) -->
+
+        <!-- Start Hopping Part -->
+        <div class="card my-2">
+            <div class="card-body">
+                <h5 class="card-title">Create a Hopping Part</h5>
+                <div class="border border-gray-300 rounded">
+                    <pre class="m-0"><code>
+    -- Import the time module from os
+    time = os.time()
+    
+    -- Define the delay
+    delay = 1
+    
+    -- Define the update function, which will be triggered on every frame of the game
+    function Update()
+        -- Check if the player has enabled the script (E on Part)
+        if not Script:IsActive() then
+            -- If not active, return out of the update function
+            return
+        end
+    
+        -- Check if the delay is over
+        if os.time() >= time + delay then
+            -- Add 5 units of force to the y / Vertical axis of the part
+            Rigidbody:AddForce(0, 5, 0)
+            -- Reset the time for the next update
+            time = os.time()
+        end
+    end
+                    </code></pre>
+                </div>
+            </div>
+        </div>
+        <!-- End Hopping Part -->
+
+        <!-- Start Counting Cube -->
+        <div class="card my-2">
+            <div class="card-body">
+                <h5 class="card-title">Create a Counting Cube</h5>
+                <div class="border border-gray-300 rounded">
+                    <pre class="m-0"><code>
+    -- This script will count all parts in the construction and debug the results
+    -- It will only happen upon unfreezing the construction to save on performance
+    -- Check your BepInEx console for the results!
+
+    -- Define the Unfrozen function, which will be triggered every time you unfreeze your build
+    function Unfrozen()
+        -- Use the #Construction:GetParts() Hook to get all the connected parts
+        local total_parts = #Construction:GetParts()
+        -- Print out the number of total parts inside the BepInEx console
+        Debug:Log("Total parts in construction is: "..total_parts)
+    end                        
+                    </code></pre>
+                </div>
+            </div>
+        </div>
+        <!-- End Counting Cube -->
+        
+        <!-- Start Tweakables -->
+        <p><strong>Working with Tweakables:</strong></p>
+        <p>If you select Tweakables under Mode or with <code>Ctrl + 4</code>, you can add various types of tweakables:</p>
+        <ul>
+            <li>Integer (non-decimal number)</li>
+            <li>String (text)</li>
+            <li>Boolean (true or false)</li>
+            <li>Float (decimal number)</li>
+            <li>Joystick action (button or range from -1 to 1)</li>
+            <li>Input action (keyboard input ranging from 0 to 1)</li>
+        </ul>
+        <p>There are several options available for customization.</p>
+        <ul>
+            <li><strong>Label:</strong> The name of your Tweakable.</li>
+            <li><strong>Description:</strong> The Description of your Tweakable.</li>
+            <li><strong>Variable Name:</strong> The name through which you can access it in Scripting.</li>
+            <li><strong>Checkbox:</strong></li>
+        </ul>
+        <!-- End Tweakables -->
+
+        <!-- Start Tweakable Cube -->
+        <div class="card my-2">
+            <div class="card-body">
+                <h5 class="card-title">Create a Tweakable Cube</h5>
+                <p>For this to work you have to go to Tweakables under Mode or <code>Ctrl + 4</code> and add the following 4 Tweakables:</p>
+
+                <ul>
+                    <li><strong>whole_number</strong> - int</li>
+                    <li><strong>checkbox</strong> - boolean</li>
+                    <li><strong>decimal_number</strong> - float</li>
+                    <li><strong>textbox</strong> - string</li>
+                </ul>
+                <div class="border border-gray-300 rounded">
+                    <pre class="m-0"><code>
+    -- This script will print out what the values of our tweakables constantly.
+    -- For fun, we're also multiplying our integer and float, then printing that result.
+    -- Check the BepInEx console to see the results!
+    
+    -- You must select a value in game for this to work.
+    -- Current GearLib (1.0.2 as of release) has a bug and doesn't use the default.
+    
+    function Update()
+        Debug:Log("whole_number has a value of "..tostring(whole_number))
+        Debug:Log("checkbox has a value of "..tostring(checkbox))
+        Debug:Log("decimal_number has a value of "..tostring(decimal_number))
+        Debug:Log("textbox has a value of "..tostring(textbox))
+        
+        local multiplied = whole_number * decimal_number
+        Debug:Log("Numbers multiplied to the value of "..tostring(multiplied))
+    end                    
+                    </code></pre>
+                </div>
+            </div>
+        </div>
+        <!-- End Tweakable Cube -->
+        <!-- End Scripting -->
+    </section>
+    <!-- End Create Mod -->
+
+</main>
+<!-- End Getting Started/Create Your First Mod -->
+
+<!-- Start Getting Started/Help -->
+<main x-show="route === 'getting-started/help'" class="p-4 overflow-y-scroll w-100">
+    <!-- Start Header -->
+    <section class="pt-4">
+        <h2>Getting Started</h2>
+        <p><strong>Help</strong></p>
+    </section>
+    <!-- End Header -->
+
+    <!-- Start Discord -->
+    <section class="pt-4">
+        <h4>Get help via our Discord</h4>
+        <p>In the Gearblocks Modding Club Discord, we are happy to help you in the Help section with your problems.</p>
+        <a href="https://discord.gg/pJrYVrKA" target="_blank" class="btn btn-primary">Join Gearblocks Modding Club</a>
+    </section>
+    <!-- End Discord -->
+</main>
+<!-- End Getting Started/Help -->
+
+<!-- Start 3D Modeling/Overview -->
+<main x-show="route === '3d-modeling/overview'" class="p-4 overflow-y-scroll w-100">
+    <!-- Start Header -->
+    <section class="pt-4">
+        <h2>3D Modeling</h2>
+        <p><strong>Overview</strong></p>
+    </section>
+    <!-- End Header -->
+
+    <!-- Start Overview Section -->
+    <section class="mt-4">
+        <h4>Introduction to 3D Modeling for Mods</h4>
+        <p>Creating your own mods can be an incredibly rewarding experience, especially when you get to design your own 3D models. This overview will help you get started with the essentials of 3D modeling, focusing on techniques and best practices that will ensure your models are optimized for use in Gearblocks.</p>
+        
+        <h4>Understanding Mesh Structure</h4>
+        <p>All 3D models are constructed from meshes, which are made up of vertices, edges, and faces. Here are some key points to remember:</p>
+        <ul>
+            <li><strong>Triangles (Tris) Only</strong>: Ensure your meshes are made up of triangles. This is crucial because triangles are the most universally compatible shape in 3D modeling and rendering.</li>
+            <li><strong>Face Limit</strong>: Keep your models within a limit of 15,000 faces. This prevents artifacts.</li>
+        </ul>
+
+        <h4>Common 3D Modeling Tools</h4>
+        <p>There are several powerful tools available for creating 3D models. Here are some of the most widely used:</p>
+        <ul>
+            <li><strong>Blender</strong>: A free and open-source 3D creation suite that supports everything from modeling and rigging to animation and rendering. It's highly recommended for beginners and professionals alike.</li>
+            <li><strong>Autodesk Maya</strong>: A professional-grade software used extensively in the film, television, and gaming industries for modeling, animation, and rendering.</li>
+            <li><strong>3ds Max</strong>: Known for its modeling, animation, and rendering capabilities, this tool is popular in game development and architectural visualization.</li>
+            <li><strong>SketchUp</strong>: User-friendly and great for architectural and interior design, SketchUp is perfect for quickly creating 3D models.</li>
+        </ul>
+
+        <h4>Best Practices for 3D Modeling</h4>
+        <p>Follow these best practices to ensure your models are high-quality and optimized for use in Gearblocks:</p>
+        <ul>
+            <li><strong>Start with Simple Shapes</strong>: Begin with basic geometric shapes and gradually refine them into more complex models. This approach helps maintain clean topology and reduces errors.</li>
+            <li><strong>Optimize Your Mesh</strong>: Remove unnecessary vertices and faces to keep your model efficient. This improves performance and makes your model easier to work with.</li>
+            <li><strong>Use Reference Images</strong>: Always use reference images to guide your modeling process. This ensures accuracy and helps achieve realistic proportions and details.</li>
+            <li><strong>Proper UV Mapping</strong>: Ensure your models have proper UV maps for texturing. Good UV mapping prevents texture stretching and distortion.</li>
+            <li><strong>Regularly Save Your Work</strong>: Frequently save your progress and maintain different versions of your model. This protects against data loss and allows you to revert to previous stages if needed.</li>
+        </ul>
+
+        <h4>Exporting Your Model</h4>
+        <p>Once your model is ready, you need to export it in a format that Gearblocks can use. Follow these steps to export your model from Blender:</p>
+        <ol>
+            <li>Select your model and ensure it is properly triangulated (press <code>Ctrl + T</code> in Edit Mode).</li>
+            <li>Go to <em>File</em> > <em>Export</em> > <em>Wavefront (.obj)</em>.</li>
+            <li>In the export settings, ensure that "Selection Only" is checked, and set the scale to 1.0.</li>
+            <li>Click <em>Export OBJ</em> to save your model.</li>
+        </ol>
+
+        <h4>Conclusion</h4>
+        <p>By following this overview, you'll be well on your way to creating efficient and high-quality 3D models for your mods. With the right tools and techniques, you can bring your creative visions to life and enhance your Gearblocks experience. Happy modeling!</p>
+    </section>
+    <!-- End Overview Section -->
+</main>
+<!-- End 3D Modeling/Overview -->
+
+<!-- Start 3D Modeling/Example Models -->
+<main x-show="route === '3d-modeling/example-models'" class="p-4 overflow-y-scroll w-100">
+    <!-- Start Header -->
+    <section class="pt-4">
+        <h2>3D Modeling</h2>
+        <p><strong>Example Models</strong></p>
+    </section>
+    <!-- End Header -->
+
+    <!-- Start Example Models Section -->
+    <section class="mt-4">
+        <div class="row row-cols-1 row-cols-md-4 g-4">
+            <div class="col">
+                <div class="card border-dark">
+                    <div class="card-header">Cube</div>
+                    <img src="./imgs/cube.png" alt="Cube" class="img-fluid mb-2 w-100">
+                    <div class="card-body">
+                        <p class="card-text">Use this cube piece for scale and reference.</p>
+                        <a href="./objs/cube.obj" download><button type="button" class="btn btn-primary">Download Cube</button></a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="card border-dark">
+                    <div class="card-header">Pin</div>
+                    <img src="./imgs/pin.png" alt="Pin" class="img-fluid mb-2 w-100">
+                    <div class="card-body">
+                        <p class="card-text">The pin model is essential for understanding scale in the game.</p>                 
+                        <a href="./objs/pin.obj" download><button type="button" class="btn btn-primary">Download Pin</button></a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="card border-dark">
+                    <div class="card-header">Angle 4 x 90</div>
+                    <img src="./imgs/angle_4_x_90.png" alt="Angle 4 x 90" class="img-fluid mb-2 w-100">
+                    <div class="card-body">
+                        <p class="card-text">This model demonstrates the scale of connection pieces.</p>           
+                        <a href="./objs/angle_4x_90.obj" download><button type="button" class="btn btn-primary">Download Angle 4 x 90</button></a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TODO: Add some sort of player reference -->
+        </div>
+
+        <h4>Using the Example Models</h4>
+        <p>To use these example models in your own projects, follow these steps:</p>
+        <ol>
+            <li>Download the desired model using the provided links.</li>
+            <li>Import the model into your 3D modeling software (e.g., Blender) by going to <em>File</em> > <em>Import</em> > <em>Wavefront (.obj)</em>.</li>
+            <li>Examine the model to understand its scale, proportions, and structure.</li>
+            <li>Use the model as a reference when creating your own parts to ensure consistency and accuracy.</li>
+        </ol>
+
+        <p>These example models are designed to help you get started quickly and efficiently. By studying these references, you'll gain a better understanding of the standards and techniques used in 3D modeling for Gearblocks.</p>
+
+        <p>If you have requests for any other parts that should be featured, let us know in our <a href="https://discord.gg/pJrYVrKA" target="_blank">Discord</a>.</p>
+    </section>
+    <!-- End Example Models Section -->
+</main>
+<!-- End 3D Modeling/Example Models -->
+
+<!-- Start Meshes Page -->
+<main x-show="route === '3d-modeling/meshes'" class="p-4 overflow-y-scroll w-100">
+    <!-- Start Header -->
+    <section class="pt-4">
+        <h2>3D Modeling</h2>
+        <p><strong>Understanding Meshes for Gearthon</strong></p>
+    </section>
+    <!-- End Header -->
+
+    <!-- Start Meshes Information -->
+    <section class="mt-4">
+        <h4>What are Meshes?</h4>
+        <p>A mesh is a collection of vertices, edges, and faces that define the shape of a 3D object in Gearblocks. It serves as the fundamental component for all 3D models in the game world.</p>
+
+        <h4>Face Limitations</h4>
+        <p>Gearthon is currently limited to about 15000 faces. Models should adhere to these limitations to maintain visual quality.</p>
+
+        <h4>Flat Normals</h4>
+        <p>In Gearthon, all mesh normals will be flat. In the future we will add custom normals, so you can utilize smoothed normals.</p>
+
+        <h4>Modeling Guidelines for Gearthon</h4>
+        <p>When creating models for Gearthon, it's essential to follow certain guidelines to ensure compatibility and optimal performance:</p>
+        <ul>
+            <li>Centered Models: Models should be centered at the origin point (0, 0, 0) to maintain consistency and ease of placement within the game world.</li>
+            <li>Optimized Geometry: Use efficient modeling techniques to minimize unnecessary geometry and keep the mesh complexity within acceptable limits.</li>
+        </ul>
+
+        <h4>Optimizing Meshes</h4>
+        <p>To optimize meshes for Gearblocks:</p>
+        <ul>
+            <li>Ensure models comply with the specified face limitations to prevent visual issues.</li>
+            <li>Regularly test models in Gearblocks to identify and address any issues.</li>
+            <li>Ensure that all visible faces have outward-facing normals! Otherwise, they will be invisible.</li>
+        </ul>
+
+        <h4>Conclusion</h4>
+        <p>Understanding mesh limitations and adhering to modeling guidelines are essential for creating content in Gearblocks. By following these principles, you can ensure compatibility, performance, and visual quality in Gearblocks.</p>
+    </section>
+    <!-- End Meshes Information -->
+</main>
+<!-- End Meshes Page -->
+
+<!-- Start 3D Modeling/Exporting -->
+<main x-show="route === '3d-modeling/exporting'" class="p-4 overflow-y-scroll w-100">
+    <!-- Start Header -->
+    <section class="pt-4">
+        <h2>3D Modeling</h2>
+        <p><strong>Exporting</strong></p>
+    </section>
+    <!-- End Header -->
+    
+    <section class="pt-4">
+        <h4>Exporting Your Model</h4>
+        <p>Once your model is ready, you need to export it in a format that Gearblocks can use. Follow these steps to export your model from Blender:</p>
+        <ol>
+            <li>Select your model and ensure it is properly triangulated (press <code>Ctrl + T</code> in Edit Mode).</li>
+            <li>Go to <em>File</em> > <em>Export</em> > <em>Wavefront (.obj)</em>.</li>
+            <li>In the export settings, ensure that "Selection Only" is checked, and set the scale to 1.0.</li>
+            <li>Click <em>Export OBJ</em> to save your model.</li>
+        </ol>
+    </section>
+</main>
+<!-- End 3D Modeling/Exporting -->
+
+<!-- Start Lua Scripting/Overview -->
+<main x-show="route === 'lua-scripting/overview'" class="p-4 overflow-y-scroll w-100">
+    <!-- Start Header -->
+    <section class="pt-4">
+        <h2>Lua Scripting</h2>
+        <p><strong>Overview</strong></p>
+    </section>
+    <!-- End Header -->
+</main>
+<!-- End Lua Scripting/Overview -->
+
+<!-- Start Lua Scripting/Examples -->
+<main x-show="route === 'lua-scripting/examples'" class="p-4 overflow-y-scroll w-100">
+    <!-- Start Header -->
+    <section class="pt-4">
+        <h2>Lua Scripting</h2>
+        <p><strong>Examples</strong></p>
+    </section>
+    <!-- End Header -->
+</main>
+<!-- End Lua Scripting/Examples -->
+
+<!-- Start Lua Scripting/Classes -->
+<main x-show="route === 'lua-scripting/classes'" class="p-4 overflow-y-scroll w-100">
+    <!-- Start Header -->
+    <section class="pt-4">
+        <h2>Lua Scripting</h2>
+        <p><strong>Classes</strong></p>
+    </section>
+    <!-- End Header -->
+</main>
+<!-- End Lua Scripting/Classes -->
+
+<!-- Start Lua Scripting/Syntax -->
+<main x-show="route === 'lua-scripting/syntax'" class="p-4 overflow-y-scroll w-100">
+    <!-- Start Header -->
+    <section class="pt-4">
+        <h2>Lua Scripting</h2>
+        <p><strong>Syntax</strong></p>
+    </section>
+    <!-- End Header -->
+</main>
+<!-- End Lua Scripting/Syntax -->
+
+
+</div>
