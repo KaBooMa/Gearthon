@@ -3,6 +3,7 @@ import json
 import os
 from pathlib import Path
 import shutil
+import tkinter
 from tkinter import filedialog
 import zipfile
 from dacite import from_dict
@@ -114,8 +115,12 @@ def rename_mod(name, new_name, new_description):
 
 @eel.expose
 def import_mod():
-    path = filedialog.askopenfilename(defaultextension='.gearthon', filetypes=[('Gearthon Mods', '*.gearthon')])
-
+    root = tkinter.Tk()
+    root.focus_force()
+    root.overrideredirect(True)
+    root.geometry('0x0+0+0')
+    path = filedialog.askopenfilename(defaultextension='.gearthon', filetypes=[('Gearthon Mods', '*.gearthon')], title='Import Mod')
+    root.destroy()
     with zipfile.ZipFile(path) as zip:
         first_dir = zip.filelist[0].filename
         from backend.appdata import appdata
@@ -128,7 +133,12 @@ def import_mod():
 
 @eel.expose
 def export_mod(name):
+    root = tkinter.Tk()
+    root.focus_force()
+    root.overrideredirect(True)
+    root.geometry('0x0+0+0')
     path = filedialog.askdirectory()
+    root.destroy()
     from backend.appdata import appdata
     mod_path = Path(f'{appdata.mods_folder()}/{name}')
     shutil.make_archive(f'{path}/{name}.gearthon', 'zip', root_dir=mod_path.parent, base_dir=f'./{name}')
