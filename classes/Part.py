@@ -40,7 +40,7 @@ class Part:
     is_swappable_material: bool = field(default=False, metadata={'label': 'Swappable Material'})
     mesh_collider: bool = field(default=False, metadata={'label': '(EXPERIMENTAL) Use Mesh Collider'})
     custom_collider: bool = field(default=False, metadata={'label': '(EXPERIMENTAL) Custom Collider'})
-    custom_collider_position: Vector3 = field(default='', metadata={'label': 'Custom Collider Position'})
+    custom_collider_position: Vector3 = field(default_factory=lambda: Vector3(0, 0, 0), metadata={'label': 'Custom Collider Position'})
     script: str = field(default='', metadata={'label': 'Script', 'hidden': True})
     int_tweakables: List[IntTweakable] = field(default_factory=list, metadata={'hidden': True})
     string_tweakables: List[StringTweakable] = field(default_factory=list, metadata={'hidden': True})
