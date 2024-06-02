@@ -9,7 +9,7 @@ from classes.IntTweakable import IntTweakable
 from classes.JoystickTweakable import JoystickTweakable
 from classes.Link import Link
 from classes.StringTweakable import StringTweakable
-
+from classes.Vector3 import Vector3
 
 @dataclass
 class Part:
@@ -39,6 +39,8 @@ class Part:
     is_paintable: bool = field(default=False, metadata={'label': 'Paintable'})
     is_swappable_material: bool = field(default=False, metadata={'label': 'Swappable Material'})
     mesh_collider: bool = field(default=False, metadata={'label': '(EXPERIMENTAL) Use Mesh Collider'})
+    custom_collider: bool = field(default=False, metadata={'label': '(EXPERIMENTAL) Custom Collider'})
+    custom_collider_position: Vector3 = field(default='', metadata={'label': 'Custom Collider Position'})
     script: str = field(default='', metadata={'label': 'Script', 'hidden': True})
     int_tweakables: List[IntTweakable] = field(default_factory=list, metadata={'hidden': True})
     string_tweakables: List[StringTweakable] = field(default_factory=list, metadata={'hidden': True})
