@@ -1,5 +1,5 @@
-<div x-data="{mod: null, show_controls: false}" x-init="async () => { mod = await eel.get_mod()(); }">
-    <div x-show="!mod" class="h-100" x-load="loading.html"></div>
+<div x-data="{mod: null, show_axis: true, show_controls: false, show_grid: true, show_wireframe: false}" x-init="async () => { mod = await eel.get_mod()();}">
+    <div x-show="!mo" class="h-100" x-load="loading.html"></div>
     <div x-show="mod">
         <div class="d-flex h-100" x-data="editor">
             <div class="w-25 p-2 border-end">
@@ -152,7 +152,32 @@
                                 </ul>
                                 <ul class="navbar-nav ms-auto">
                                     <li class="nav-item d-flex" x-data="{ open_file_browser: function() { $refs.filebrowser.click(); }}">
-                                        <button class="btn me-2" :class="{'btn-outline-primary': show_controls, 'btn-outline-danger': !show_controls}" x-on:click="show_controls = !show_controls" x-text="show_controls ? 'Hide Controls' : 'Show Controls'">Show Controls</button>
+                                    </li>
+                                    <li class="nav-item dropdown">
+                                        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Options</a>
+                                        <div class="dropdown-menu ps-2 " style="top:115%; left: -70px;">
+                                          <h6 class="dropdown-header">Options</h6>
+                                          <div class="form-check">
+                                            <!-- TODO: Add persistance logic here -->
+                                            <input class="form-check-input" type="checkbox" x-on:change="show_wireframe = !show_wireframe; showWireframe(show_wireframe);" id="showWireframeCheckBox">
+                                            <label class="form-check-label" for="showWireframeCheckBox">Show Wireframe</label>
+                                          </div>
+                                          <div class="form-check">
+                                            <!-- TODO: Add persistance logic here -->
+                                            <input class="form-check-input" type="checkbox" x-on:change="show_controls = !show_controls" id="showControlsCheckBox">
+                                            <label class="form-check-label" for="showControlsCheckBox">Show Controls</label>
+                                          </div>                                        
+                                          <div class="form-check">
+                                            <!-- TODO: Add persistance logic here -->
+                                            <input class="form-check-input" type="checkbox" checked="checked" x-on:change="show_grid = !show_grid; showGrid(show_grid);" id="showGridCheckBox">
+                                            <label class="form-check-label" for="showGridCheckBox">Show Grid</label>
+                                          </div>
+                                          <div class="form-check">
+                                            <!-- TODO: Add persistance logic here -->
+                                            <input class="form-check-input" type="checkbox" checked="checked" x-on:change="show_axis = !show_axis; showAxis(show_axis);" id="showAxisCheckBox">
+                                            <label class="form-check-label" for="showAxisCheckBox">Show Axis</label>
+                                          </div>
+                                        </div>
                                     </li>
                                 </ul>
                             </div>
@@ -694,13 +719,16 @@
             this.DeselectAttachment();
             this.DeselectLink();
             if (this.mode == "View") {
+                showGrid(true);
             }
             
             if (this.mode == "Tweakables") {
+                showGrid(true);
             }
 
             if (this.mode == "Attachments") {
                 setTransparency(0.2);
+                showGrid(false);
             } else {
                 setTransparency(1);
             }
@@ -967,6 +995,9 @@
         container = document.getElementById('3js');
         WIDTH = container.offsetWidth;
         HEIGHT = container.offsetHeight;
+        line = null;
+        gridHelper = null;
+        axisHelper = null;
 
         scene = new THREE.Scene();
         camera = new THREE.PerspectiveCamera(60, WIDTH/HEIGHT, 0.01, 100);
@@ -977,6 +1008,9 @@
         camera.position.z = 0.5; // Default zoom so to speak
         renderer.setSize(WIDTH, HEIGHT);
         container.appendChild(renderer.domElement);
+
+        showGrid( true );
+        showAxis( true );
 
         // Add some lights
         var light = new THREE.HemisphereLight(0xffffff, 0x444444, 1.0);
@@ -1025,6 +1059,46 @@
         scene.remove(loaded_obj);
         loaded_obj = loader.parse(data).children[0];
         scene.add(loaded_obj);
+    }
+
+    function showWireframe( boolean ) {
+        if ( loaded_obj ) {
+            if (!line && boolean ) {
+                wireframe = new THREE.WireframeGeometry(loaded_obj.geometry);
+                line = new THREE.LineSegments(wireframe);
+                line.material.depthTest = true;
+                line.material.color = new THREE.Color(0xffa500);
+                line.material.opacity = 0.9;
+                line.material.transparent = true;
+                scene.add(line);
+            } else if (line && !boolean ) {
+                console.log('Deleting Wireframe');
+                scene.remove(line);
+                line = null;
+            }
+        }
+    }
+
+    function showGrid( boolean ) {
+        if ( !gridHelper && boolean ) {
+            gridHelper = new  THREE.GridHelper( 4.5, 45 );
+            scene.add(gridHelper);
+        } else if ( gridHelper && !boolean ) {
+            scene.remove(gridHelper);
+            gridHelper = null;
+        } else {
+            console.log('no gridHelper');
+        }
+    }
+
+    function showAxis( boolean ) {
+        if ( !axisHelper && boolean ) {
+            axisHelper = new THREE.AxesHelper( 2.25 );
+            scene.add(axisHelper);
+        } else if ( axisHelper && !boolean ) {
+            scene.remove(axisHelper);
+            axisHelper = null;
+        }
     }
 
     function setTransparency(transparency) {
